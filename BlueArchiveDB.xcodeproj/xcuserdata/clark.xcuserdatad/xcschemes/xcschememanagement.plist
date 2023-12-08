@@ -4,13 +4,19 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>BlueArchive Database.xcscheme_^#shared#^_</key>
+		<key>BlueArchiveDB.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
-	<dict/>
+	<dict>
+		<key>4BE4893F2B0DC49B000992B0</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+	</dict>
 </dict>
 </plist>
