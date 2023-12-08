@@ -18,7 +18,12 @@ class ViewController: UIViewController {
             versionLabel.text = "Version: \(version) Build: \(build)"
         }
     }
-
+    @IBAction func destinationWindow(_ sender: UISegmentedControl) {
+        //"「未実装です」というアラートを表示"
+        let alert = UIAlertController(title: "エラー", message: "まだ実装されていない機能です", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+    }
 
 }
 
