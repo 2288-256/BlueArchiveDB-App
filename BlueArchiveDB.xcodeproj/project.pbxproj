@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4B32350E2B28189200523803 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B32350D2B28189200523803 /* WidgetKit.framework */; };
+		4B3235102B28189200523803 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B32350F2B28189200523803 /* SwiftUI.framework */; };
+		4B3235132B28189300523803 /* birthdayStudentsBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B3235122B28189300523803 /* birthdayStudentsBundle.swift */; };
+		4B3235172B28189300523803 /* birthdayStudents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B3235162B28189300523803 /* birthdayStudents.swift */; };
+		4B32351A2B28189500523803 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4B3235192B28189500523803 /* Assets.xcassets */; };
+		4B32351C2B28189500523803 /* birthdayStudents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 4B3235182B28189300523803 /* birthdayStudents.intentdefinition */; };
+		4B3235202B28189500523803 /* birthdayStudentsExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 4B32350B2B28189200523803 /* birthdayStudentsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		4BB8FE202B15B8E700946B70 /* CharacterInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BB8FE1F2B15B8E700946B70 /* CharacterInfo.swift */; };
 		4BB8FE242B16FD8300946B70 /* CustomLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BB8FE232B16FD8300946B70 /* CustomLabel.swift */; };
 		4BB8FE282B1710E200946B70 /* CustomImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BB8FE272B1710E200946B70 /* CustomImageView.swift */; };
@@ -26,7 +33,39 @@
 		4BE4895A2B0DE9E3000992B0 /* CharacterSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE489592B0DE9E3000992B0 /* CharacterSelect.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		4B32352A2B28422900523803 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4BE489382B0DC49B000992B0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4B32350A2B28189200523803;
+			remoteInfo = birthdayStudentsExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		4B3235242B28189500523803 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				4B3235202B28189500523803 /* birthdayStudentsExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		4B32350B2B28189200523803 /* birthdayStudentsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = birthdayStudentsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		4B32350D2B28189200523803 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		4B32350F2B28189200523803 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		4B3235122B28189300523803 /* birthdayStudentsBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = birthdayStudentsBundle.swift; sourceTree = "<group>"; };
+		4B3235162B28189300523803 /* birthdayStudents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = birthdayStudents.swift; sourceTree = "<group>"; };
+		4B3235182B28189300523803 /* birthdayStudents.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = birthdayStudents.intentdefinition; sourceTree = "<group>"; };
+		4B3235192B28189500523803 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		4B32351B2B28189500523803 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4BB8FE1F2B15B8E700946B70 /* CharacterInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterInfo.swift; sourceTree = "<group>"; };
 		4BB8FE232B16FD8300946B70 /* CustomLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomLabel.swift; sourceTree = "<group>"; };
 		4BB8FE272B1710E200946B70 /* CustomImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomImageView.swift; sourceTree = "<group>"; };
@@ -49,6 +88,15 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		4B3235082B28189200523803 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4B3235102B28189200523803 /* SwiftUI.framework in Frameworks */,
+				4B32350E2B28189200523803 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4BE4893D2B0DC49B000992B0 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -59,10 +107,33 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4B32350C2B28189200523803 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4B32350D2B28189200523803 /* WidgetKit.framework */,
+				4B32350F2B28189200523803 /* SwiftUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		4B3235112B28189300523803 /* birthdayStudents */ = {
+			isa = PBXGroup;
+			children = (
+				4B3235122B28189300523803 /* birthdayStudentsBundle.swift */,
+				4B3235162B28189300523803 /* birthdayStudents.swift */,
+				4B3235182B28189300523803 /* birthdayStudents.intentdefinition */,
+				4B3235192B28189500523803 /* Assets.xcassets */,
+				4B32351B2B28189500523803 /* Info.plist */,
+			);
+			path = birthdayStudents;
+			sourceTree = "<group>";
+		};
 		4BE489372B0DC49B000992B0 = {
 			isa = PBXGroup;
 			children = (
 				4BE489422B0DC49B000992B0 /* BlueArchiveDB */,
+				4B3235112B28189300523803 /* birthdayStudents */,
+				4B32350C2B28189200523803 /* Frameworks */,
 				4BE489412B0DC49B000992B0 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -71,6 +142,7 @@
 			isa = PBXGroup;
 			children = (
 				4BE489402B0DC49B000992B0 /* BlueArchiveDB.app */,
+				4B32350B2B28189200523803 /* birthdayStudentsExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -103,6 +175,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		4B32350A2B28189200523803 /* birthdayStudentsExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4B3235212B28189500523803 /* Build configuration list for PBXNativeTarget "birthdayStudentsExtension" */;
+			buildPhases = (
+				4B3235072B28189200523803 /* Sources */,
+				4B3235082B28189200523803 /* Frameworks */,
+				4B3235092B28189200523803 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = birthdayStudentsExtension;
+			productName = birthdayStudentsExtension;
+			productReference = 4B32350B2B28189200523803 /* birthdayStudentsExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		4BE4893F2B0DC49B000992B0 /* BlueArchiveDB */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4BE489542B0DC49E000992B0 /* Build configuration list for PBXNativeTarget "BlueArchiveDB" */;
@@ -110,10 +199,12 @@
 				4BE4893C2B0DC49B000992B0 /* Sources */,
 				4BE4893D2B0DC49B000992B0 /* Frameworks */,
 				4BE4893E2B0DC49B000992B0 /* Resources */,
+				4B3235242B28189500523803 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				4B32352B2B28422900523803 /* PBXTargetDependency */,
 			);
 			name = BlueArchiveDB;
 			productName = "BlueArchive Database";
@@ -130,6 +221,9 @@
 				LastSwiftUpdateCheck = 1430;
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
+					4B32350A2B28189200523803 = {
+						CreatedOnToolsVersion = 14.3.1;
+					};
 					4BE4893F2B0DC49B000992B0 = {
 						CreatedOnToolsVersion = 14.3.1;
 					};
@@ -149,11 +243,20 @@
 			projectRoot = "";
 			targets = (
 				4BE4893F2B0DC49B000992B0 /* BlueArchiveDB */,
+				4B32350A2B28189200523803 /* birthdayStudentsExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		4B3235092B28189200523803 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4B32351A2B28189500523803 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4BE4893E2B0DC49B000992B0 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -170,6 +273,16 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		4B3235072B28189200523803 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4B3235132B28189300523803 /* birthdayStudentsBundle.swift in Sources */,
+				4B32351C2B28189500523803 /* birthdayStudents.intentdefinition in Sources */,
+				4B3235172B28189300523803 /* birthdayStudents.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4BE4893C2B0DC49B000992B0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -189,6 +302,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4B32352B2B28422900523803 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4B32350A2B28189200523803 /* birthdayStudentsExtension */;
+			targetProxy = 4B32352A2B28422900523803 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		4BE489492B0DC49B000992B0 /* Main.storyboard */ = {
@@ -210,6 +331,63 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		4B3235222B28189500523803 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = GR736X5QND;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = birthdayStudents/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = birthdayStudents;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.github.2288-256.BlueArchiveDB.birthdayStudents";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		4B3235232B28189500523803 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = GR736X5QND;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = birthdayStudents/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = birthdayStudents;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.github.2288-256.BlueArchiveDB.birthdayStudents";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		4BE489522B0DC49E000992B0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -327,10 +505,11 @@
 		4BE489552B0DC49E000992B0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = GR736X5QND;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BlueArchiveDB/Info.plist;
@@ -347,7 +526,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1.3;
+				MARKETING_VERSION = 0.1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.github.2288-256.BlueArchiveDB";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -360,10 +539,11 @@
 		4BE489562B0DC49E000992B0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = GR736X5QND;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BlueArchiveDB/Info.plist;
@@ -380,7 +560,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1.3;
+				MARKETING_VERSION = 0.1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.github.2288-256.BlueArchiveDB";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -393,6 +573,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		4B3235212B28189500523803 /* Build configuration list for PBXNativeTarget "birthdayStudentsExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4B3235222B28189500523803 /* Debug */,
+				4B3235232B28189500523803 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		4BE4893B2B0DC49B000992B0 /* Build configuration list for PBXProject "BlueArchiveDB" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
