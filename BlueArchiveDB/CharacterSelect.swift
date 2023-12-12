@@ -31,20 +31,25 @@ class CharacterSelect: UIViewController,UICollectionViewDataSource,
         self.present(nextVC, animated: false, completion: nil)
     }
     @IBAction func MainStudentsFilter(_ sender: UIButton) {
-        presentCharacterSelect(viewMode: "Main")
+        loadMainStudents()
+        collectionView.reloadData()
     }
     @IBAction func AllStudentsFilter(_ sender: UIButton) {
-        presentCharacterSelect(viewMode: "All")
+        loadAllStudents()
+        collectionView.reloadData()
     }
     @IBAction func SupporterStudentsFilter(_ sender: UIButton) {
-        presentCharacterSelect(viewMode: "Support")
+        loadSupportStudents()
+        collectionView.reloadData()
     }
     @IBOutlet weak var collectionView: UICollectionView!
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let testCell: UICollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "character-cell", for: indexPath)
         
         let imageView = testCell.contentView.viewWithTag(1) as! UIImageView
+        imageView.image = nil
         let label = testCell.contentView.viewWithTag(2) as! UILabel
+        label.text = nil
         if jsonArrays.count > indexPath.row {
             let characterInfo = jsonArrays[indexPath.row]
             if let unitId = characterInfo["Id"] as? Int,
@@ -157,17 +162,5 @@ class CharacterSelect: UIViewController,UICollectionViewDataSource,
         }
         // セル選択の解除
         collectionView.deselectItem(at: indexPath, animated: true)
-    }
-    func presentCharacterSelect(viewMode viewMode: String) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        if let viewController = storyboard.instantiateViewController(withIdentifier: "CharacterSelect") as? CharacterSelect {
-            // 引き渡したい変数を設定する
-            viewController.viewMode = viewMode
-            viewController.modalTransitionStyle = .crossDissolve
-            viewController.modalPresentationStyle = .fullScreen
-            self.present(viewController, animated: true, completion: nil)
-        } else {
-            print("Error: Failed to instantiate CharacterSelect")
-        }
     }
 }

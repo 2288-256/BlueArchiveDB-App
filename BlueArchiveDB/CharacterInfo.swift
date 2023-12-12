@@ -11,6 +11,7 @@ import UIKit
 class CharacterInfo: UIViewController {
     
     var unitId: Int = 0
+    var BackPage: String = ""
     var jsonArrays: [[String: Any]] = []
     var LightArmorColor: UIColor = UIColor(red: 167/255, green: 12/255, blue: 25/255, alpha: 1.0)
     var HeavyArmorColor: UIColor = UIColor(red: 178/255, green: 109/255, blue: 31/255, alpha: 1.0)
