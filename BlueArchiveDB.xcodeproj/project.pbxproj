@@ -28,6 +28,7 @@
 		4BE060412B4FD320006DF278 /* SettingCharacterSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE060402B4FD320006DF278 /* SettingCharacterSelect.swift */; };
 		4BE060452B5218EE006DF278 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BE060442B5218EE006DF278 /* MobileCoreServices.framework */; };
 		4BE060472B5218F8006DF278 /* CoreSpotlight.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BE060462B5218F7006DF278 /* CoreSpotlight.framework */; };
+		4BE140CE2B72F6BC0021912C /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4BE140CD2B72F6BC0021912C /* Settings.bundle */; };
 		4BE489442B0DC49B000992B0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE489432B0DC49B000992B0 /* AppDelegate.swift */; };
 		4BE489462B0DC49B000992B0 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE489452B0DC49B000992B0 /* SceneDelegate.swift */; };
 		4BE489482B0DC49B000992B0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE489472B0DC49B000992B0 /* ViewController.swift */; };
@@ -82,6 +83,7 @@
 		4BE060402B4FD320006DF278 /* SettingCharacterSelect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingCharacterSelect.swift; sourceTree = "<group>"; };
 		4BE060442B5218EE006DF278 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		4BE060462B5218F7006DF278 /* CoreSpotlight.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreSpotlight.framework; path = System/Library/Frameworks/CoreSpotlight.framework; sourceTree = SDKROOT; };
+		4BE140CD2B72F6BC0021912C /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		4BE489402B0DC49B000992B0 /* BlueArchiveDB.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BlueArchiveDB.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4BE489432B0DC49B000992B0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4BE489452B0DC49B000992B0 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -145,6 +147,7 @@
 		4BE489372B0DC49B000992B0 = {
 			isa = PBXGroup;
 			children = (
+				4BE140CD2B72F6BC0021912C /* Settings.bundle */,
 				4BE489422B0DC49B000992B0 /* BlueArchiveDB */,
 				4B3235112B28189300523803 /* birthdayStudents */,
 				4B32350C2B28189200523803 /* Frameworks */,
@@ -214,6 +217,7 @@
 				4BE4893D2B0DC49B000992B0 /* Frameworks */,
 				4BE4893E2B0DC49B000992B0 /* Resources */,
 				4B3235242B28189500523803 /* Embed Foundation Extensions */,
+				4BE140D12B72FC7F0021912C /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -285,6 +289,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4BE140CE2B72F6BC0021912C /* Settings.bundle in Resources */,
 				4BE489502B0DC49E000992B0 /* LaunchScreen.storyboard in Resources */,
 				4BE4894D2B0DC49E000992B0 /* Assets.xcassets in Resources */,
 				4BE4894B2B0DC49B000992B0 /* Main.storyboard in Resources */,
@@ -292,6 +297,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4BE140D12B72FC7F0021912C /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# バージョン\n/usr/libexec/PlistBuddy -c \"Set :PreferenceSpecifiers:1:DefaultValue ${MARKETING_VERSION}\" \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/Settings.bundle/Root.plist\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		4B3235072B28189200523803 /* Sources */ = {
@@ -533,7 +558,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2024.02.01;
+				CURRENT_PROJECT_VERSION = 2024.02.07;
 				DEVELOPMENT_TEAM = GR736X5QND;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BlueArchiveDB/Info.plist;
@@ -551,7 +576,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1.8a;
+				MARKETING_VERSION = "0.1.9-pre";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.github.2288-256.BlueArchiveDB";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -572,7 +597,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2024.02.01;
+				CURRENT_PROJECT_VERSION = 2024.02.07;
 				DEVELOPMENT_TEAM = GR736X5QND;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BlueArchiveDB/Info.plist;
@@ -590,7 +615,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1.8a;
+				MARKETING_VERSION = "0.1.9-pre";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.github.2288-256.BlueArchiveDB";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
