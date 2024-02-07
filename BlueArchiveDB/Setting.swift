@@ -3,7 +3,7 @@
 //  BlueArchiveDB
 //
 //  Created by 2288-256 on 2024/01/11.
-//  Copyright (c) 2023 2288-256 All Rights Reserved
+//  Copyright (c) 2024 2288-256 All Rights Reserved
 //
 
 import Foundation
