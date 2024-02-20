@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class CustomButton: UIButton {
+@IBDesignable class CustomButton: UIButton {
     // @IBInspectable のアノテーションを設定することでカスタムプロパティを追加することができる
     @IBInspectable var borderColor: UIColor = UIColor.clear // 枠線の色
     @IBInspectable var borderWidth: CGFloat = 0.0 // 枠線の太さ
