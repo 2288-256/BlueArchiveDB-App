@@ -51,6 +51,12 @@ class CharacterInfo: UIViewController {
         super.viewDidLoad()
         ContainerView.bringSubviewToFront(InfoView)
         MoreView.isHidden = true
+        StatusView.isHidden = true
+        DispatchQueue.main.async {
+            if self.jsonArrays.isEmpty{
+                self.loadAllStudents()
+            }
+        }
         setup(unitId: unitId)
         viewWidth = self.view.frame.width
     }
@@ -152,11 +158,18 @@ class CharacterInfo: UIViewController {
         setup(unitId: unitId)
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if jsonArrays.isEmpty{
+            loadAllStudents()
+        }
         switch (segue.identifier, segue.destination) {
         case ("toCharacterProfile"?, let destination as CharacterProfilePage):
             destination.unitId = unitId
+            destination.jsonArrays = jsonArrays
         case ("toMorePage"?, let destination as CharacterMorePage):
             destination.unitId = unitId
+        case ("toStatus"?, let destination as CharacterStatus):
+            destination.unitId = unitId
+            destination.jsonArrays = jsonArrays
         default:
             ()
         }
@@ -164,15 +177,24 @@ class CharacterInfo: UIViewController {
     @IBAction func changeInfoView(_ sender: UISegmentedControl) {
         InfoView.isHidden = false
         MoreView.isHidden = true
+        StatusView.isHidden = true
         ContainerView.bringSubviewToFront(InfoView)
     }
     @IBAction func changeMoreView(_ sender: UISegmentedControl){
         InfoView.isHidden = true
         MoreView.isHidden = false
+        StatusView.isHidden = true
         ContainerView.bringSubviewToFront(MoreView)
+    }
+    @IBAction func changeStatusView(_ sender: UISegmentedControl) {
+        InfoView.isHidden = true
+        MoreView.isHidden = true
+        StatusView.isHidden = false
+        ContainerView.bringSubviewToFront(StatusView)
     }
     @IBAction func destinationWindow(_ sender: UISegmentedControl) {
         //"「未実装です」というアラートを表示"
+        let alert = UIAlertController(title: "注意", message: "まだ実装がされていないか、完全に終わっていません\n最悪の場合クラッシュする場合があります", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
@@ -185,6 +207,17 @@ class CharacterInfo: UIViewController {
         self.present(nextVC, animated: false, completion: nil)
     }
     func loadAllStudents() {
+            do {
+                let fileManager = FileManager.default
+                let documentsURL = try fileManager.url(for: .libraryDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+                let studentsFileURL = documentsURL.appendingPathComponent("assets/data/jp/students.json")
+                
+                let data = try Data(contentsOf: studentsFileURL)
+                self.jsonArrays = try JSONSerialization.jsonObject(with: data) as? [[String: Any]] ?? []
+                print("ロードした生徒数:\(self.jsonArrays.count)")
+            } catch {
+                print("Error reading students JSON file: \(error)")
+            }
     }
     func translateString(_ input: String) -> String? {
         // Load the contents of localization.json from the Documents directory
