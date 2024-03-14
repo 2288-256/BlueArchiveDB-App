@@ -1515,7 +1515,6 @@
                                                         </userDefinedRuntimeAttributes>
                                                         <connections>
                                                             <action selector="changeStatusView:" destination="IHy-gL-Kot" eventType="touchUpInside" id="tgX-nz-JcQ"/>
-                                                            <action selector="destinationWindow:" destination="IHy-gL-Kot" eventType="touchUpInside" id="g5p-qm-hbx"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="t6H-1c-6Lg" customClass="CustomButton" customModule="BlueArchiveDB" customModuleProvider="target">

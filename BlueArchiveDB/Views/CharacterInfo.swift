@@ -194,7 +194,7 @@ class CharacterInfo: UIViewController {
     }
     @IBAction func destinationWindow(_ sender: UISegmentedControl) {
         //"「未実装です」というアラートを表示"
-        let alert = UIAlertController(title: "注意", message: "まだ実装がされていないか、完全に終わっていません\n最悪の場合クラッシュする場合があります", preferredStyle: .alert)
+        let alert = UIAlertController(title: "エラー", message: "まだ実装されていない機能です", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
