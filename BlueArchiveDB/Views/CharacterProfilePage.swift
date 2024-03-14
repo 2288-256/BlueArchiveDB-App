@@ -34,10 +34,7 @@ class CharacterProfilePage: UIViewController {
         super.viewDidLoad()
         CharacterProfileText.addObserver(self, forKeyPath: "contentSize", options: .new, context: nil)
         CharacterAcquisitionMethodText.addObserver(self, forKeyPath: "contentSize", options: .new, context: nil)
-        // Do any additional setup after loading the view.
-        loadAllStudents()
         let matchingStudents = jsonArrays.filter { $0["Id"] as? Int == unitId }
-        
         CharacterProfileText.text = matchingStudents.first?["ProfileIntroduction"] as? String
         CharacterSchoolText.text = translateString((matchingStudents.first?["School"])! as! String, mainKey: "SchoolLong")
         CharacterSchoolYear.text = matchingStudents.first?["SchoolYear"] as? String
@@ -79,81 +76,7 @@ class CharacterProfilePage: UIViewController {
         }
     }
     func fetchHTML(from url: URL, completion: @escaping (Result<String, Error>) -> Void) {
-    let task = URLSession.shared.dataTask(with: url) { data, response, error in
-        if let error = error {
-            completion(.failure(error))
-            return
-        }
-
-        guard let httpResponse = response as? HTTPURLResponse,
-              (200...299).contains(httpResponse.statusCode),
-              let mimeType = httpResponse.mimeType, mimeType == "text/html",
-              let data = data,
-              let htmlString = String(data: data, encoding: .utf8) else {
-            completion(.failure(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Invalid response or data."])))
-            return
-        }
-
-        completion(.success(htmlString))
-    }
-    task.resume()
-}
-
-func findContentByTitleInTable(html: String, title: String) throws -> [String]? {
-    let doc: Document = try SwiftSoup.parse(html)
-    let table = try doc.select("div#body table").first()
-    if let table = table {
-        let elements: Elements = try table.select("tr")
-        var foundTh = false
-        for element in elements {
-            if foundTh {
-                let tds = try element.select("td")
-                let htmlStrings = try tds.array().map { try $0.outerHtml() }
-                return cleanHtmlStrings(htmlStrings)
-            }
-            let ths = try element.select("th")
-            if let thText = try ths.first()?.text(), thText == title {
-                foundTh = true
-            }
-        }
-    }
-    return nil
-}
-
-func cleanHtmlStrings(_ htmlStrings: [String]) -> [String] {
-    return htmlStrings.map { htmlString in
-        var cleanString = htmlString
-        cleanString = cleanString.replacingOccurrences(of: "<td[^>]*>", with: "", options: .regularExpression, range: nil)
-        cleanString = cleanString.replacingOccurrences(of: "</td>", with: "")
-        cleanString = cleanString.replacingOccurrences(of: "<br[^>]*>", with: "\n", options: .regularExpression, range: nil)
-        cleanString = cleanString.replacingOccurrences(of: "<.[^>]*>|</.>", with: "", options: .regularExpression, range: nil)
-        cleanString = cleanString.replacingOccurrences(of: "\\((?<!\\n)(\\d{4}/\\d{2}/\\d{2}( \\d{2}:\\d{2})?)", with: "\n($1", options: .regularExpression, range: nil)
-        return cleanString
-    }
-}
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-            if let textView = object as? UITextView {
-                var topCorrect = (textView.bounds.size.height - textView.contentSize.height * textView.zoomScale) / 2
-                topCorrect = topCorrect < 0.0 ? 0.0 : topCorrect;
-                textView.contentInset.top = topCorrect
-            }
-        }
-
-        deinit {
-            CharacterProfileText.removeObserver(self, forKeyPath: "contentSize")
-        }
-    func loadAllStudents() {
-        do {
-            let fileManager = FileManager.default
-            let documentsURL = try fileManager.url(for: .libraryDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-            let studentsFileURL = documentsURL.appendingPathComponent("assets/data/jp/students.json")
-            
-            let data = try Data(contentsOf: studentsFileURL)
-            jsonArrays = try JSONSerialization.jsonObject(with: data) as? [[String: Any]] ?? []
-            print("ロードした生徒数:\(jsonArrays.count)")
-        } catch {
-            print("Error reading students JSON file: \(error)")
-        }
     }
     func translateString(_ input: String, mainKey: String? = nil) -> String? {
         // Load the contents of localization.json from the Documents directory

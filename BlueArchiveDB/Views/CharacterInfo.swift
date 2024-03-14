@@ -51,8 +51,6 @@ class CharacterInfo: UIViewController {
         super.viewDidLoad()
         ContainerView.bringSubviewToFront(InfoView)
         MoreView.isHidden = true
-        
-        loadAllStudents()
         setup(unitId: unitId)
         viewWidth = self.view.frame.width
     }
@@ -175,7 +173,6 @@ class CharacterInfo: UIViewController {
     }
     @IBAction func destinationWindow(_ sender: UISegmentedControl) {
         //"「未実装です」というアラートを表示"
-        let alert = UIAlertController(title: "エラー", message: "まだ実装されていない機能です", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
@@ -188,17 +185,6 @@ class CharacterInfo: UIViewController {
         self.present(nextVC, animated: false, completion: nil)
     }
     func loadAllStudents() {
-        do {
-            let fileManager = FileManager.default
-            let documentsURL = try fileManager.url(for: .libraryDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-            let studentsFileURL = documentsURL.appendingPathComponent("assets/data/jp/students.json")
-            
-            let data = try Data(contentsOf: studentsFileURL)
-            jsonArrays = try JSONSerialization.jsonObject(with: data) as? [[String: Any]] ?? []
-            print("ロードした生徒数:\(jsonArrays.count)")
-        } catch {
-            print("Error reading students JSON file: \(error)")
-        }
     }
     func translateString(_ input: String) -> String? {
         // Load the contents of localization.json from the Documents directory
