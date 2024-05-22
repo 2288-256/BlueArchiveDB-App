@@ -26,7 +26,8 @@ and so on.
 
 ***DEMO:***
 
-![demo](https://github.com/2288-256/BlueArchiveDB-App/assets/74705442/0042ac6f-6ccf-4f51-9381-92e93f12a57c)
+![demo](https://github.com/2288-256/BlueArchiveDB-App/assets/74705442/233ed30c-3a1b-4d5e-ac69-6621e43beb9a)
+
 
 ## Features
 
