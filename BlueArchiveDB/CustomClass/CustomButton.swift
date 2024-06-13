@@ -9,17 +9,19 @@
 import Foundation
 import UIKit
 
-@IBDesignable class CustomButton: UIButton {
-    // @IBInspectable のアノテーションを設定することでカスタムプロパティを追加することができる
-    @IBInspectable var borderColor: UIColor = UIColor.clear // 枠線の色
-    @IBInspectable var borderWidth: CGFloat = 0.0 // 枠線の太さ
-    @IBInspectable var cornerRadius: CGFloat = 0.0 // 枠線の角丸
-    
-    override func draw(_ rect: CGRect) {
-        self.layer.borderColor = borderColor.cgColor
-        self.layer.borderWidth = borderWidth
-        self.layer.cornerRadius = cornerRadius
-        self.layer.masksToBounds = true
-        super.draw(rect)
-    }
+@IBDesignable class CustomButton: UIButton
+{
+	// @IBInspectable のアノテーションを設定することでカスタムプロパティを追加することができる
+	@IBInspectable var borderColor: UIColor = .clear // 枠線の色
+	@IBInspectable var borderWidth: CGFloat = 0.0 // 枠線の太さ
+	@IBInspectable var cornerRadius: CGFloat = 0.0 // 枠線の角丸
+
+	override func draw(_ rect: CGRect)
+	{
+		layer.borderColor = borderColor.cgColor
+		layer.borderWidth = borderWidth
+		layer.cornerRadius = cornerRadius
+		layer.masksToBounds = true
+		super.draw(rect)
+	}
 }

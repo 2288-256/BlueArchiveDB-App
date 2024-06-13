@@ -1,0 +1,9 @@
+# format options
+--allman true
+--indent tab # tabs FTW!
+
+# file options
+--exclude Pods
+
+# rules
+--disable elseOnSameLine,semicolons
