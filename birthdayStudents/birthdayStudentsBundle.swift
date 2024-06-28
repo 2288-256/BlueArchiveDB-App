@@ -6,12 +6,14 @@
 //  Copyright (c) 2023 2288-256 All Rights Reserved
 //
 
-import WidgetKit
 import SwiftUI
+import WidgetKit
 
 @main
-struct birthdayStudentsBundle: WidgetBundle {
-    var body: some Widget {
-        BirthdayStudentsWidget()
-    }
+struct birthdayStudentsBundle: WidgetBundle
+{
+	var body: some Widget
+	{
+		BirthdayStudentsWidget()
+	}
 }
