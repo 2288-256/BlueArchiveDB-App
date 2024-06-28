@@ -17,6 +17,7 @@ class CharacterSkill: UIViewController
 	var SkillArrays: [[String: Any]] = []
 	var ExSkillLevel: Int = 0
 	var SkillLevel: Int = 0
+	var SkillCellPosition: Int = 0
 	var LightArmorColor: UIColor = .init(
 		red: 167 / 255, green: 12 / 255, blue: 25 / 255, alpha: 1.0
 	)
@@ -33,7 +34,6 @@ class CharacterSkill: UIViewController
 	//    @IBOutlet weak var collectionView: UICollectionView!
 	// 親のSkillView
 	@IBOutlet var ContainerSkillView: UIView!
-
 	override func viewDidLoad()
 	{
 		super.viewDidLoad()
@@ -45,10 +45,27 @@ class CharacterSkill: UIViewController
 			return skillType.contains("gear") || skillType.contains("weapon")
 		}
 		print("count", SkillArrays.count)
+		SkillCellPosition = 0
 		for i in 0 ..< SkillArrays.count
 		{
 			loadAllSkillCell(skillIndex: i, SkillArrays: SkillArrays)
 		}
+		print(SkillCellPosition + 10)
+		let heightConstraint = NSLayoutConstraint(item: ContainerSkillView, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: CGFloat(SkillCellPosition + 10))
+		heightConstraint.isActive = true
+	}
+
+	@objc func sliderDidChangeValue(_ sender: UISlider)
+	{
+		// 1ごとにスライダーの値を更新
+		sender.value = round(sender.value)
+		let tag = sender.tag
+		let SkillLevelSlider = view.viewWithTag(tag) as! UISlider
+		let SkillDesc = view.viewWithTag(tag - 1) as! UITextView
+		let SkillArray = SkillArrays[(tag - 5) / 100]
+        let SkillLevelLabel = view.viewWithTag(tag+1) as! UILabel
+        SkillLevelLabel.text = "Lv.\(Int(sender.value)+1)"
+		SkillDescValueChange(SkillArray: SkillArray, nowSkillLevel: Int(sender.value), skillDescTextView: SkillDesc)
 	}
 
 	func loadAllSkillCell(skillIndex: Int, SkillArrays: [[String: Any]] = [])
@@ -56,26 +73,79 @@ class CharacterSkill: UIViewController
 		let fileManager = FileManager.default
 		let libraryDirectory = fileManager.urls(for: .libraryDirectory, in: .userDomainMask).first!
 		var mainView = UIView()
-		mainView.frame = CGRect(x: 0, y: 0, width: 564, height: 181)
+		mainView.tag = skillIndex * 100
+        mainView.backgroundColor = .white.withAlphaComponent(CGFloat(0.5))
+		mainView.frame = CGRect(x: 0, y: SkillCellPosition, width: 564, height: 200)
 		var skillImageView = UIImageView()
+		skillImageView.tag = skillIndex * 100 + 1
 		mainView.addSubview(skillImageView)
 		skillImageView.frame = CGRect(x: 5, y: 5, width: 88, height: 88)
 		skillImageView.topAnchor.constraint(equalTo: mainView.topAnchor, constant: 5).isActive = true
 		skillImageView.leftAnchor.constraint(equalTo: mainView.leftAnchor, constant: 5).isActive = true
 		var skillName = UILabel()
+		skillName.tag = skillIndex * 100 + 2
 		mainView.addSubview(skillName)
-		skillName.frame = CGRect(x: 98, y: 10, width: 226, height: 35)
+		skillName.frame = CGRect(x: 98, y: 10, width: 461, height: 35)
 		skillName.leftAnchor.constraint(equalTo: mainView.rightAnchor, constant: 10).isActive = true
 		skillName.leftAnchor.constraint(equalTo: skillImageView.leftAnchor, constant: 5).isActive = true
 		var skillDesc = UILabel()
+		skillDesc.tag = skillIndex * 100 + 3
 		mainView.addSubview(skillDesc)
+		skillDesc.frame = CGRect(x: 98, y: 53, width: 461, height: 35)
 		skillDesc.topAnchor.constraint(equalTo: skillName.topAnchor, constant: 8).isActive = true
 		skillDesc.rightAnchor.constraint(equalTo: mainView.rightAnchor, constant: 8).isActive = true
-		skillDesc.frame = CGRect(x: 98, y: 53, width: 226, height: 35)
 		var skillDescTextView = UITextView()
 		let SkillArray = SkillArrays[skillIndex]
 		var SkillDescTemp: String
 		var nowSkillLevel = 1
+		if SkillArray["SkillType"] as! String != "autoattack"
+		{
+            skillDescTextView.backgroundColor = .clear
+			skillDescTextView.isEditable = false
+			skillDescTextView.isSelectable = false
+			skillDescTextView.tag = skillIndex * 100 + 4
+			mainView.addSubview(skillDescTextView)
+			skillDescTextView.frame = CGRect(x: 0, y: 101, width: 564, height: 56)
+			skillDescTextView.topAnchor.constraint(equalTo: skillImageView.topAnchor, constant: 8)
+				.isActive = true
+			skillDescTextView.rightAnchor.constraint(equalTo: mainView.rightAnchor, constant: 0)
+				.isActive = true
+			skillDescTextView.leftAnchor.constraint(equalTo: mainView.leftAnchor, constant: 0).isActive =
+				true
+
+			let SkillLevelSlider = UISlider()
+			SkillLevelSlider.tag = skillIndex * 100 + 5
+			mainView.addSubview(SkillLevelSlider)
+			//                 SkillLevelSlider.topAnchor.constraint(equalTo: skillDescTextView.bottomAnchor, constant: )
+			//                .isActive = true
+			SkillLevelSlider.rightAnchor.constraint(equalTo: mainView.rightAnchor, constant: 5)
+				.isActive = true
+			SkillLevelSlider.leftAnchor.constraint(equalTo: mainView.leftAnchor, constant: 5)
+				.isActive = true
+			SkillLevelSlider.frame = CGRect(x: 0, y: 165, width: 459, height: 20)
+			SkillLevelSlider.addTarget(self, action: #selector(sliderDidChangeValue(_:)), for: .valueChanged)
+			if SkillArray["SkillType"] as? String == "ex"
+			{
+				SkillLevelSlider.maximumValue = Float(4)
+			} else
+			{
+				SkillLevelSlider.maximumValue = Float(9)
+			}
+			let SkillLevelLabel = UILabel()
+			SkillLevelLabel.tag = skillIndex * 100 + 6
+			mainView.addSubview(SkillLevelLabel)
+			SkillLevelLabel.frame = CGRect(x: 467, y: 165, width: 79, height: 20)
+			SkillLevelLabel.rightAnchor.constraint(equalTo: SkillLevelSlider.leftAnchor, constant: 8)
+				.isActive = true
+			SkillLevelLabel.leftAnchor.constraint(equalTo: mainView.rightAnchor, constant: 8)
+				.isActive = true
+			SkillLevelLabel.text = "Lv.1"
+            SkillLevelLabel.textAlignment = .center
+		} else
+		{
+			mainView.frame.size.height = 95
+		}
+		SkillDescValueChange(SkillArray: SkillArray, nowSkillLevel: 1, skillDescTextView: skillDescTextView)
 		// // Repeat until the input text doesn't change anymore
 		// if SkillArray["SkillType"] as? String == "ex" {
 		//     nowSkillLevel = ExSkillLevel
@@ -83,47 +153,6 @@ class CharacterSkill: UIViewController
 		//     SkillLevelSlider.isHidden = true
 		//     nowSkillLevel = SkillLevel
 		// }
-		SkillDescTemp = SkillDescReplace(
-			SkillDesc: SkillArray["Desc"] as? String ?? "nil", regexPattern: "<b:([a-zA-Z0-9_]+)>",
-			replaceOf: "b:", replaceWithCategory: "Buff_", replaceWithKey: "BuffName"
-		)
-		SkillDescTemp = SkillDescReplace(
-			SkillDesc: SkillDescTemp, regexPattern: "<d:([a-zA-Z0-9_]+)>", replaceOf: "d:",
-			replaceWithCategory: "Debuff_", replaceWithKey: "BuffName"
-		)
-		SkillDescTemp = SkillDescReplace(
-			SkillDesc: SkillDescTemp, regexPattern: "<c:([a-zA-Z0-9_]+)>", replaceOf: "c:",
-			replaceWithCategory: "CC_", replaceWithKey: "BuffName"
-		)
-		SkillDescTemp = SkillDescReplace(
-			SkillDesc: SkillDescTemp, regexPattern: "<s:([a-zA-Z0-9_]+)>", replaceOf: "s:",
-			replaceWithCategory: "Special_", replaceWithKey: "BuffName"
-		)
-		SkillDescTemp = SkillKbValueReplace(
-			SkillDesc: SkillDescTemp, regexPattern: "<kb:([0-9]+)>", replaceOf: "kb:",
-			nowSkillLevel: nowSkillLevel, SkillArray: SkillArray
-		)
-		SkillDescTemp = SkillDescValueReplace(
-			SkillDesc: SkillDescTemp, regexPattern: "<?([0-9]+)>", replaceOf: "?",
-			nowSkillLevel: nowSkillLevel, SkillArray: SkillArray
-		)
-		if SkillArray["SkillType"] as! String != "autoattack"
-		{
-			skillDescTextView.text = SkillDescTemp
-			skillDescTextView.isEditable = false
-			skillDescTextView.isSelectable = false
-			mainView.addSubview(skillDescTextView)
-			skillDescTextView.topAnchor.constraint(equalTo: skillImageView.topAnchor, constant: 8)
-				.isActive = true
-			skillDescTextView.rightAnchor.constraint(equalTo: mainView.rightAnchor, constant: 0)
-				.isActive = true
-			skillDescTextView.leftAnchor.constraint(equalTo: mainView.leftAnchor, constant: 0).isActive =
-				true
-			skillDescTextView.frame = CGRect(x: 0, y: 101, width: 564, height: 56)
-		} else
-		{
-			mainView.frame.size.height = 125
-		}
 		if let radius = SkillArray["Radius"] as? [[String: Any]],
 		   let type = radius[0]["Type"] as? String
 		{
@@ -271,6 +300,39 @@ class CharacterSkill: UIViewController
 			break
 		}
 		ContainerSkillView.addSubview(mainView)
+		SkillCellPosition += Int(mainView.frame.height) + 5
+	}
+
+	func SkillDescValueChange(SkillArray: [String: Any], nowSkillLevel: Int, skillDescTextView: UITextView)
+	{
+		var SkillDescTemp = SkillDescReplace(
+			SkillDesc: SkillArray["Desc"] as? String ?? "nil", regexPattern: "<b:([a-zA-Z0-9_]+)>",
+			replaceOf: "b:", replaceWithCategory: "Buff_", replaceWithKey: "BuffName"
+		)
+		SkillDescTemp = SkillDescReplace(
+			SkillDesc: SkillDescTemp, regexPattern: "<d:([a-zA-Z0-9_]+)>", replaceOf: "d:",
+			replaceWithCategory: "Debuff_", replaceWithKey: "BuffName"
+		)
+		SkillDescTemp = SkillDescReplace(
+			SkillDesc: SkillDescTemp, regexPattern: "<c:([a-zA-Z0-9_]+)>", replaceOf: "c:",
+			replaceWithCategory: "CC_", replaceWithKey: "BuffName"
+		)
+		SkillDescTemp = SkillDescReplace(
+			SkillDesc: SkillDescTemp, regexPattern: "<s:([a-zA-Z0-9_]+)>", replaceOf: "s:",
+			replaceWithCategory: "Special_", replaceWithKey: "BuffName"
+		)
+		SkillDescTemp = SkillKbValueReplace(
+			SkillDesc: SkillDescTemp, regexPattern: "<kb:([0-9]+)>", replaceOf: "kb:",
+			nowSkillLevel: nowSkillLevel, SkillArray: SkillArray
+		)
+		SkillDescTemp = SkillDescValueReplace(
+			SkillDesc: SkillDescTemp, regexPattern: "<?([0-9]+)>", replaceOf: "?",
+			nowSkillLevel: nowSkillLevel, SkillArray: SkillArray
+		)
+		if SkillArray["SkillType"] as! String != "autoattack"
+		{
+			skillDescTextView.text = SkillDescTemp
+		}
 	}
 
 	func getParentCell(of view: UIView) -> UICollectionViewCell?
