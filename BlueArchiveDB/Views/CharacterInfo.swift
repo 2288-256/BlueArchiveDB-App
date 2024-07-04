@@ -48,11 +48,11 @@ class CharacterInfo: UIViewController
 	{
 		super.viewDidLoad()
 		ContainerView.bringSubviewToFront(SkillView)
-		MoreView.isHidden = true
+		InfoView.isHidden = false
 		StatusView.isHidden = true
-		SkillView.isHidden = false
-		InfoView.isHidden = true
+		SkillView.isHidden = true
 		WeaponView.isHidden = true
+		MoreView.isHidden = true
 		DispatchQueue.main.async
 		{
 			if self.jsonArrays.isEmpty
