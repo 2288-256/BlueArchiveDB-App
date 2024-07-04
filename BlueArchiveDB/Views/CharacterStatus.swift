@@ -23,7 +23,7 @@ class CharacterStatus: UIViewController
 	var StarATKCorrection: [[String: Any]] = [["1": 0, "2": 1.10, "3": 1.22, "4": 1.36, "5": 1.53]]
 	var StarHealingCorrection: [[String: Any]] = [["1": 0, "2": 1.075, "3": 1.175, "4": 1.295, "5": 1.445]]
 	var EquipmentTier: [Int: String] = [1: "1", 2: "1", 3: "1"]
-	var OrangeColor: UIColor = .init(red: 255 / 255, green: 147 / 255, blue: 0 / 255, alpha: 1.0)
+	var OrangeColor: UIColor = UIColor(red: 255 / 255, green: 147 / 255, blue: 0 / 255, alpha: 1.0)
 	var addBonus: [String: Int] = [:]
 	var weaponBuff: [String: Int] = [:]
 	var EquipmentArray: [String] = []
@@ -384,7 +384,10 @@ class CharacterStatus: UIViewController
 				}
 
 				let tempValue: Double = round((start1 + (start100 - start1) * levelScale) * 10000) / 10000
-				scaledValue = Int(ceil((round(tempValue) * Double(transcendenceHP)) + Double(addWeaponHP)))
+                let roundedTempValue = round(tempValue)
+                let scaledTempValue = roundedTempValue * Double(transcendenceHP)
+                let totalValue = scaledTempValue + Double(addWeaponHP)
+                scaledValue = Int(ceil(totalValue))
 
 			case "AttackPower":
 				var addWeaponATK = 0
@@ -406,7 +409,11 @@ class CharacterStatus: UIViewController
 				}
 
 				let tempValue: Double = round((start1 + (start100 - start1) * levelScale) * 10000) / 10000
-				scaledValue = Int(ceil((round(tempValue) * Double(transcendenceAttack)) + Double(addWeaponATK)))
+                let roundedTempValue = round(tempValue)
+                let scaledTempValue = roundedTempValue * Double(transcendenceAttack)
+                let totalValue = scaledTempValue + Double(addWeaponATK)
+                scaledValue = Int(ceil(totalValue))
+
 
 			case "HealPower":
 				var addWeaponHeal = 0
@@ -428,7 +435,11 @@ class CharacterStatus: UIViewController
 				}
 
 				let tempValue: Double = round((start1 + (start100 - start1) * levelScale) * 10000) / 10000
-				scaledValue = Int(ceil((round(tempValue) * Double(transcendenceHeal)) + Double(addWeaponHeal)))
+                let roundedTempValue = round(tempValue)
+                let scaledTempValue = roundedTempValue * Double(transcendenceHeal)
+                let totalValue = scaledTempValue + Double(addWeaponHeal)
+                scaledValue = Int(ceil(totalValue))
+
 
 			default:
 				var levelscale = Double(nowWeaponLevel - 1) / 99

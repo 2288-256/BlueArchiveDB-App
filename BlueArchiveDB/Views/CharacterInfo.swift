@@ -14,11 +14,11 @@ class CharacterInfo: UIViewController
 	var unitId: Int = 0
 	var BackPage: String = ""
 	var jsonArrays: [[String: Any]] = []
-	var LightArmorColor: UIColor = .init(red: 167 / 255, green: 12 / 255, blue: 25 / 255, alpha: 1.0)
-	var HeavyArmorColor: UIColor = .init(red: 178 / 255, green: 109 / 255, blue: 31 / 255, alpha: 1.0)
-	var UnarmedColor: UIColor = .init(red: 33 / 255, green: 111 / 255, blue: 156 / 255, alpha: 1.0)
-	var ElasticArmorColor: UIColor = .init(red: 148 / 255, green: 49 / 255, blue: 165 / 255, alpha: 1.0)
-	var NormalColor: UIColor = .init(red: 72 / 255, green: 85 / 255, blue: 130 / 255, alpha: 1.0)
+	var LightArmorColor: UIColor = UIColor(red: 167 / 255, green: 12 / 255, blue: 25 / 255, alpha: 1.0)
+	var HeavyArmorColor: UIColor = UIColor(red: 178 / 255, green: 109 / 255, blue: 31 / 255, alpha: 1.0)
+	var UnarmedColor: UIColor = UIColor(red: 33 / 255, green: 111 / 255, blue: 156 / 255, alpha: 1.0)
+	var ElasticArmorColor: UIColor = UIColor(red: 148 / 255, green: 49 / 255, blue: 165 / 255, alpha: 1.0)
+	var NormalColor: UIColor = UIColor(red: 72 / 255, green: 85 / 255, blue: 130 / 255, alpha: 1.0)
 	var viewWidth: CGFloat = 0
 
 	@IBOutlet var BackgroundImage: UIImageView!
@@ -67,7 +67,6 @@ class CharacterInfo: UIViewController
 	// 初期化処理
 	func setup(unitId: Int)
 	{
-		let CharacterImageHeight = CharacterImage.frame.height
 		Name.text = ""
 		Position.text = ""
 		ArmorType.text = ""
@@ -295,7 +294,7 @@ class CharacterInfo: UIViewController
 			if let localization = json as? [String: Any]
 			{
 				// Search for the translation based on the input string
-				for (key, value) in localization
+                for (_, value) in localization
 				{
 					if let translations = value as? [String: String],
 					   let translatedString = translations[input]

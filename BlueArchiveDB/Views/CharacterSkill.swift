@@ -18,17 +18,17 @@ class CharacterSkill: UIViewController
 	var ExSkillLevel: Int = 0
 	var SkillLevel: Int = 0
 	var SkillCellPosition: Int = 0
-	var LightArmorColor: UIColor = .init(
+	var LightArmorColor: UIColor = UIColor(
 		red: 167 / 255, green: 12 / 255, blue: 25 / 255, alpha: 1.0
 	)
-	var HeavyArmorColor: UIColor = .init(
+	var HeavyArmorColor: UIColor = UIColor(
 		red: 178 / 255, green: 109 / 255, blue: 31 / 255, alpha: 1.0
 	)
-	var UnarmedColor: UIColor = .init(red: 33 / 255, green: 111 / 255, blue: 156 / 255, alpha: 1.0)
-	var ElasticArmorColor: UIColor = .init(
+	var UnarmedColor: UIColor = UIColor(red: 33 / 255, green: 111 / 255, blue: 156 / 255, alpha: 1.0)
+	var ElasticArmorColor: UIColor = UIColor(
 		red: 148 / 255, green: 49 / 255, blue: 165 / 255, alpha: 1.0
 	)
-	var NormalColor: UIColor = .init(red: 72 / 255, green: 85 / 255, blue: 130 / 255, alpha: 1.0)
+	var NormalColor: UIColor = UIColor(red: 72 / 255, green: 85 / 255, blue: 130 / 255, alpha: 1.0)
 	var OldLevelSliderValue: Int = 0
 
 	//    @IBOutlet weak var collectionView: UICollectionView!
