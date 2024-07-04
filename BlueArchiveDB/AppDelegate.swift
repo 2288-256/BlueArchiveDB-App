@@ -12,12 +12,11 @@ import UIKit
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate
 {
-	func application(application _: UIApplication, continueUserActivity userActivity: NSUserActivity, restorationHandler _: ([AnyObject]?) -> Void) -> Bool
+    private func application(application _: UIApplication, continueUserActivity userActivity: NSUserActivity, restorationHandler _: ([AnyObject]?) -> Void) -> Bool
 	{
 		if userActivity.activityType == CSSearchableItemActionType
 		{
 			let uniqueIdentifier = userActivity.userInfo? [CSSearchableItemActivityIdentifier] as? String
-			print(uniqueIdentifier)
 		}
 		return true
 	}

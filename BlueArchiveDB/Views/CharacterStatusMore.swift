@@ -472,7 +472,11 @@ class CharacterStatusMore: UIViewController
 				}
 
 				let tempValue: Double = round((start1 + (start100 - start1) * levelScale) * 10000) / 10000
-				scaledValue = Int(ceil((round(tempValue) * Double(transcendenceHP)) + Double(addWeaponHP)))
+                let roundedTempValue = round(tempValue)
+                let scaledTempValue = roundedTempValue * Double(transcendenceHP)
+                let totalValue = scaledTempValue + Double(addWeaponHP)
+                scaledValue = Int(ceil(totalValue))
+
 
 			case "AttackPower":
 				var addWeaponATK = 0
@@ -494,7 +498,10 @@ class CharacterStatusMore: UIViewController
 				}
 
 				let tempValue: Double = round((start1 + (start100 - start1) * levelScale) * 10000) / 10000
-				scaledValue = Int(ceil((round(tempValue) * Double(transcendenceAttack)) + Double(addWeaponATK)))
+                let roundedTempValue = round(tempValue)
+                let scaledTempValue = roundedTempValue * Double(transcendenceAttack)
+                let totalValue = scaledTempValue + Double(addWeaponATK)
+                scaledValue = Int(ceil(totalValue))
 
 			case "HealPower":
 				var addWeaponHeal = 0
@@ -516,7 +523,10 @@ class CharacterStatusMore: UIViewController
 				}
 
 				let tempValue: Double = round((start1 + (start100 - start1) * levelScale) * 10000) / 10000
-				scaledValue = Int(ceil((round(tempValue) * Double(transcendenceHeal)) + Double(addWeaponHeal)))
+                let tempValueDouble = Double(tempValue)
+                let healComponent = round(tempValueDouble) * Double(transcendenceHeal)
+                let totalHeal = healComponent + Double(addWeaponHeal)
+                let scaledValue = Int(ceil(totalHeal)) 
 
 			default:
 				var levelscale = Double(nowWeaponLevel - 1) / 99
