@@ -188,7 +188,7 @@ class CharacterMorePage: UIViewController, UICollectionViewDataSource,
 		// Get the Group information.
 		if let group = jsonArrays[indexPath.row]["Group"] as? String
 		{
-			groupLabel?.text = translateString(group)
+			groupLabel?.text = LoadFile.shared.translateString(group)
 		}
 
 		// Get the Transcription information.
@@ -277,75 +277,6 @@ class CharacterMorePage: UIViewController, UICollectionViewDataSource,
 			{
 				print("Error reading voice JSON file: \(error)")
 			}
-		}
-	}
-
-	func translateString(_ input: String) -> String?
-	{
-		// Load the contents of localization.json
-		let fileManager = FileManager.default
-		let documentDirectory = fileManager.urls(for: .libraryDirectory, in: .userDomainMask).first
-		let localizationFileURL = documentDirectory?.appendingPathComponent("assets/data/jp/localization.json")
-
-		guard let path = localizationFileURL,
-		      let fileData = fileManager.contents(atPath: path.path),
-		      let json = try? JSONSerialization.jsonObject(with: fileData, options: []),
-		      let localization = json as? [String: Any] else
-		{
-			return nil
-		}
-
-		// Convert the input string to an array of characters
-		let characters = Array(input)
-
-		// Manually extract the trailing numbers from the input string if any
-		var trailingNumberString = ""
-		var keyToSearch = input
-		for character in characters.reversed()
-		{
-			if character.isNumber
-			{
-				trailingNumberString.insert(character, at: trailingNumberString.startIndex)
-			} else
-			{
-				break
-			}
-		}
-		// Remove the trailing numbers from the input to get the key to search
-		if !trailingNumberString.isEmpty
-		{
-			keyToSearch.removeLast(trailingNumberString.count)
-		}
-
-		// Define a helper function to search for the key in the localization dictionary
-		func searchForKey(_ searchKey: String) -> String?
-		{
-			for (key, value) in localization
-			{
-				if let translations = value as? [String: String],
-				   let translatedString = translations[searchKey]
-				{
-					// Check if the translated string has a placeholder "{0}" for the trailing numbers
-					if translatedString.contains("{0}")
-					{
-						// Replace "{0}" with the trailing numbers
-						return translatedString.replacingOccurrences(of: "{0}", with: trailingNumberString)
-					}
-					return translatedString
-				}
-			}
-			return nil
-		}
-
-		// Search using the key without trailing numbers
-		if let translation = searchForKey(keyToSearch)
-		{
-			return translation
-		} else
-		{
-			// If not found, search again using the entire key including trailing numbers
-			let inputNew = String(input.dropLast())
-			return searchForKey(inputNew) ?? "Error" // Translation not found
 		}
 	}
 

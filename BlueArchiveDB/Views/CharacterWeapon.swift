@@ -19,24 +19,7 @@ class CharacterWeapon: UIViewController
 	override func viewDidLoad()
 	{
 		super.viewDidLoad()
-		studentStatus = jsonArrays.filter { $0["Id"] as? Int == unitId }
-		SkillArrays = studentStatus.first?["Skills"] as! [[String: Any]]
-	}
-
-	func loadAllStudents()
-	{
-		do
-		{
-			let fileManager = FileManager.default
-			let documentsURL = try fileManager.url(for: .libraryDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-			let studentsFileURL = documentsURL.appendingPathComponent("assets/data/jp/students.json")
-
-			let data = try Data(contentsOf: studentsFileURL)
-			jsonArrays = try JSONSerialization.jsonObject(with: data) as? [[String: Any]] ?? []
-			print("ロードした生徒数:\(jsonArrays.count)")
-		} catch
-		{
-			print("Error reading students JSON file: \(error)")
-		}
+        jsonArrays = LoadFile.shared.getStudents()
+        studentStatus = jsonArrays.filter { $0["Id"] as? Int == unitId }
 	}
 }

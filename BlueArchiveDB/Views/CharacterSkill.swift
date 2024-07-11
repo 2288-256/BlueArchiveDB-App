@@ -18,17 +18,17 @@ class CharacterSkill: UIViewController
 	var ExSkillLevel: Int = 0
 	var SkillLevel: Int = 0
 	var SkillCellPosition: Int = 0
-	var LightArmorColor: UIColor = UIColor(
+	var LightArmorColor = UIColor(
 		red: 167 / 255, green: 12 / 255, blue: 25 / 255, alpha: 1.0
 	)
-	var HeavyArmorColor: UIColor = UIColor(
+	var HeavyArmorColor = UIColor(
 		red: 178 / 255, green: 109 / 255, blue: 31 / 255, alpha: 1.0
 	)
-	var UnarmedColor: UIColor = UIColor(red: 33 / 255, green: 111 / 255, blue: 156 / 255, alpha: 1.0)
-	var ElasticArmorColor: UIColor = UIColor(
+	var UnarmedColor = UIColor(red: 33 / 255, green: 111 / 255, blue: 156 / 255, alpha: 1.0)
+	var ElasticArmorColor = UIColor(
 		red: 148 / 255, green: 49 / 255, blue: 165 / 255, alpha: 1.0
 	)
-	var NormalColor: UIColor = UIColor(red: 72 / 255, green: 85 / 255, blue: 130 / 255, alpha: 1.0)
+	var NormalColor = UIColor(red: 72 / 255, green: 85 / 255, blue: 130 / 255, alpha: 1.0)
 	var OldLevelSliderValue: Int = 0
 
 	//    @IBOutlet weak var collectionView: UICollectionView!
@@ -63,8 +63,8 @@ class CharacterSkill: UIViewController
 		let SkillLevelSlider = view.viewWithTag(tag) as! UISlider
 		let SkillDesc = view.viewWithTag(tag - 1) as! UITextView
 		let SkillArray = SkillArrays[(tag - 5) / 100]
-        let SkillLevelLabel = view.viewWithTag(tag+1) as! UILabel
-        SkillLevelLabel.text = "Lv.\(Int(sender.value)+1)"
+		let SkillLevelLabel = view.viewWithTag(tag + 1) as! UILabel
+		SkillLevelLabel.text = "Lv.\(Int(sender.value) + 1)"
 		SkillDescValueChange(SkillArray: SkillArray, nowSkillLevel: Int(sender.value), skillDescTextView: SkillDesc)
 	}
 
@@ -74,7 +74,7 @@ class CharacterSkill: UIViewController
 		let libraryDirectory = fileManager.urls(for: .libraryDirectory, in: .userDomainMask).first!
 		var mainView = UIView()
 		mainView.tag = skillIndex * 100
-        mainView.backgroundColor = .white.withAlphaComponent(CGFloat(0.5))
+		mainView.backgroundColor = .white.withAlphaComponent(CGFloat(0.5))
 		mainView.frame = CGRect(x: 0, y: SkillCellPosition, width: 564, height: 200)
 		var skillImageView = UIImageView()
 		skillImageView.tag = skillIndex * 100 + 1
@@ -97,10 +97,10 @@ class CharacterSkill: UIViewController
 		var skillDescTextView = UITextView()
 		let SkillArray = SkillArrays[skillIndex]
 		var SkillDescTemp: String
-		var nowSkillLevel = 1
+		var nowSkillLevel = 0
 		if SkillArray["SkillType"] as! String != "autoattack"
 		{
-            skillDescTextView.backgroundColor = .clear
+			skillDescTextView.backgroundColor = .clear
 			skillDescTextView.isEditable = false
 			skillDescTextView.isSelectable = false
 			skillDescTextView.tag = skillIndex * 100 + 4
@@ -140,12 +140,12 @@ class CharacterSkill: UIViewController
 			SkillLevelLabel.leftAnchor.constraint(equalTo: mainView.rightAnchor, constant: 8)
 				.isActive = true
 			SkillLevelLabel.text = "Lv.1"
-            SkillLevelLabel.textAlignment = .center
+			SkillLevelLabel.textAlignment = .center
 		} else
 		{
 			mainView.frame.size.height = 95
 		}
-		SkillDescValueChange(SkillArray: SkillArray, nowSkillLevel: 1, skillDescTextView: skillDescTextView)
+		SkillDescValueChange(SkillArray: SkillArray, nowSkillLevel: 0, skillDescTextView: skillDescTextView)
 		// // Repeat until the input text doesn't change anymore
 		// if SkillArray["SkillType"] as? String == "ex" {
 		//     nowSkillLevel = ExSkillLevel
@@ -159,17 +159,17 @@ class CharacterSkill: UIViewController
 			switch type
 			{
 			case "Circle":
-				let Desc = translateString("skill_normalattack_circle")
+				let Desc = LoadFile.shared.translateString("skill_normalattack_circle")
 				let IconImagePath = libraryDirectory.appendingPathComponent(
 					"assets/images/skill/COMMON_SKILLICON_CIRCLE.webp")
 				skillImageView.image = UIImage(contentsOfFile: IconImagePath.path)
 			case "Obb":
-				let Desc = translateString("skill_normalattack_line")
+				let Desc = LoadFile.shared.translateString("skill_normalattack_line")
 				let IconImagePath = libraryDirectory.appendingPathComponent(
 					"assets/images/skill/COMMON_SKILLICON_LINE.webp")
 				skillImageView.image = UIImage(contentsOfFile: IconImagePath.path)
 			case "Fan":
-				let Desc = translateString("skill_normalattack_fan")
+				let Desc = LoadFile.shared.translateString("skill_normalattack_fan")
 				let IconImagePath = libraryDirectory.appendingPathComponent(
 					"assets/images/skill/COMMON_SKILLICON_FAN.webp")
 				skillImageView.image = UIImage(contentsOfFile: IconImagePath.path)
@@ -178,7 +178,7 @@ class CharacterSkill: UIViewController
 			}
 		} else
 		{
-			let Desc = translateString("skill_normalattack_target")
+			let Desc = LoadFile.shared.translateString("skill_normalattack_target")
 			let IconImagePath = libraryDirectory.appendingPathComponent(
 				"assets/images/skill/COMMON_SKILLICON_TARGET.webp")
 			skillImageView.image = UIImage(contentsOfFile: IconImagePath.path)
@@ -232,7 +232,7 @@ class CharacterSkill: UIViewController
 				RadiusType = "target"
 			}
 			var AutoAttackDescTemp = SkillDescReplace(
-				SkillDesc: translateString("skill_normalattack_\(RadiusType)") ?? "null",
+				SkillDesc: LoadFile.shared.translateString("skill_normalattack_\(RadiusType)") ?? "null",
 				regexPattern: "<b:([a-zA-Z0-9_]+)>", replaceOf: "b:", replaceWithCategory: "Buff_",
 				replaceWithKey: "BuffName"
 			)
@@ -277,24 +277,24 @@ class CharacterSkill: UIViewController
 			skillDesc.text = AutoAttackDescTemp
 
 		case "ex":
-			skillDesc.text = translateString("student_skill_ex") ?? "null"
+			skillDesc.text = LoadFile.shared.translateString("student_skill_ex") ?? "null"
 			let Cost = SkillArray["Cost"] as? [Any]
 			skillDesc.text! += "・コスト\(Cost?[0] as! Int)"
 
 		case "normal":
-			skillDesc.text = translateString("student_skill_normal") ?? "null"
+			skillDesc.text = LoadFile.shared.translateString("student_skill_normal") ?? "null"
 
 		case "gearnormal":
-			skillDesc.text = translateString("student_skill_gearnormal") ?? "null"
+			skillDesc.text = LoadFile.shared.translateString("student_skill_gearnormal") ?? "null"
 
 		case "passive":
-			skillDesc.text = translateString("student_skill_passive") ?? "null"
+			skillDesc.text = LoadFile.shared.translateString("student_skill_passive") ?? "null"
 
 		case "weaponpassive":
-			skillDesc.text = translateString("student_skill_weaponpassive") ?? "null"
+			skillDesc.text = LoadFile.shared.translateString("student_skill_weaponpassive") ?? "null"
 
 		case "sub":
-			skillDesc.text = translateString("student_skill_sub") ?? "null"
+			skillDesc.text = LoadFile.shared.translateString("student_skill_sub") ?? "null"
 
 		default:
 			break
@@ -387,7 +387,7 @@ class CharacterSkill: UIViewController
 
 						// Replace the matched text with an empty string or any replacement text
 						let replacementText =
-							translateString("\(replaceWithCategory)\(matchedText)", mainKey: replaceWithKey) ?? ""
+							LoadFile.shared.translateString("\(replaceWithCategory)\(matchedText)", mainKey: replaceWithKey) ?? ""
 						if Desc
 							!= Desc.replacingOccurrences(
 								of: "<\(replaceOf)\(matchedText)>", with: replacementText
@@ -689,49 +689,4 @@ class CharacterSkill: UIViewController
 
 	//     return CGSize(width: cellWidth, height: cellHeight)
 	// }
-	func translateString(_ input: String, mainKey: String? = nil) -> String?
-	{
-		// Load the contents of localization.json from the Documents directory
-		let fileManager = FileManager.default
-		do
-		{
-			let libraryDirectoryURL = fileManager.urls(for: .libraryDirectory, in: .userDomainMask).first
-			if let localizationFileURL = libraryDirectoryURL?.appendingPathComponent(
-				"assets/data/jp/localization.json")
-			{
-				let fileData = try Data(contentsOf: localizationFileURL)
-				let json = try JSONSerialization.jsonObject(with: fileData, options: [])
-				if let localization = json as? [String: Any]
-				{
-					// If mainKey is provided, search within the nested dictionary
-					if let mainKey = mainKey,
-					   let mainDictionary = localization[mainKey] as? [String: String],
-					   let translatedString = mainDictionary[input]
-					{
-						return translatedString
-					} else
-					{
-						// Search for the translation based on the input string
-						for (_, value) in localization
-						{
-							if let translations = value as? [String: String],
-							   let translatedString = translations[input]
-							{
-								return translatedString
-							}
-						}
-					}
-				}
-			} else
-			{
-				print("")
-			}
-		} catch
-		{
-			print("Error loading localization JSON from Documents directory: \(error)")
-			return nil
-		}
-
-		return "Error" // Translation not found
-	}
 }

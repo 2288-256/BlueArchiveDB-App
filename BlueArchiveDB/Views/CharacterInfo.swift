@@ -14,11 +14,11 @@ class CharacterInfo: UIViewController
 	var unitId: Int = 0
 	var BackPage: String = ""
 	var jsonArrays: [[String: Any]] = []
-	var LightArmorColor: UIColor = UIColor(red: 167 / 255, green: 12 / 255, blue: 25 / 255, alpha: 1.0)
-	var HeavyArmorColor: UIColor = UIColor(red: 178 / 255, green: 109 / 255, blue: 31 / 255, alpha: 1.0)
-	var UnarmedColor: UIColor = UIColor(red: 33 / 255, green: 111 / 255, blue: 156 / 255, alpha: 1.0)
-	var ElasticArmorColor: UIColor = UIColor(red: 148 / 255, green: 49 / 255, blue: 165 / 255, alpha: 1.0)
-	var NormalColor: UIColor = UIColor(red: 72 / 255, green: 85 / 255, blue: 130 / 255, alpha: 1.0)
+	var LightArmorColor = UIColor(red: 167 / 255, green: 12 / 255, blue: 25 / 255, alpha: 1.0)
+	var HeavyArmorColor = UIColor(red: 178 / 255, green: 109 / 255, blue: 31 / 255, alpha: 1.0)
+	var UnarmedColor = UIColor(red: 33 / 255, green: 111 / 255, blue: 156 / 255, alpha: 1.0)
+	var ElasticArmorColor = UIColor(red: 148 / 255, green: 49 / 255, blue: 165 / 255, alpha: 1.0)
+	var NormalColor = UIColor(red: 72 / 255, green: 85 / 255, blue: 130 / 255, alpha: 1.0)
 	var viewWidth: CGFloat = 0
 
 	@IBOutlet var BackgroundImage: UIImageView!
@@ -57,7 +57,7 @@ class CharacterInfo: UIViewController
 		{
 			if self.jsonArrays.isEmpty
 			{
-				self.loadAllStudents()
+				self.jsonArrays = LoadFile.shared.getStudents()
 			}
 		}
 		setup(unitId: unitId)
@@ -101,9 +101,9 @@ class CharacterInfo: UIViewController
 		Name.text = matchingStudents.first?["Name"] as? String
 		let PositionText = matchingStudents.first?["Position"] as? String
 		Position.text = PositionText?.uppercased()
-		ArmorType.text = translateString((matchingStudents.first?["ArmorType"])! as! String)
-		BulletType.text = translateString((matchingStudents.first?["BulletType"])! as! String)
-		TacticRole.text = translateString((matchingStudents.first?["TacticRole"])! as! String)
+		ArmorType.text = LoadFile.shared.translateString((matchingStudents.first?["ArmorType"])! as! String)
+		BulletType.text = LoadFile.shared.translateString((matchingStudents.first?["BulletType"])! as! String)
+		TacticRole.text = LoadFile.shared.translateString((matchingStudents.first?["TacticRole"])! as! String)
 		let image = UIImage(named: "Role_\((matchingStudents.first?["TacticRole"])! as! String)")
 		TacticRoleImage.image = image
 
@@ -178,7 +178,7 @@ class CharacterInfo: UIViewController
 	{
 		if jsonArrays.isEmpty
 		{
-			loadAllStudents()
+			jsonArrays = LoadFile.shared.getStudents()
 		}
 		switch (segue.identifier, segue.destination)
 		{
@@ -261,54 +261,5 @@ class CharacterInfo: UIViewController
 		let storyboard = UIStoryboard(name: "Main", bundle: nil)
 		let nextVC = storyboard.instantiateViewController(withIdentifier: "Home") as! ViewController
 		present(nextVC, animated: false, completion: nil)
-	}
-
-	func loadAllStudents()
-	{
-		do
-		{
-			let fileManager = FileManager.default
-			let documentsURL = try fileManager.url(for: .libraryDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-			let studentsFileURL = documentsURL.appendingPathComponent("assets/data/jp/students.json")
-
-			let data = try Data(contentsOf: studentsFileURL)
-			jsonArrays = try JSONSerialization.jsonObject(with: data) as? [[String: Any]] ?? []
-			print("ロードした生徒数:\(jsonArrays.count)")
-		} catch
-		{
-			print("Error reading students JSON file: \(error)")
-		}
-	}
-
-	func translateString(_ input: String) -> String?
-	{
-		// Load the contents of localization.json from the Documents directory
-		let fileManager = FileManager.default
-		do
-		{
-			let documentsURL = try fileManager.url(for: .libraryDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-			let localizationFileURL = documentsURL.appendingPathComponent("assets/data/jp/localization.json")
-
-			let fileData = try Data(contentsOf: localizationFileURL)
-			let json = try JSONSerialization.jsonObject(with: fileData, options: [])
-			if let localization = json as? [String: Any]
-			{
-				// Search for the translation based on the input string
-                for (_, value) in localization
-				{
-					if let translations = value as? [String: String],
-					   let translatedString = translations[input]
-					{
-						return translatedString
-					}
-				}
-			}
-		} catch
-		{
-			print("Error loading localization JSON from Documents directory: \(error)")
-			return nil
-		}
-
-		return "Error" // Translation not found
 	}
 }

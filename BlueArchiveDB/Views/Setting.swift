@@ -17,7 +17,7 @@ class Setting: UIViewController
 	override func viewDidLoad()
 	{
 		super.viewDidLoad()
-		loadAllStudents()
+		jsonArrays = LoadFile.shared.getStudents()
 		if let characterIdString = UserDefaults.standard.string(forKey: "CharacterID")
 		{
 			if let characterId = Int(characterIdString)
@@ -51,23 +51,6 @@ class Setting: UIViewController
 		if let viewController = storyboard.instantiateViewController(withIdentifier: "SettingCharacterSelect") as? SettingCharacterSelect
 		{
 			present(viewController, animated: false, completion: nil)
-		}
-	}
-
-	func loadAllStudents()
-	{
-		do
-		{
-			let fileManager = FileManager.default
-			let documentsURL = try fileManager.url(for: .libraryDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-			let studentsFileURL = documentsURL.appendingPathComponent("assets/data/jp/students.json")
-
-			let data = try Data(contentsOf: studentsFileURL)
-			jsonArrays = try JSONSerialization.jsonObject(with: data) as? [[String: Any]] ?? []
-			print("ロードした生徒数:\(jsonArrays.count)")
-		} catch
-		{
-			print("Error reading students JSON file: \(error)")
 		}
 	}
 }
