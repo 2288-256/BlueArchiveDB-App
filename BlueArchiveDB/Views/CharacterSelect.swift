@@ -28,7 +28,8 @@ class CharacterSelect: UIViewController, UICollectionViewDataSource,
 			loadSupportStudents()
 		} else
 		{
-			loadAllStudents()
+			jsonArrays = LoadFile.shared.getStudents()
+			StudentData = jsonArrays
 		}
 		if SearchString != ""
 		{
@@ -57,7 +58,7 @@ class CharacterSelect: UIViewController, UICollectionViewDataSource,
 
 	@IBAction func AllStudentsFilter(_: UIButton)
 	{
-		loadAllStudents()
+		jsonArrays = LoadFile.shared.getStudents()
 		collectionView.reloadData()
 	}
 
@@ -121,36 +122,11 @@ class CharacterSelect: UIViewController, UICollectionViewDataSource,
 		return jsonArrays.count
 	}
 
-	func loadAllStudents()
-	{
-		do
-		{
-			jsonArrays.removeAll()
-			let fileManager = FileManager.default
-			let documentsURL = try fileManager.url(for: .libraryDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-			let studentsFileURL = documentsURL.appendingPathComponent("assets/data/jp/students.json")
-
-			let data = try Data(contentsOf: studentsFileURL)
-			StudentData = try JSONSerialization.jsonObject(with: data) as? [[String: Any]] ?? []
-			jsonArrays = StudentData
-			print("ロードした生徒数:\(StudentData.count)")
-		} catch
-		{
-			print("Error reading students JSON file: \(error)")
-		}
-	}
-
 	func loadMainStudents()
 	{
 		do
 		{
 			jsonArrays.removeAll()
-			let fileManager = FileManager.default
-			let documentsURL = try fileManager.url(for: .libraryDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-			let studentsFileURL = documentsURL.appendingPathComponent("assets/data/jp/students.json")
-
-			let data = try Data(contentsOf: studentsFileURL)
-			let jsonArray = try JSONSerialization.jsonObject(with: data) as? [[String: Any]] ?? []
 			jsonArrays = StudentData.filter { ($0["SquadType"] as? String) == "Main" }
 			print("STRIKERの生徒数:\(jsonArrays.count)人")
 		} catch
@@ -164,12 +140,6 @@ class CharacterSelect: UIViewController, UICollectionViewDataSource,
 		do
 		{
 			jsonArrays.removeAll()
-			let fileManager = FileManager.default
-			let documentsURL = try fileManager.url(for: .libraryDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-			let studentsFileURL = documentsURL.appendingPathComponent("assets/data/jp/students.json")
-
-			let data = try Data(contentsOf: studentsFileURL)
-			let jsonArray = try JSONSerialization.jsonObject(with: data, options: []) as? [[String: Any]] ?? []
 			jsonArrays = StudentData.filter { ($0["SquadType"] as? String) == "Support" }
 			print("SUPPORTERの生徒数:\(jsonArrays.count)人")
 		} catch
@@ -218,7 +188,7 @@ class CharacterSelect: UIViewController, UICollectionViewDataSource,
 		searchTerms.append(searchText)
 		if searchText != ""
 		{
-			searchTerms += findMatchingKeys(searchText: searchText)
+			searchTerms += LoadFile.shared.findMatchingKeys(searchText: searchText)
 			print("検索結果:\(searchTerms)")
 			// 検索文字列を含む要素を検索結果配列に追加する
 			jsonArrays = StudentData.filter
@@ -253,43 +223,10 @@ class CharacterSelect: UIViewController, UICollectionViewDataSource,
 				loadSupportStudents()
 			} else
 			{
-				loadAllStudents()
+				jsonArrays = LoadFile.shared.getStudents()
 			}
 		}
 		// テーブルを再読み込みする
 		collectionView.reloadData()
-	}
-
-	func findMatchingKeys(searchText: String) -> [String]
-	{
-		var matchingKeys: [String] = []
-
-		do
-		{
-			let fileManager = FileManager.default
-			let documentsURL = try fileManager.url(for: .libraryDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-			let localizationFileURL = documentsURL.appendingPathComponent("assets/data/jp/localization.json")
-
-			let fileData = try Data(contentsOf: localizationFileURL)
-			if let json = try JSONSerialization.jsonObject(with: fileData, options: []) as? [String: [String: String]]
-			{
-				let directoriesToSearch = ["School", "SchoolLong", "Club"]
-
-				for directory in directoriesToSearch
-				{
-					if let directoryData = json[directory]
-					{
-						for (key, value) in directoryData where value.contains(searchText)
-						{
-							matchingKeys.append(key)
-						}
-					}
-				}
-			}
-		} catch
-		{
-			// Handle error
-		}
-		return matchingKeys
 	}
 }

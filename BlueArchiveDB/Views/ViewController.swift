@@ -48,7 +48,7 @@ class ViewController: UIViewController, UICollectionViewDataSource,
 		let CharacterImageHeight = CharacterImage.frame.size.height
 		// イメージビューにタップジェスチャーレコグナイザーを追加
 		CharacterImage.addGestureRecognizer(tapGestureRecognizer)
-		loadAllStudents()
+		jsonArrays = LoadFile.shared.getStudents()
 		loadVoice()
 		print("ロードした生徒数:\(jsonArrays.count)")
 		print(voiceArrays)
@@ -458,7 +458,8 @@ class ViewController: UIViewController, UICollectionViewDataSource,
 					try fileManager.moveItem(at: sourceFilePath, to: destinationFilePath)
 				}
 				try fileManager.removeItem(at: sourceDirectory)
-				self.loadAllStudents()
+				NotificationCenter.default.post(name: Notification.Name("LocalizationDataGenerated"), object: nil)
+				self.jsonArrays = LoadFile.shared.getStudents()
 				print("Indexing for Spotlight")
 				for (index, character) in self.jsonArrays.enumerated()
 				{
@@ -466,8 +467,8 @@ class ViewController: UIViewController, UICollectionViewDataSource,
 					      let familyName = character["FamilyName"] as? String,
 					      let name = character["Name"] as? String,
 					      let profileIntroduction = character["ProfileIntroduction"] as? String,
-					      let school = self.translateString((character["School"] as? String)!, mainKey: "School"),
-					      let club = self.translateString((character["Club"] as? String)!),
+					      let school = LoadFile.shared.translateString((character["School"] as? String)!, mainKey: "School"),
+					      let club = LoadFile.shared.translateString((character["Club"] as? String)!),
 					      let familyNameRuby = character["FamilyNameRuby"] as? String,
 					      let characterVoice = character["CharacterVoice"] as? String,
 					      let illustrator = character["Illustrator"] as? String,
@@ -593,27 +594,6 @@ class ViewController: UIViewController, UICollectionViewDataSource,
 		player?.play()
 	}
 
-	func loadAllStudents()
-	{
-		do
-		{
-			let fileManager = FileManager.default
-			let documentsURL = fileManager.urls(for: .libraryDirectory, in: .userDomainMask).first!
-			let studentsFileURL = documentsURL.appendingPathComponent("assets/data/jp/students.json")
-
-			guard FileManager.default.fileExists(atPath: studentsFileURL.path) else
-			{
-				return
-			}
-
-			let data = try Data(contentsOf: studentsFileURL)
-			jsonArrays = try JSONSerialization.jsonObject(with: data) as? [[String: Any]] ?? []
-		} catch
-		{
-			print("Error reading students JSON file: \(error)")
-		}
-	}
-
 	func loadVoice()
 	{
 		let characterID = UserDefaults.standard.string(forKey: "CharacterID") ?? "10066"
@@ -638,50 +618,5 @@ class ViewController: UIViewController, UICollectionViewDataSource,
 				print("Error reading voice JSON file: \(error)")
 			}
 		}
-	}
-
-	func translateString(_ input: String, mainKey: String? = nil) -> String?
-	{
-		// Load the contents of localization.json from the Documents directory
-		let fileManager = FileManager.default
-		do
-		{
-			let libraryDirectoryURL = fileManager.urls(for: .libraryDirectory, in: .userDomainMask).first
-			if let localizationFileURL = libraryDirectoryURL?.appendingPathComponent("assets/data/jp/localization.json")
-			{
-				let fileData = try Data(contentsOf: localizationFileURL)
-				let json = try JSONSerialization.jsonObject(with: fileData, options: [])
-				if let localization = json as? [String: Any]
-				{
-					// If mainKey is provided, search within the nested dictionary
-					if let mainKey = mainKey,
-					   let mainDictionary = localization[mainKey] as? [String: String],
-					   let translatedString = mainDictionary[input]
-					{
-						return translatedString
-					} else
-					{
-						// Search for the translation based on the input string
-						for (_, value) in localization
-						{
-							if let translations = value as? [String: String],
-							   let translatedString = translations[input]
-							{
-								return translatedString
-							}
-						}
-					}
-				}
-			} else
-			{
-				print("localization.json not found")
-			}
-		} catch
-		{
-			print("Error loading localization JSON from Documents directory: \(error)")
-			return nil
-		}
-
-		return "Error" // Translation not found
 	}
 }

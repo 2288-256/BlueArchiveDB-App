@@ -18,7 +18,7 @@ class SettingCharacterSelect: UIViewController, UICollectionViewDataSource,
 	@IBOutlet var searchBar: UISearchBar!
 	override func viewDidLoad()
 	{
-		loadAllStudents()
+		jsonArrays = LoadFile.shared.getStudents()
 	}
 
 	@IBAction func backButton(_: Any)
@@ -85,24 +85,6 @@ class SettingCharacterSelect: UIViewController, UICollectionViewDataSource,
 		return jsonArrays.count
 	}
 
-	func loadAllStudents()
-	{
-		do
-		{
-			let fileManager = FileManager.default
-			let documentsURL = try fileManager.url(for: .libraryDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-			let studentsFileURL = documentsURL.appendingPathComponent("assets/data/jp/students.json")
-
-			let data = try Data(contentsOf: studentsFileURL)
-			StudentData = try JSONSerialization.jsonObject(with: data) as? [[String: Any]] ?? []
-			jsonArrays = StudentData
-			print("ロードした生徒数:\(jsonArrays.count)")
-		} catch
-		{
-			print("Error reading students JSON file: \(error)")
-		}
-	}
-
 	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath)
 	{
 		// 選択されたセルを取得
@@ -153,7 +135,7 @@ class SettingCharacterSelect: UIViewController, UICollectionViewDataSource,
 		searchTerms.append(searchText)
 		if searchText != ""
 		{
-			searchTerms += findMatchingKeys(searchText: searchText)
+			searchTerms += LoadFile.shared.findMatchingKeys(searchText: searchText)
 			// 検索文字列を含む要素を検索結果配列に追加する
 			jsonArrays = StudentData.filter
 			{ student in
@@ -178,42 +160,9 @@ class SettingCharacterSelect: UIViewController, UICollectionViewDataSource,
 			}
 		} else
 		{
-			loadAllStudents()
+			jsonArrays = LoadFile.shared.getStudents()
 		}
 		// テーブルを再読み込みする
 		collectionView.reloadData()
-	}
-
-	func findMatchingKeys(searchText: String) -> [String]
-	{
-		var matchingKeys: [String] = []
-
-		do
-		{
-			let fileManager = FileManager.default
-			let documentsURL = try fileManager.url(for: .libraryDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-			let localizationFileURL = documentsURL.appendingPathComponent("assets/data/jp/localization.json")
-
-			let fileData = try Data(contentsOf: localizationFileURL)
-			if let json = try JSONSerialization.jsonObject(with: fileData, options: []) as? [String: [String: String]]
-			{
-				let directoriesToSearch = ["School", "SchoolLong", "Club"]
-
-				for directory in directoriesToSearch
-				{
-					if let directoryData = json[directory]
-					{
-						for (key, value) in directoryData where value.contains(searchText)
-						{
-							matchingKeys.append(key)
-						}
-					}
-				}
-			}
-		} catch
-		{
-			// Handle error
-		}
-		return matchingKeys
 	}
 }

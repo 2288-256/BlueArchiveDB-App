@@ -17,11 +17,11 @@ class CharacterWeaponStar1: UIViewController
 	var SkillArrays: [[String: Any]] = []
 	var SkillLevel: Int = 1
 	var nowSkillLevel: Int = 0
-	var LightArmorColor: UIColor = UIColor(red: 167 / 255, green: 12 / 255, blue: 25 / 255, alpha: 1.0)
-	var HeavyArmorColor: UIColor = UIColor(red: 178 / 255, green: 109 / 255, blue: 31 / 255, alpha: 1.0)
-	var UnarmedColor: UIColor = UIColor(red: 33 / 255, green: 111 / 255, blue: 156 / 255, alpha: 1.0)
-	var ElasticArmorColor: UIColor = UIColor(red: 148 / 255, green: 49 / 255, blue: 165 / 255, alpha: 1.0)
-	var NormalColor: UIColor = UIColor(red: 72 / 255, green: 85 / 255, blue: 130 / 255, alpha: 1.0)
+	var LightArmorColor = UIColor(red: 167 / 255, green: 12 / 255, blue: 25 / 255, alpha: 1.0)
+	var HeavyArmorColor = UIColor(red: 178 / 255, green: 109 / 255, blue: 31 / 255, alpha: 1.0)
+	var UnarmedColor = UIColor(red: 33 / 255, green: 111 / 255, blue: 156 / 255, alpha: 1.0)
+	var ElasticArmorColor = UIColor(red: 148 / 255, green: 49 / 255, blue: 165 / 255, alpha: 1.0)
+	var NormalColor = UIColor(red: 72 / 255, green: 85 / 255, blue: 130 / 255, alpha: 1.0)
 	@IBOutlet var SkillDesc: UITextView!
 	@IBOutlet var SkillName: UILabel!
 	@IBOutlet var skillTypeIconImagePath: UIImageView!
@@ -73,15 +73,15 @@ class CharacterWeaponStar1: UIViewController
 			switch type
 			{
 			case "Circle":
-				let Desc = translateString("skill_normalattack_circle")
+				let Desc = LoadFile.shared.translateString("skill_normalattack_circle")
 				let IconImagePath = libraryDirectory.appendingPathComponent("assets/images/skill/COMMON_SKILLICON_CIRCLE.webp")
 				skillTypeIconImagePath.image = UIImage(contentsOfFile: IconImagePath.path)
 			case "Obb":
-				let Desc = translateString("skill_normalattack_line")
+				let Desc = LoadFile.shared.translateString("skill_normalattack_line")
 				let IconImagePath = libraryDirectory.appendingPathComponent("assets/images/skill/COMMON_SKILLICON_LINE.webp")
 				skillTypeIconImagePath.image = UIImage(contentsOfFile: IconImagePath.path)
 			case "Fan":
-				let Desc = translateString("skill_normalattack_fan")
+				let Desc = LoadFile.shared.translateString("skill_normalattack_fan")
 				let IconImagePath = libraryDirectory.appendingPathComponent("assets/images/skill/COMMON_SKILLICON_FAN.webp")
 				skillTypeIconImagePath.image = UIImage(contentsOfFile: IconImagePath.path)
 			default:
@@ -89,7 +89,7 @@ class CharacterWeaponStar1: UIViewController
 			}
 		} else
 		{
-			let Desc = translateString("skill_normalattack_target")
+			let Desc = LoadFile.shared.translateString("skill_normalattack_target")
 			let IconImagePath = libraryDirectory.appendingPathComponent("assets/images/skill/COMMON_SKILLICON_TARGET.webp")
 			skillTypeIconImagePath.image = UIImage(contentsOfFile: IconImagePath.path)
 		}
@@ -139,7 +139,7 @@ class CharacterWeaponStar1: UIViewController
 			{
 				RadiusType = "target"
 			}
-			var AutoAttackDescTemp = SkillDescReplace(SkillDesc: translateString("skill_normalattack_\(RadiusType)") ?? "null", regexPattern: "<b:([a-zA-Z0-9_]+)>", replaceOf: "b:", replaceWithCategory: "Buff_", replaceWithKey: "BuffName")
+			var AutoAttackDescTemp = SkillDescReplace(SkillDesc: LoadFile.shared.translateString("skill_normalattack_\(RadiusType)") ?? "null", regexPattern: "<b:([a-zA-Z0-9_]+)>", replaceOf: "b:", replaceWithCategory: "Buff_", replaceWithKey: "BuffName")
 			AutoAttackDescTemp = SkillDescReplace(SkillDesc: AutoAttackDescTemp, regexPattern: "<d:([a-zA-Z0-9_]+)>", replaceOf: "d:", replaceWithCategory: "Debuff_", replaceWithKey: "BuffName")
 			AutoAttackDescTemp = SkillDescReplace(SkillDesc: AutoAttackDescTemp, regexPattern: "<c:([a-zA-Z0-9_]+)>", replaceOf: "c:", replaceWithCategory: "CC_", replaceWithKey: "BuffName")
 			do
@@ -172,24 +172,24 @@ class CharacterWeaponStar1: UIViewController
 			SkillTypeName.text = AutoAttackDescTemp
 
 		case "ex":
-			SkillTypeName.text = translateString("student_skill_ex") ?? "null"
+			SkillTypeName.text = LoadFile.shared.translateString("student_skill_ex") ?? "null"
 			let Cost = SkillArray!["Cost"] as? [Any]
 			SkillTypeName.text! += "・コスト\(Cost?[0] as! Int)"
 
 		case "normal":
-			SkillTypeName.text = translateString("student_skill_normal") ?? "null"
+			SkillTypeName.text = LoadFile.shared.translateString("student_skill_normal") ?? "null"
 
 		case "gearnormal":
-			SkillTypeName.text = translateString("student_skill_gearnormal") ?? "null"
+			SkillTypeName.text = LoadFile.shared.translateString("student_skill_gearnormal") ?? "null"
 
 		case "passive":
-			SkillTypeName.text = translateString("student_skill_passive") ?? "null"
+			SkillTypeName.text = LoadFile.shared.translateString("student_skill_passive") ?? "null"
 
 		case "weaponpassive":
-			SkillTypeName.text = translateString("student_skill_weaponpassive") ?? "null"
+			SkillTypeName.text = LoadFile.shared.translateString("student_skill_weaponpassive") ?? "null"
 
 		case "sub":
-			SkillTypeName.text = translateString("student_skill_sub") ?? "null"
+			SkillTypeName.text = LoadFile.shared.translateString("student_skill_sub") ?? "null"
 
 		default:
 			break
@@ -219,7 +219,7 @@ class CharacterWeaponStar1: UIViewController
 						// print("Matched text: \(matchedText)") // Do something with matched text
 
 						// Replace the matched text with an empty string or any replacement text
-						let replacementText = translateString("\(replaceWithCategory)\(matchedText)", mainKey: replaceWithKey) ?? ""
+						let replacementText = LoadFile.shared.translateString("\(replaceWithCategory)\(matchedText)", mainKey: replaceWithKey) ?? ""
 						if Desc != Desc.replacingOccurrences(of: "<\(replaceOf)\(matchedText)>", with: replacementText)
 						{
 							Desc = Desc.replacingOccurrences(of: "<\(replaceOf)\(matchedText)>", with: replacementText)
@@ -313,50 +313,5 @@ class CharacterWeaponStar1: UIViewController
 			}
 		}
 		return Desc
-	}
-
-	func translateString(_ input: String, mainKey: String? = nil) -> String?
-	{
-		// Load the contents of localization.json from the Documents directory
-		let fileManager = FileManager.default
-		do
-		{
-			let libraryDirectoryURL = fileManager.urls(for: .libraryDirectory, in: .userDomainMask).first
-			if let localizationFileURL = libraryDirectoryURL?.appendingPathComponent("assets/data/jp/localization.json")
-			{
-				let fileData = try Data(contentsOf: localizationFileURL)
-				let json = try JSONSerialization.jsonObject(with: fileData, options: [])
-				if let localization = json as? [String: Any]
-				{
-					// If mainKey is provided, search within the nested dictionary
-					if let mainKey = mainKey,
-					   let mainDictionary = localization[mainKey] as? [String: String],
-					   let translatedString = mainDictionary[input]
-					{
-						return translatedString
-					} else
-					{
-						// Search for the translation based on the input string
-						for (_, value) in localization
-						{
-							if let translations = value as? [String: String],
-							   let translatedString = translations[input]
-							{
-								return translatedString
-							}
-						}
-					}
-				}
-			} else
-			{
-				print("")
-			}
-		} catch
-		{
-			print("Error loading localization JSON from Documents directory: \(error)")
-			return nil
-		}
-
-		return "Error" // Translation not found
 	}
 }
