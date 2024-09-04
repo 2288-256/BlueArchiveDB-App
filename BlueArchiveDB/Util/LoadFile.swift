@@ -176,7 +176,6 @@ class LoadFile
             // Search using the key without trailing numbers
             if let translation = searchForKey(keyToSearch)
             {
-                print("searchForKey:" + translation)
                 return translation
             }else{
                 return "Error: TNSK"
