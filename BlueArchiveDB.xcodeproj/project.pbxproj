@@ -20,6 +20,7 @@
 		4B39DE462C7EE7DC008E8DC3 /* LoadSkill.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B39DE452C7EE7DC008E8DC3 /* LoadSkill.swift */; };
 		4B39DE482C7F0C03008E8DC3 /* CharacterGear.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B39DE472C7F0C03008E8DC3 /* CharacterGear.swift */; };
 		4B39DE4A2C84B608008E8DC3 /* CreateElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B39DE492C84B608008E8DC3 /* CreateElement.swift */; };
+		4B5FABA32C882A6D0039CA83 /* DownloadFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5FABA22C882A6D0039CA83 /* DownloadFile.swift */; };
 		4B9313022C1AE62B0058B93D /* SwiftFormat in Frameworks */ = {isa = PBXBuildFile; productRef = 4B9313012C1AE62B0058B93D /* SwiftFormat */; };
 		4B9ED6BD2B6766F600E5A29E /* CustomTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B9ED6BC2B6766F600E5A29E /* CustomTextView.swift */; };
 		4B9ED6C02B67926300E5A29E /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 4B9ED6BF2B67926300E5A29E /* SwiftSoup */; };
@@ -92,6 +93,7 @@
 		4B39DE452C7EE7DC008E8DC3 /* LoadSkill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadSkill.swift; sourceTree = "<group>"; };
 		4B39DE472C7F0C03008E8DC3 /* CharacterGear.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterGear.swift; sourceTree = "<group>"; };
 		4B39DE492C84B608008E8DC3 /* CreateElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateElement.swift; sourceTree = "<group>"; };
+		4B5FABA22C882A6D0039CA83 /* DownloadFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadFile.swift; sourceTree = "<group>"; };
 		4B9ED6BC2B6766F600E5A29E /* CustomTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextView.swift; sourceTree = "<group>"; };
 		4BB31A8F2C376D0F004659C8 /* LoadFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadFile.swift; sourceTree = "<group>"; };
 		4BB8FE1F2B15B8E700946B70 /* CharacterInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterInfo.swift; sourceTree = "<group>"; };
@@ -186,6 +188,7 @@
 				4BB31A8F2C376D0F004659C8 /* LoadFile.swift */,
 				4B39DE452C7EE7DC008E8DC3 /* LoadSkill.swift */,
 				4B39DE492C84B608008E8DC3 /* CreateElement.swift */,
+				4B5FABA22C882A6D0039CA83 /* DownloadFile.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -341,6 +344,7 @@
 				4B9ED6C12B68A50300E5A29E /* XCRemoteSwiftPackageReference "Reachability" */,
 				4B9ED6C42B68B47F00E5A29E /* XCRemoteSwiftPackageReference "Zip" */,
 				4B9313002C1AE62B0058B93D /* XCRemoteSwiftPackageReference "SwiftFormat" */,
+				4B5FABA42C892A820039CA83 /* XCRemoteSwiftPackageReference "OrderedDictionary" */,
 			);
 			productRefGroup = 4BE489412B0DC49B000992B0 /* Products */;
 			projectDirPath = "";
@@ -443,6 +447,7 @@
 				4BE489442B0DC49B000992B0 /* AppDelegate.swift in Sources */,
 				4BCC532F2B1F118400EE2682 /* VoiceCell.swift in Sources */,
 				4B2528362BE9A0C5006F83B2 /* CharacterWeapon.swift in Sources */,
+				4B5FABA32C882A6D0039CA83 /* DownloadFile.swift in Sources */,
 				4BE140C42B70C76D0021912C /* CharacterStatus.swift in Sources */,
 				4BB31A902C376D0F004659C8 /* LoadFile.swift in Sources */,
 				4B39DE4A2C84B608008E8DC3 /* CreateElement.swift in Sources */,
@@ -782,6 +787,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		4B5FABA42C892A820039CA83 /* XCRemoteSwiftPackageReference "OrderedDictionary" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/lukaskubanek/OrderedDictionary";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		4B9313002C1AE62B0058B93D /* XCRemoteSwiftPackageReference "SwiftFormat" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/nicklockwood/SwiftFormat";

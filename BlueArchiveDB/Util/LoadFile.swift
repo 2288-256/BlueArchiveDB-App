@@ -12,59 +12,60 @@ class LoadFile
 {
     static let shared = LoadFile()
 
-    private var studentsData: [[String: Any]] = []
-    private var voiceData: [[String: Any]] = []
-    private var localizationData: [String: Any] = [:]
+    private var studentsData: [String: [String: Any]] = [:]
+        private var voiceData: [[String: Any]] = []
+        private var localizationData: [String: Any] = [:]
 
-    private init()
-    {
-        loadInitialData()
-
-        // NotificationCenterのオブザーバーを登録
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(handleLocalizationDataGenerated),
-            name: Notification.Name("LocalizationDataGenerated"),
-            object: nil
-        )
-    }
-
-    deinit
-    {
-        // オブザーバーを削除
-        NotificationCenter.default.removeObserver(self)
-    }
-
-    // 初期データ読み込み処理
-    private func loadInitialData()
-    {
-        loadAllStudents()
-        loadLocalizationData()
-    }
-
-    private func loadAllStudents()
-    {
-        do
+        private init()
         {
-            let fileManager = FileManager.default
-            let documentsURL = try fileManager.url(for: .libraryDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-            let studentsFileURL = documentsURL.appendingPathComponent("assets/data/jp/students.json")
+            loadInitialData()
 
-            let data = try Data(contentsOf: studentsFileURL)
-            studentsData = try JSONSerialization.jsonObject(with: data) as? [[String: Any]] ?? []
-            print("ロードした生徒数:\(studentsData.count)")
-        } catch
-        {
-            print("Error reading students JSON file: \(error)")
+            // NotificationCenterのオブザーバーを登録
+            NotificationCenter.default.addObserver(
+                self,
+                selector: #selector(handleLocalizationDataGenerated),
+                name: Notification.Name("LocalizationDataGenerated"),
+                object: nil
+            )
         }
-    }
+
+        deinit
+        {
+            // オブザーバーを削除
+            NotificationCenter.default.removeObserver(self)
+        }
+
+        // 初期データ読み込み処理
+        private func loadInitialData()
+        {
+            loadAllStudents()
+            loadLocalizationData()
+        }
+
+        private func loadAllStudents()
+        {
+            do
+            {
+                let fileManager = FileManager.default
+                let documentsURL = try fileManager.url(for: .libraryDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+                let studentsFileURL = documentsURL.appendingPathComponent("assets/data/jp/students.min.json")
+
+                let data = try Data(contentsOf: studentsFileURL)
+                // 型を [String: [String: Any]] に変更
+                studentsData = try JSONSerialization.jsonObject(with: data) as? [String: [String: Any]] ?? [:]
+                print("ロードした生徒数:\(studentsData.count)")
+            } catch
+            {
+                print("Error reading students JSON file: \(error)")
+            }
+        }
 
     func loadAllStudentsVoice(unitId: String)
     {
         let fileManager = FileManager.default
         if let documentsURL = fileManager.urls(for: .libraryDirectory, in: .userDomainMask).first
         {
-            let voiceFileURL = documentsURL.appendingPathComponent("assets/data/jp/voice.json")
+            let voiceFileURL = documentsURL.appendingPathComponent("assets/data/jp/voice.min.json")
             do
             {
                 let data = try Data(contentsOf: voiceFileURL)
@@ -87,7 +88,7 @@ class LoadFile
         {
             let fileManager = FileManager.default
             let libraryDirectoryURL = fileManager.urls(for: .libraryDirectory, in: .userDomainMask).first
-            if let localizationFileURL = libraryDirectoryURL?.appendingPathComponent("assets/data/jp/localization.json")
+            if let localizationFileURL = libraryDirectoryURL?.appendingPathComponent("assets/data/jp/localization.min.json")
             {
                 let fileData = try Data(contentsOf: localizationFileURL)
                 let json = try JSONSerialization.jsonObject(with: fileData, options: [])
@@ -192,7 +193,7 @@ class LoadFile
         {
             let fileManager = FileManager.default
             let documentsURL = try fileManager.url(for: .libraryDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-            let localizationFileURL = documentsURL.appendingPathComponent("assets/data/jp/localization.json")
+            let localizationFileURL = documentsURL.appendingPathComponent("assets/data/jp/localization.min.json")
 
             let fileData = try Data(contentsOf: localizationFileURL)
             if let json = try JSONSerialization.jsonObject(with: fileData, options: []) as? [String: [String: String]]
@@ -217,10 +218,10 @@ class LoadFile
         return matchingKeys
     }
 
-    public func getStudents() -> [[String: Any]]
-    {
-        return studentsData
-    }
+    public func getStudents() -> [String: [String: Any]]
+        {
+            return studentsData
+        }
 
     public func getVoiceData(forUnitId unitId: String) -> [String: Any]?
     {

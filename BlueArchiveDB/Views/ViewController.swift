@@ -48,7 +48,8 @@ class ViewController: UIViewController, UICollectionViewDataSource,
 		let CharacterImageHeight = CharacterImage.frame.size.height
 		// イメージビューにタップジェスチャーレコグナイザーを追加
 		CharacterImage.addGestureRecognizer(tapGestureRecognizer)
-		jsonArrays = LoadFile.shared.getStudents()
+        //        jsonArrays = LoadFile.shared.getStudents()
+                jsonArrays = []
 		loadVoice()
 		print("ロードした生徒数:\(jsonArrays.count)")
 		print(voiceArrays)
@@ -172,6 +173,7 @@ class ViewController: UIViewController, UICollectionViewDataSource,
 		activityIndicator.startAnimating()
 		downloadLoadingView.addSubview(activityIndicator)
 
+		downloadLoadingLabel.frame = CGRect(x: 0, y: 0, width: 400, height: 30)
 		downloadLoadingLabel.center = CGPoint(x: activityIndicator.frame.midX, y: activityIndicator.frame.midY + 90)
 		downloadLoadingLabel.textColor = .white
 		downloadLoadingLabel.textAlignment = .center
@@ -359,32 +361,56 @@ class ViewController: UIViewController, UICollectionViewDataSource,
 	@IBAction func downloadZip()
 	{
 		downloadLoadingLabel.text = "ダウンロードの準備中"
-		switch reachability.connection
-		{
-		case .cellular, .wifi:
+//        keyWindow.addSubview(downloadLoadingView)
+//		switch reachability.connection
+//		{
+//		case .cellular, .wifi:
 			if let keyWindow = UIApplication.shared.windows.first(where: { $0.isKeyWindow })
 			{
 				keyWindow.addSubview(downloadLoadingView)
 			}
-			// 通信のコンフィグを用意.
-			let config = URLSessionConfiguration.default
-
-			// Sessionを作成する.
-			let session: URLSession = Foundation.URLSession(configuration: config, delegate: self, delegateQueue: OperationQueue.main)
-
-			// ダウンロード先のURLからリクエストを生成.
-			let url = NSURL(string: "https://github.com/lonqie/SchaleDB/archive/refs/heads/main.zip")!
-			let request = URLRequest(url: url as URL)
-			// ダウンロードタスクを生成.
-			let task: URLSessionDownloadTask = session.downloadTask(with: request)
-			task.resume()
-		case .unavailable:
-
-			downloadLoadingView.removeFromSuperview()
-			let alert = UIAlertController(title: "エラー", message: "ネットワーク接続がありません。", preferredStyle: .alert)
-			alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-			present(alert, animated: true, completion: nil)
-		}
+//			// 通信のコンフィグを用意.
+//			let config = URLSessionConfiguration.default
+//
+//			// Sessionを作成する.
+//			let session: URLSession = Foundation.URLSession(configuration: config, delegate: self, delegateQueue: OperationQueue.main)
+//
+//			// ダウンロード先のURLからリクエストを生成.
+//			let url = NSURL(string: "https://github.com/lonqie/SchaleDB/archive/refs/heads/main.zip")!
+//			let request = URLRequest(url: url as URL)
+//			// ダウンロードタスクを生成.
+//			let task: URLSessionDownloadTask = session.downloadTask(with: request)
+//			task.resume()
+//		case .unavailable:
+//
+//			downloadLoadingView.removeFromSuperview()
+//			let alert = UIAlertController(title: "エラー", message: "ネットワーク接続がありません。", preferredStyle: .alert)
+//			alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+//			present(alert, animated: true, completion: nil)
+//		}
+        downloadLoadingLabel.text = "ダウンロード中..."
+        DownloadFile.shared.downloadDataFile(urls: DataFileURLs.urls) {
+            DispatchQueue.main.async
+            {
+                print("All files have been downloaded.")
+                self.downloadLoadingLabel.text = "生徒の画像をダウンロード中..."
+            }
+            DownloadFile.shared.processStudentImages(jsonFile: "students.min.json", progressTextView: self.downloadLoadingLabel) {
+                print("student Image Comp")
+                 DownloadFile.shared.processUniqueImages(jsonFile: "students.min.json", progressTextView: self.downloadLoadingLabel){
+                    DispatchQueue.main.async
+                    {
+                        self.downloadLoadingView.removeFromSuperview()
+                        let alert = UIAlertController(title: "更新完了", message: "更新が完了しました。", preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
+                            self.loadView()
+                            self.viewDidLoad()
+                        }))
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                 }
+            }
+        }
 	}
 
 	func urlSession(_: URLSession, downloadTask _: URLSessionDownloadTask, didWriteData _: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64)
@@ -459,7 +485,8 @@ class ViewController: UIViewController, UICollectionViewDataSource,
 				}
 				try fileManager.removeItem(at: sourceDirectory)
 				NotificationCenter.default.post(name: Notification.Name("LocalizationDataGenerated"), object: nil)
-				self.jsonArrays = LoadFile.shared.getStudents()
+//                self.jsonArrays = LoadFile.shared.getStudents()
+				self.jsonArrays = []
 				print("Indexing for Spotlight")
 				for (index, character) in self.jsonArrays.enumerated()
 				{

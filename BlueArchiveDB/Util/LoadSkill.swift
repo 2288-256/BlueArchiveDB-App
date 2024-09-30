@@ -25,7 +25,7 @@ class LoadSkill {
     )
     var NormalColor = UIColor(red: 72 / 255, green: 85 / 255, blue: 130 / 255, alpha: 1.0)
     
-    func loadAllSkillCell(studentStatus:[[String: Any]],skillIndex: Int, SkillArray: [String: Any],SkillCellPosition: Int,action: Selector,target: Any) -> UIView
+    func loadAllSkillCell(studentStatus:[String: Any],skillIndex: Int, SkillArray: [String: Any],SkillCellPosition: Int,SkillName:String,action: Selector,target: Any) -> UIView
     {
         let fileManager = FileManager.default
         let libraryDirectory = fileManager.urls(for: .libraryDirectory, in: .userDomainMask).first!
@@ -54,7 +54,7 @@ class LoadSkill {
         var skillDescTextView = UITextView()
         var SkillDescTemp: String
         var nowSkillLevel = 0
-        if SkillArray["SkillType"] as! String != "autoattack"
+        if SkillName != "Normal"
         {
             skillDescTextView.backgroundColor = .clear
             skillDescTextView.isEditable = false
@@ -101,7 +101,7 @@ class LoadSkill {
         {
             mainView.frame.size.height = 95
         }
-        SkillDescValueChange(SkillArray: SkillArray, nowSkillLevel: 0, skillDescTextView: skillDescTextView)
+        SkillDescValueChange(SkillArray: SkillArray, nowSkillLevel: 0, skillDescTextView: skillDescTextView, SkillName: SkillName)
         // // Repeat until the input text doesn't change anymore
         // if SkillArray["SkillType"] as? String == "ex" {
         //     nowSkillLevel = ExSkillLevel
@@ -146,7 +146,7 @@ class LoadSkill {
 
             skillImageView.image = UIImage(contentsOfFile: IconImagePath.path)
         }
-        if let bulletType = studentStatus.first?["BulletType"] as? String
+        if let bulletType = studentStatus["BulletType"] as? String
         {
             switch bulletType
             {
@@ -164,12 +164,12 @@ class LoadSkill {
         }
         if SkillArray["Name"] != nil
         {
-            skillName.text = SkillArray["Name"] as! String
-        } else if SkillArray["SkillType"] as! String == "autoattack"
+            skillName.text = SkillArray["Name"] as? String
+        } else if SkillName == "autoattack"
         {
             skillName.text = "通常攻撃"
         }
-        switch SkillArray["SkillType"] as! String
+        switch SkillName
         {
         case "autoattack":
             var RadiusType: String
@@ -235,7 +235,7 @@ class LoadSkill {
         case "ex":
             skillDesc.text = LoadFile.shared.translateString("student_skill_ex") ?? "null"
             let Cost = SkillArray["Cost"] as? [Any]
-            skillDesc.text! += "・コスト\(Cost?[0] as! Int)"
+            skillDesc.text! += "・コスト\(Cost?[0] as? Int)"
 
         case "normal":
             skillDesc.text = LoadFile.shared.translateString("student_skill_normal") ?? "null"
@@ -257,7 +257,7 @@ class LoadSkill {
         }
         return mainView
     }
-    func SkillDescValueChange(SkillArray: [String: Any], nowSkillLevel: Int, skillDescTextView: UITextView)
+    func SkillDescValueChange(SkillArray: [String: Any], nowSkillLevel: Int, skillDescTextView: UITextView,SkillName:String)
     {
         var SkillDescTemp = SkillDescReplace(
             SkillDesc: SkillArray["Desc"] as? String ?? "nil", regexPattern: "<b:([a-zA-Z0-9_]+)>",
@@ -283,7 +283,7 @@ class LoadSkill {
             SkillDesc: SkillDescTemp, regexPattern: "<?([0-9]+)>", replaceOf: "?",
             nowSkillLevel: nowSkillLevel, SkillArray: SkillArray
         )
-        if SkillArray["SkillType"] as! String != "autoattack"
+        if SkillName != "autoattack"
         {
             skillDescTextView.text = SkillDescTemp
         }

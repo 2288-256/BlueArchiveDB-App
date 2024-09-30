@@ -12,13 +12,13 @@ import UIKit
 class CharacterStatusMore: UIViewController
 {
 	var unitId: Int = 0
-	var studentStatus: [[String: Any]] = []
+	var studentData: [String: Any] = [:]
 	let checkedImage = UIImage(named: "ico_check_on")!
 	let uncheckedImage = UIImage(named: "ico_check_off")!
 	var EquipmentTier: [Int] = []
 	var EquipmentName: [String] = []
 	var WeaponImageName: String = ""
-	var ItemJson: [[String: Any]] = []
+	var ItemJson: [String: [String: Any]] = [:]
 	var configJson: [String: Any] = [:]
 	var localizeJson: [String: Any] = [:]
 	var MaxTir: [Int] = []
@@ -54,14 +54,16 @@ class CharacterStatusMore: UIViewController
 		{
 			EquipmentToggleButton.isSelected = false
 		}
-		EquipmentArray = studentStatus.first?["Equipment"] as! [String]
+		EquipmentArray = studentData["Equipment"] as! [String]
 		LevelSlider.value = Float(nowLevel)
 		LevelSliderLabel.text = "Lv." + String(nowLevel)
-		let regions = configJson["Regions"] as! [[String: Any]]
-		let jpRegion = regions.first(where: { $0["Name"] as? String == "Jp" })
-		MaxTir = jpRegion?["EquipmentMaxLevel"] as? [Int] ?? []
-		MaxWeaponLevel = jpRegion?["WeaponMaxLevel"] as? Int ?? 0
-		let weaponStatus = studentStatus.first?["Weapon"] as? [String: Any]
+		let regions = configJson["Regions"] as? [[String: Any]]
+		print(regions)
+		// [{"Name":"Jp"},{"Name":"Cn"}] からJpを取り出す
+		let jpRegion = regions?.first(where: { $0["Name"] as? String == "Jp" })
+        MaxTir = jpRegion?["EquipmentMaxLevel"] as? [Int] ?? []
+        MaxWeaponLevel = jpRegion?["WeaponMaxLevel"] as? Int ?? 0
+		let weaponStatus = studentData["Weapon"] as? [String: Any]
 		var contentStackView: UIStackView
 		contentStackView = view.viewWithTag(999) as! UIStackView
 		for i in 1 ... StatusList.count
@@ -122,6 +124,7 @@ class CharacterStatusMore: UIViewController
 			let equipmentTierLabel = equipmentView.viewWithTag((i * 100) + 2) as! UILabel
 			equipmentTierLabel.text = "T\(EquipmentTier[i - 1])"
 			let equipmentImageView = equipmentView.viewWithTag((i * 100) + 3) as! UIImageView
+            print(EquipmentTier)
 			UpdateEquipmentName(EquipmentType: EquipmentName[i - 1], Tier: EquipmentTier[i - 1], EquipmentNameLabel: equipmentName, EquipmentImage: equipmentImageView, equipmentEffectLabel: equipmentEffectLabel, tag: i)
 		}
 		let equipmentView = view.viewWithTag(4) as! UIView
@@ -135,7 +138,7 @@ class CharacterStatusMore: UIViewController
 		let equipmentTierLabel = equipmentView.viewWithTag((4 * 100) + 2) as! UILabel
 		equipmentTierLabel.text = "Lv.\(nowWeaponLevel)"
 		let equipmentImageView = equipmentView.viewWithTag((4 * 100) + 3) as! UIImageView
-		let imageName = studentStatus.first?["WeaponImg"] as! String
+		let imageName = studentData["WeaponImg"] as! String
 		let fileManager = FileManager.default
 		let libraryDirectory = fileManager.urls(for: .libraryDirectory, in: .userDomainMask).first!
 		let imagePath = libraryDirectory.appendingPathComponent("assets/images/weapon/\(imageName).webp")
@@ -231,7 +234,7 @@ class CharacterStatusMore: UIViewController
 	{
 		var BuffText = ""
 		var levelscale = Double(Double(level - 1) / 99)
-		let weaponStatus = studentStatus.first?["Weapon"] as? [String: Any]
+		let weaponStatus = studentData["Weapon"] as? [String: Any]
 		if weaponStatus?["StatLevelUpType"] as? String == "Standard"
 		{
 			levelscale = (round(levelscale * 10000) / 10000)
@@ -265,7 +268,8 @@ class CharacterStatusMore: UIViewController
 
 	func UpdateEquipmentName(EquipmentType: String, Tier: Int, EquipmentNameLabel: UILabel, EquipmentImage: UIImageView, equipmentEffectLabel: UILabel, tag: Int)
 	{
-		let matchingStudents = ItemJson.filter { $0["Icon"] as? String == "equipment_icon_\(EquipmentType.lowercased())_tier\(Tier)" }
+        let matchingStudents = ItemJson.values.filter { $0["Icon"] as? String == "equipment_icon_\(EquipmentType.lowercased())_tier\(Tier)" }
+        print(matchingStudents)
 		let StatType = matchingStudents.first?["StatType"] as! [String]
 		let StatValue = matchingStudents.first?["StatValue"] as! [[Int]]
 		var EffectText = ""
@@ -283,7 +287,7 @@ class CharacterStatusMore: UIViewController
 		EquipmentNameLabel.text = matchingStudents.first?["Name"] as? String
 		let fileManager = FileManager.default
 		let libraryDirectory = fileManager.urls(for: .libraryDirectory, in: .userDomainMask).first!
-		let Equipment1ImagePath = libraryDirectory.appendingPathComponent("assets/images/equipment/full/equipment_icon_\(EquipmentType.lowercased())_tier\(Tier).webp")
+		let Equipment1ImagePath = libraryDirectory.appendingPathComponent("assets/images/equipment/icon/equipment_icon_\(EquipmentType.lowercased())_tier\(Tier).webp")
 		EquipmentImage.image = UIImage(contentsOfFile: Equipment1ImagePath.path)
 		EquipmentTier[tag - 1] = Tier
 		LabelSetUp(level: nowLevel)
@@ -353,7 +357,7 @@ class CharacterStatusMore: UIViewController
 					Equipment3.image = Equipment3.image?.withRenderingMode(.alwaysTemplate)
 					Equipment3.tintColor = .gray
 				default:
-					let matchingStudents = ItemJson.filter { $0["Icon"] as? String == "equipment_icon_\(EquipmentName[i - 1].lowercased())_tier\(String(EquipmentTier[i - 1]))" }
+                    let matchingStudents = ItemJson.values.filter { $0["Icon"] as? String == "equipment_icon_\(EquipmentName[i - 1].lowercased())_tier\(String(EquipmentTier[i - 1]))" }
 					let statType = matchingStudents.first?["StatType"] as! [String]
 					let statValue = matchingStudents.first?["StatValue"] as! [[Int]]
 					for j in 0 ..< statType.count
@@ -442,9 +446,9 @@ class CharacterStatusMore: UIViewController
 			}
 		}
 
-		if let start1 = studentStatus.first?["\(StatusName)1"] as? Double,
-		   let weaponStatus = studentStatus.first?["Weapon"] as? [String: Any],
-		   let start100 = studentStatus.first?["\(StatusName)100"] as? Double
+		if let start1 = studentData["\(StatusName)1"] as? Double,
+		   let weaponStatus = studentData["Weapon"] as? [String: Any],
+		   let start100 = studentData["\(StatusName)100"] as? Double
 		{
 			var levelScale: Double = 0
 			levelScale = round((Double(level - 1) / 99) * 10000) / 10000
@@ -472,11 +476,10 @@ class CharacterStatusMore: UIViewController
 				}
 
 				let tempValue: Double = round((start1 + (start100 - start1) * levelScale) * 10000) / 10000
-                let roundedTempValue = round(tempValue)
-                let scaledTempValue = roundedTempValue * Double(transcendenceHP)
-                let totalValue = scaledTempValue + Double(addWeaponHP)
-                scaledValue = Int(ceil(totalValue))
-
+				let roundedTempValue = round(tempValue)
+				let scaledTempValue = roundedTempValue * Double(transcendenceHP)
+				let totalValue = scaledTempValue + Double(addWeaponHP)
+				scaledValue = Int(ceil(totalValue))
 
 			case "AttackPower":
 				var addWeaponATK = 0
@@ -498,10 +501,10 @@ class CharacterStatusMore: UIViewController
 				}
 
 				let tempValue: Double = round((start1 + (start100 - start1) * levelScale) * 10000) / 10000
-                let roundedTempValue = round(tempValue)
-                let scaledTempValue = roundedTempValue * Double(transcendenceAttack)
-                let totalValue = scaledTempValue + Double(addWeaponATK)
-                scaledValue = Int(ceil(totalValue))
+				let roundedTempValue = round(tempValue)
+				let scaledTempValue = roundedTempValue * Double(transcendenceAttack)
+				let totalValue = scaledTempValue + Double(addWeaponATK)
+				scaledValue = Int(ceil(totalValue))
 
 			case "HealPower":
 				var addWeaponHeal = 0
@@ -523,10 +526,10 @@ class CharacterStatusMore: UIViewController
 				}
 
 				let tempValue: Double = round((start1 + (start100 - start1) * levelScale) * 10000) / 10000
-                let tempValueDouble = Double(tempValue)
-                let healComponent = round(tempValueDouble) * Double(transcendenceHeal)
-                let totalHeal = healComponent + Double(addWeaponHeal)
-                let scaledValue = Int(ceil(totalHeal)) 
+				let tempValueDouble = Double(tempValue)
+				let healComponent = round(tempValueDouble) * Double(transcendenceHeal)
+				let totalHeal = healComponent + Double(addWeaponHeal)
+				let scaledValue = Int(ceil(totalHeal))
 
 			default:
 				var levelscale = Double(nowWeaponLevel - 1) / 99
@@ -550,15 +553,15 @@ class CharacterStatusMore: UIViewController
 		} else
 		{
 			if StatusName == "CriticalDamageRate",
-			   let StatusValue = studentStatus.first?["\(StatusName)"] as? Int
+			   let StatusValue = studentData["\(StatusName)"] as? Int
 			{
 				BeforeLabel.text = "\(StatusValue / 100)"
-			} else if let StatusValue = studentStatus.first?["\(StatusName)"] as? Int
+			} else if let StatusValue = studentData["\(StatusName)"] as? Int
 			{
 				BeforeLabel.text = "\(StatusValue)"
 			} else if StatusName == "CriticalChanceResistPoint"
 			{
-				if let StatusValue = studentStatus.first?["\(StatusName)"] as? Int
+				if let StatusValue = studentData["\(StatusName)"] as? Int
 				{
 					BeforeLabel.text = "\(StatusValue)"
 				} else
@@ -567,7 +570,7 @@ class CharacterStatusMore: UIViewController
 				}
 			} else if StatusName == "CriticalDamageResistRate"
 			{
-				if let StatusValue = studentStatus.first?["\(StatusName)"] as? Int
+				if let StatusValue = studentData["\(StatusName)"] as? Int
 				{
 					BeforeLabel.text = "\(StatusValue / 100)"
 				} else
@@ -576,7 +579,7 @@ class CharacterStatusMore: UIViewController
 				}
 			} else if StatusName == "OppressionPower"
 			{
-				if let StatusValue = studentStatus.first?["\(StatusName)"] as? Int
+				if let StatusValue = studentData["\(StatusName)"] as? Int
 				{
 					BeforeLabel.text = "\(StatusValue)"
 				} else
@@ -585,7 +588,7 @@ class CharacterStatusMore: UIViewController
 				}
 			} else if StatusName == "HealEffectivenessRate"
 			{
-				if let StatusValue = studentStatus.first?["\(StatusName)"] as? Int
+				if let StatusValue = studentData["\(StatusName)"] as? Int
 				{
 					BeforeLabel.text = "\(StatusValue)"
 				} else
@@ -702,7 +705,7 @@ class CharacterStatusMore: UIViewController
 		{
 			let fileManager = FileManager.default
 			let documentsURL = fileManager.urls(for: .libraryDirectory, in: .userDomainMask).first!
-			let studentsFileURL = documentsURL.appendingPathComponent("assets/data/jp/equipment.json")
+			let studentsFileURL = documentsURL.appendingPathComponent("assets/data/jp/equipment.min.json")
 
 			guard FileManager.default.fileExists(atPath: studentsFileURL.path) else
 			{
@@ -710,7 +713,7 @@ class CharacterStatusMore: UIViewController
 			}
 
 			let data = try Data(contentsOf: studentsFileURL)
-			ItemJson = try JSONSerialization.jsonObject(with: data) as? [[String: Any]] ?? []
+			ItemJson = try JSONSerialization.jsonObject(with: data) as? [String: [String: Any]] ?? [:]
 		} catch
 		{
 			print("Error reading students JSON file: \(error)")
@@ -723,7 +726,7 @@ class CharacterStatusMore: UIViewController
 		{
 			let fileManager = FileManager.default
 			let documentsURL = fileManager.urls(for: .libraryDirectory, in: .userDomainMask).first!
-			let studentsFileURL = documentsURL.appendingPathComponent("assets/data/config.json")
+			let studentsFileURL = documentsURL.appendingPathComponent("assets/data/config.min.json")
 
 			guard FileManager.default.fileExists(atPath: studentsFileURL.path) else
 			{
@@ -744,7 +747,7 @@ class CharacterStatusMore: UIViewController
 		{
 			let fileManager = FileManager.default
 			let documentsURL = fileManager.urls(for: .libraryDirectory, in: .userDomainMask).first!
-			let studentsFileURL = documentsURL.appendingPathComponent("assets/data/jp/localization.json")
+			let studentsFileURL = documentsURL.appendingPathComponent("assets/data/jp/localization.min.json")
 
 			guard FileManager.default.fileExists(atPath: studentsFileURL.path) else
 			{

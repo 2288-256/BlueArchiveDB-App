@@ -18,7 +18,8 @@ class SettingCharacterSelect: UIViewController, UICollectionViewDataSource,
 	@IBOutlet var searchBar: UISearchBar!
 	override func viewDidLoad()
 	{
-		jsonArrays = LoadFile.shared.getStudents()
+        //        jsonArrays = LoadFile.shared.getStudents()
+                jsonArrays = []
 	}
 
 	@IBAction func backButton(_: Any)
@@ -160,7 +161,8 @@ class SettingCharacterSelect: UIViewController, UICollectionViewDataSource,
 			}
 		} else
 		{
-			jsonArrays = LoadFile.shared.getStudents()
+            //        jsonArrays = LoadFile.shared.getStudents()
+                    jsonArrays = []
 		}
 		// テーブルを再読み込みする
 		collectionView.reloadData()
