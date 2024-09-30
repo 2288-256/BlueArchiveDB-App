@@ -1,9 +1,11 @@
-<img src="https://img.shields.io/badge/-Swift-FA7343.svg?logo=swift&style=for-the-badge"><img src="https://img.shields.io/badge/-Xcode-0c4ea8.svg?logo=xcode&style=for-the-badge">
+<img src="https://img.shields.io/badge/-Swift-FA7343.svg?logo=swift&style=for-the-badge"> <img src="https://img.shields.io/badge/-Xcode-0c4ea8.svg?logo=xcode&style=for-the-badge">
 
 ![GitHub Tag](https://img.shields.io/github/v/tag/2288-256/BlueArchiveDB-App)
 
-> [!NOTE]
-> Since v0.1.7, Autolayout has been set up so that the layout is no longer distorted on the iPad.
+> [!CAUTION]
+> Currently not working properly due to SchaleBD update.
+> 
+> If you are interested in this project, please use the [support-for-the-new-site branch](https://github.com/2288-256/BlueArchiveDB-App/tree/support-for-the-new-site) and build it.
 
 > [!CAUTION]
 > This app is not programmed to run on an iPhone at this time.
@@ -14,17 +16,18 @@ Display data from [SchaleDB](https://github.com/lonqie/SchaleDB) as an IOS app. 
 
 ## Description
 
-This is an IOS application that displays data in [SchaleDB](https://github.com/lonqie/SchaleDB) and [schale.gg](https://schale.gg/).
+This is an IOS application that displays data in [SchaleDB](https://github.com/lonqie/SchaleDB) and [Schale DB](https://schaledb.com/home).
 
 Unique features as an IOS application
 
 - Widgets
-- Spotlight search (Coming Soon)
+- Spotlight search
 - Event and gacha reminder notifications (Coming Soon)
+- Can be viewed even when offline
  
 and so on.
 
-***DEMO:***
+# DEMO
 
 ![demo](https://github.com/2288-256/BlueArchiveDB-App/assets/74705442/233ed30c-3a1b-4d5e-ac69-6621e43beb9a)
 
@@ -32,11 +35,11 @@ and so on.
 ## Features
 
 - Student information (basic status, listen to voices, etc.)
-- Battle stage information
+- Battle stage information (Coming Soon)
 - Information on gachas currently being picked up (Coming Soon)
 - Information on students celebrating birthdays
 - Widgets
-- Spotlight search (Coming Soon)
+- Spotlight search
 - Event and gacha reminder notifications (Coming Soon)
 - and more!
 
