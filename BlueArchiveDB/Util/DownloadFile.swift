@@ -27,7 +27,7 @@ class DownloadFile
     /// - Parameters:
     ///   - url: ダウンロードするURL
     ///   - completion: ダウンロード完了時に呼び出されるクロージャ
-    func downloadFile(url: URL, completion: @escaping (Result<URL, Error>) -> Void)
+    func downloadFile(url: URL, baseURL: String, completion: @escaping (Result<URL, Error>) -> Void)
     {
         let downloadTask = session.downloadTask(with: url)
         { localURL, response, error in
@@ -49,7 +49,6 @@ class DownloadFile
 
             do
             {
-                let baseURL = "https://schaledb.com/"
                 var path = url.absoluteString
 
                 if path.hasPrefix(baseURL)
@@ -108,7 +107,7 @@ class DownloadFile
         var remainingURLs = urls
         let currentURL = remainingURLs.removeFirst()
 
-        downloadFile(url: currentURL)
+        downloadFile(url: currentURL, baseURL: "https://schaledb.com/")
         { result in
             switch result
             {
@@ -183,7 +182,7 @@ class DownloadFile
 
             dispatchGroup.enter()
 
-            downloadFile(url: url)
+            downloadFile(url: url, baseURL: "https://schaledb.com/")
             { result in
                 switch result
                 {
@@ -250,7 +249,7 @@ class DownloadFile
                         continue
                     }
 
-                    self!.downloadFile(url: url)
+                    self!.downloadFile(url: url, baseURL: "https://schaledb.com/")
                     { result in
                         switch result
                         {
@@ -302,7 +301,7 @@ class DownloadFile
             }
             let dispatchGroup = DispatchGroup()
             let uniqueNameList = ["Equipment", "CollectionBG"]
-            let jsonArrays: [String : [String : Any]] = LoadFile.shared.getStudents()
+            let jsonArrays: [String: [String: Any]] = LoadFile.shared.getStudents()
             var DownloadEquipmentArray: [String] = []
             var DownloadBGArray: [String] = []
             var totalCount = 0
@@ -351,7 +350,6 @@ class DownloadFile
                 for fileName in fileArray
                 {
                     let urlString = UniqueAssetURLs.urls[key] ?? ""
-                    print(urlString.replacingOccurrences(of: placeholder, with: "\(fileName)"))
                     guard let url = URL(string: urlString.replacingOccurrences(of: placeholder, with: "\(fileName)")) else
                     {
                         print("Invalid URL: \(urlString)")
@@ -365,7 +363,7 @@ class DownloadFile
                         continue
                     }
                     dispatchGroup.enter()
-                    self.downloadFile(url: url)
+                    self.downloadFile(url: url, baseURL: "https://schaledb.com/")
                     { result in
                         switch result
                         {
@@ -386,6 +384,83 @@ class DownloadFile
             dispatchGroup.notify(queue: .main)
             {
                 print("All images processed.")
+                completion()
+            }
+        }
+    }
+
+    /// 各生徒の音声データをダウンロードする関数
+    ///
+    ///
+    /// - Parameters:
+    ///   - progressTextView: 進捗を表示するためのテキストビュー
+    ///   - completion: 音声データのダウンロードが完了した際に呼び出されるクロージャ
+    func processVoiceData(jsonFile: String, progressTextView: UILabel, completion: @escaping () -> Void)
+    {
+        loadStudentIDs(jsonFile: jsonFile)
+        { [weak self] ids in
+            guard let self = self, let ids = ids, !ids.isEmpty else
+            {
+                print("Failed to load student IDs or no IDs found.")
+                completion()
+                return
+            }
+            let dispatchGroup = DispatchGroup()
+            let totalCount = ids.count
+            var processedCount = 0
+            for id in ids
+            {
+                let voiceArrays: [[String: Any]] = LoadFile.shared.getVoiceData(forUnitId: "\(id)")!
+                for i in 0 ..< voiceArrays.count
+                {
+                    let test = voiceArrays[i]
+                    let key = Array(test.keys)
+                    for j in 0 ..< key.count
+                    {
+                        let test2: [[String: Any]] = voiceArrays[i]["\(key[j])"] as! [[String: Any]]
+                        for k in 0 ..< test2.count
+                        {
+                            let filePath = test2[k]["AudioClip"] as! String
+                            let urlString = UniqueAssetURLs.urls["Voice"] ?? ""
+                            guard let url = URL(string: urlString.replacingOccurrences(of: "$path", with: filePath)) else
+                            {
+                                // print("Invalid URL: \(urlString)")
+                                continue
+                            }
+                            let destinationPath = self.destinationPathForURL(url: url, baseURL: "https://r2.schaledb.com/")
+                            print(destinationPath)
+                            if FileManager.default.fileExists(atPath: destinationPath.path)
+                            {
+                                print("File already exists at: \(destinationPath.path). Skipping download.")
+                                continue
+                            }
+                            dispatchGroup.enter()
+                            self.downloadFile(url: url, baseURL: "https://r2.schaledb.com/")
+                            { result in
+                                switch result
+                                {
+                                case let .success(localURL):
+                                    // print("Downloaded to: \(localURL)")
+                                    print("")
+                                case let .failure(error):
+                                    // print("Failed to download from \(url): \(error)")
+                                    print("")
+                                }
+                                processedCount += 1
+                                DispatchQueue.main.async
+                                {
+                                    progressTextView.text = "ボイスデータをダウンロード中... \(processedCount)"
+                                }
+                                dispatchGroup.leave()
+                            }
+                        }
+                        var filePath = ""
+                    }
+                }
+            }
+            dispatchGroup.notify(queue: .main)
+            {
+                print("All voice data processed.")
                 completion()
             }
         }
@@ -449,5 +524,6 @@ enum UniqueAssetURLs
     static let urls: [String: String] = [
         "Equipment": "https://schaledb.com/images/equipment/icon/$FileName.webp",
         "CollectionBG": "https://schaledb.com/images/background/$BGName.jpg",
+        "Voice": "https://r2.schaledb.com/voice/$path",
     ]
 }

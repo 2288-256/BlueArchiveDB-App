@@ -11,7 +11,7 @@ import Reachability
 import UIKit
 
 class CharacterMorePage: UIViewController, UICollectionViewDataSource,
-	UICollectionViewDelegateFlowLayout
+	UICollectionViewDelegateFlowLayout,AVAudioPlayerDelegate
 {
 	let reachability = try! Reachability()
 	@IBOutlet var collectionView: UICollectionView!
@@ -29,12 +29,13 @@ class CharacterMorePage: UIViewController, UICollectionViewDataSource,
 	var tempJson: [[String: Any]] = []
 	var unitId: Int = 0
 	var player: AVPlayer?
+	var audioPlayer: AVAudioPlayer!
 
 	override func viewDidLoad()
 	{
 		super.viewDidLoad()
 		// Do any additional setup after loading the view.
-		loadAllStudentsVoice()
+        jsonArray = LoadFile.shared.getVoiceData(forUnitId: "\(unitId)") ?? []
 		if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout
 		{
 			layout.minimumInteritemSpacing = 10 // セルの間の隙間を10ポイントに設定
@@ -135,38 +136,66 @@ class CharacterMorePage: UIViewController, UICollectionViewDataSource,
 			let cellTag = cell.tag
 			if let SoundFilePath = jsonArrays[cellTag]["AudioClip"] as? String
 			{
-				switch reachability.connection
-				{
-				case .cellular, .wifi:
-					if let url = URL(string: "https://static.schale.gg/voice/\(SoundFilePath)")
-					{
-						// http通信をし、200番台なら再生する
-						if let data = try? Data(contentsOf: url)
-						{
-							playSound(from: url)
-						} else
-						{
-							let alert = UIAlertController(title: "エラー", message: "原因不明のエラーで再生できませんでした。", preferredStyle: .alert)
-							alert.addAction(UIAlertAction(title: "OK", style: .default))
-							present(alert, animated: true, completion: nil)
-						}
-					}
-				case .unavailable:
-					let alert = UIAlertController(title: "エラー", message: "ネットワークに接続されていないため再生できません。", preferredStyle: .alert)
+				let libraryDirectory = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask).first!
+				let url = libraryDirectory.appendingPathComponent("assets/\(SoundFilePath)")
+				if url == nil {
+					let alert = UIAlertController(title: "エラー", message: "ファイルが見つかりませんでした。", preferredStyle: .alert)
 					alert.addAction(UIAlertAction(title: "OK", style: .default))
 					present(alert, animated: true, completion: nil)
+					return
 				}
+				playSound(SoundFilePath: SoundFilePath)
+				// switch reachability.connection
+				// {
+				// case .cellular, .wifi:
+				// 	if let url = URL(string: "https://static.schale.gg/voice/\(SoundFilePath)")
+				// 	{
+				// 		// http通信をし、200番台なら再生する
+				// 		if let data = try? Data(contentsOf: url)
+				// 		{
+				// 			playSound(from: url)
+				// 		} else
+				// 		{
+				// 			let alert = UIAlertController(title: "エラー", message: "原因不明のエラーで再生できませんでした。", preferredStyle: .alert)
+				// 			alert.addAction(UIAlertAction(title: "OK", style: .default))
+				// 			present(alert, animated: true, completion: nil)
+				// 		}
+				// 	}
+				// case .unavailable:
+				// 	let alert = UIAlertController(title: "エラー", message: "ネットワークに接続されていないため再生できません。", preferredStyle: .alert)
+				// 	alert.addAction(UIAlertAction(title: "OK", style: .default))
+				// 	present(alert, animated: true, completion: nil)
+				// }
 			}
 		}
 	}
 
-	func playSound(from url: URL)
-	{
-		let playerItem = AVPlayerItem(url: url)
-		player = AVPlayer(playerItem: playerItem)
-		player?.play()
-	}
+	// func playSound(from url: URL)
+	// {
+		
+	// 	let playerItem = AVPlayerItem(url: url)
+	// 	player = AVPlayer(playerItem: playerItem)
+	// 	player?.play()
+	// }
+	func playSound(SoundFilePath: String) {
+        let libraryDirectory = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask).first!
+        let soundFilePath = libraryDirectory.appendingPathComponent("assets/voice/\(SoundFilePath)").path
+        let soundFileURL = URL(fileURLWithPath: soundFilePath)
 
+        // ファイルの存在確認
+        if !FileManager.default.fileExists(atPath: soundFilePath) {
+            print("Error: ファイルが存在しません: \(soundFilePath)")
+            return
+        }
+
+        do {
+            audioPlayer = try AVAudioPlayer(contentsOf: soundFileURL)
+            audioPlayer?.prepareToPlay()
+            audioPlayer?.play()
+        } catch {
+            print("音源ファイルの再生に失敗しました: \(error)")
+        }
+    }
 	// JSONデータを含む配列
 
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
@@ -249,34 +278,6 @@ class CharacterMorePage: UIViewController, UICollectionViewDataSource,
 		} else
 		{
 			return 0
-		}
-	}
-
-	func loadAllStudentsVoice()
-	{
-		// JSONを読み込み、解析する処理を想定しています。
-		// このメソッドで、jsonArrays配列に適切なデータを設定する必要があります。
-		// 以下は仮のコードで、実際のJSON読み込み処理には置き換えてください。
-		let fileManager = FileManager.default
-		if let documentsURL = fileManager.urls(for: .libraryDirectory, in: .userDomainMask).first
-		{
-			let voiceFileURL = documentsURL.appendingPathComponent("assets/data/jp/voice.json")
-			do
-			{
-				let data = try Data(contentsOf: voiceFileURL)
-				let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
-				if let dict = jsonObject as? [String: Any]
-				{
-					// 特定のキーに対応するデータを取得
-					if let user = dict["\(unitId)"] as? [String: Any]
-					{
-						jsonArray = [user]
-					}
-				}
-			} catch
-			{
-				print("Error reading voice JSON file: \(error)")
-			}
 		}
 	}
 

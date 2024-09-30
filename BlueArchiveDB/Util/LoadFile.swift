@@ -13,52 +13,52 @@ class LoadFile
     static let shared = LoadFile()
 
     private var studentsData: [String: [String: Any]] = [:]
-        private var voiceData: [[String: Any]] = []
-        private var localizationData: [String: Any] = [:]
+    private var voiceData: [[String: Any]] = []
+    private var localizationData: [String: Any] = [:]
 
-        private init()
+    private init()
+    {
+        loadInitialData()
+
+        // NotificationCenterのオブザーバーを登録
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleLocalizationDataGenerated),
+            name: Notification.Name("LocalizationDataGenerated"),
+            object: nil
+        )
+    }
+
+    deinit
+    {
+        // オブザーバーを削除
+        NotificationCenter.default.removeObserver(self)
+    }
+
+    // 初期データ読み込み処理
+    private func loadInitialData()
+    {
+        loadAllStudents()
+        loadLocalizationData()
+    }
+
+    private func loadAllStudents()
+    {
+        do
         {
-            loadInitialData()
+            let fileManager = FileManager.default
+            let documentsURL = try fileManager.url(for: .libraryDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+            let studentsFileURL = documentsURL.appendingPathComponent("assets/data/jp/students.min.json")
 
-            // NotificationCenterのオブザーバーを登録
-            NotificationCenter.default.addObserver(
-                self,
-                selector: #selector(handleLocalizationDataGenerated),
-                name: Notification.Name("LocalizationDataGenerated"),
-                object: nil
-            )
-        }
-
-        deinit
+            let data = try Data(contentsOf: studentsFileURL)
+            // 型を [String: [String: Any]] に変更
+            studentsData = try JSONSerialization.jsonObject(with: data) as? [String: [String: Any]] ?? [:]
+            print("ロードした生徒数:\(studentsData.count)")
+        } catch
         {
-            // オブザーバーを削除
-            NotificationCenter.default.removeObserver(self)
+            print("Error reading students JSON file: \(error)")
         }
-
-        // 初期データ読み込み処理
-        private func loadInitialData()
-        {
-            loadAllStudents()
-            loadLocalizationData()
-        }
-
-        private func loadAllStudents()
-        {
-            do
-            {
-                let fileManager = FileManager.default
-                let documentsURL = try fileManager.url(for: .libraryDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-                let studentsFileURL = documentsURL.appendingPathComponent("assets/data/jp/students.min.json")
-
-                let data = try Data(contentsOf: studentsFileURL)
-                // 型を [String: [String: Any]] に変更
-                studentsData = try JSONSerialization.jsonObject(with: data) as? [String: [String: Any]] ?? [:]
-                print("ロードした生徒数:\(studentsData.count)")
-            } catch
-            {
-                print("Error reading students JSON file: \(error)")
-            }
-        }
+    }
 
     func loadAllStudentsVoice(unitId: String)
     {
@@ -155,10 +155,10 @@ class LoadFile
             // If not found, search again using the entire key including trailing numbers
             let inputNew = String(input.dropLast())
             if
-               let mainDictionary = localizationData[mainKey] as? [String: String],
-               let translatedString = mainDictionary[input]
+                let mainDictionary = localizationData[mainKey] as? [String: String],
+                let translatedString = mainDictionary[input]
             {
-                print("if:"+translatedString)
+                print("if:" + translatedString)
                 return translatedString
             } else
             {
@@ -168,17 +168,19 @@ class LoadFile
                     if let translations = value as? [String: String],
                        let translatedString = translations[input]
                     {
-                        print("ifelse:"+translatedString)
+                        print("ifelse:" + translatedString)
                         return translatedString
                     }
                 }
             }
-        }else{
+        } else
+        {
             // Search using the key without trailing numbers
             if let translation = searchForKey(keyToSearch)
             {
                 return translation
-            }else{
+            } else
+            {
                 return "Error: TNSK"
             }
         }
@@ -219,16 +221,16 @@ class LoadFile
     }
 
     public func getStudents() -> [String: [String: Any]]
-        {
-            return studentsData
-        }
+    {
+        return studentsData
+    }
 
-    public func getVoiceData(forUnitId unitId: String) -> [String: Any]?
+    public func getVoiceData(forUnitId unitId: String) -> [[String: Any]]?
     {
         loadAllStudentsVoice(unitId: unitId)
         if !voiceData.isEmpty
         {
-            return voiceData[0]
+            return voiceData
         } else
         {
             return nil
