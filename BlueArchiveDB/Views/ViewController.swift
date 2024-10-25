@@ -405,7 +405,7 @@ class ViewController: UIViewController, UICollectionViewDataSource,
                     continueAction()
                 }))
                 
-                alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: { _ in
+                alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { _ in
                     self.finalizeDownload()
                 }))
                 
