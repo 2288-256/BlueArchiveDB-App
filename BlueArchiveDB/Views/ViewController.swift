@@ -359,107 +359,74 @@ class ViewController: UIViewController, UICollectionViewDataSource,
 		}
 	}
 
-	@IBAction func downloadZip()
-	{
-		downloadLoadingLabel.text = "ダウンロードの準備中"
-		//        keyWindow.addSubview(downloadLoadingView)
-//		switch reachability.connection
-//		{
-//		case .cellular, .wifi:
-		if let keyWindow = UIApplication.shared.windows.first(where: { $0.isKeyWindow })
-		{
-			keyWindow.addSubview(downloadLoadingView)
-		}
-//			// 通信のコンフィグを用意.
-//			let config = URLSessionConfiguration.default
-//
-//			// Sessionを作成する.
-//			let session: URLSession = Foundation.URLSession(configuration: config, delegate: self, delegateQueue: OperationQueue.main)
-//
-//			// ダウンロード先のURLからリクエストを生成.
-//			let url = NSURL(string: "https://github.com/lonqie/SchaleDB/archive/refs/heads/main.zip")!
-//			let request = URLRequest(url: url as URL)
-//			// ダウンロードタスクを生成.
-//			let task: URLSessionDownloadTask = session.downloadTask(with: request)
-//			task.resume()
-//		case .unavailable:
-//
-//			downloadLoadingView.removeFromSuperview()
-//			let alert = UIAlertController(title: "エラー", message: "ネットワーク接続がありません。", preferredStyle: .alert)
-//			alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-//			present(alert, animated: true, completion: nil)
-//		}
-		downloadLoadingLabel.text = "ダウンロード中..."
-		DownloadFile.shared.downloadDataFile(urls: DataFileURLs.urls)
-		{
-			DispatchQueue.main.async
-			{
-				self.downloadLoadingLabel.text = "生徒の画像をダウンロード中..."
-			}
-			DownloadFile.shared.processStudentImages(jsonFile: "students.min.json", progressTextView: self.downloadLoadingLabel)
-			{
-				DispatchQueue.main.async
-				{
-					self.downloadLoadingLabel.text = "その他の画像をダウンロード中..."
-				}
-				DownloadFile.shared.processUniqueImages(jsonFile: "students.min.json", progressTextView: self.downloadLoadingLabel)
-				{
-					DispatchQueue.main.async
-					{
-						self.downloadLoadingLabel.text = "ボイスデータをダウンロード中..."
-					}
-					DownloadFile.shared.processVoiceData(jsonFile: "students.min.json", progressTextView: self.downloadLoadingLabel)
-					{
-                        let dispatchGroup = DispatchGroup()
-
-                        for (index, character) in self.jsonArrays.enumerated() {
-                            dispatchGroup.enter()
-                            guard let id = character.value["Id"] as? Int,
-                                  let familyName = character.value["FamilyName"] as? String,
-                                  let name = character.value["Name"] as? String,
-                                  let profileIntroduction = character.value["ProfileIntroduction"] as? String,
-                                  let school = LoadFile.shared.translateString((character.value["School"] as? String)!, mainKey: "School"),
-                                  let club = LoadFile.shared.translateString((character.value["Club"] as? String)!),
-                                  let familyNameRuby = character.value["FamilyNameRuby"] as? String,
-                                  let characterVoice = character.value["CharacterVoice"] as? String,
-                                  let illustrator = character.value["Illustrator"] as? String,
-                                  let designer = character.value["Designer"] as? String,
-                                  let searchTags = character.value["SearchTags"] as? [String] else { continue }
-
-                            let title = "\(familyName) \(name)"
-                            let summary = profileIntroduction
-                            var keywords: [String] = [school, club, familyNameRuby, characterVoice, illustrator, designer, familyName, name]
-                            for words in searchTags {
-                                keywords.append(words)
-                            }
-
-                            // Call the function to index this character for Spotlight
-                            self.insert(id: String(id), title: title, summary: summary, keywords: keywords)
-                            DispatchQueue.main.async {
-                                self.downloadLoadingLabel.text = "Spotlightに登録中... (\(index + 1)/\(self.jsonArrays.count))"
-                                dispatchGroup.leave()
+    @IBAction func downloadZip() {
+            updateDownloadStatus("ダウンロードの準備中")
+            
+            if let keyWindow = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
+                keyWindow.addSubview(downloadLoadingView)
+            }
+            
+            updateDownloadStatus("ダウンロード中...")
+            
+            // ダウンロード処理開始
+            DownloadFile.shared.downloadDataFile(urls: DataFileURLs.urls) {
+                self.updateDownloadStatus("生徒の画像をダウンロード中...")
+                
+                DownloadFile.shared.processStudentImages(jsonFile: "students.min.json", progressTextView: self.downloadLoadingLabel) {
+                    self.updateDownloadStatus("その他の画像をダウンロード中...")
+                    
+                    DownloadFile.shared.processUniqueImages(jsonFile: "students.min.json", progressTextView: self.downloadLoadingLabel) {
+                        self.showDownloadCompletionAlert(title: "更新完了",
+                                                         message: "基本データのダウンロードが完了しました。\n続けてボイスデータをダウンロードしますか？\n(ボイスデータをダウンロードしない場合はオフラインでの再生ができなくなります)") { [weak self] in
+                            self?.updateDownloadStatus("ボイスデータをダウンロード中...")
+                            
+                            DownloadFile.shared.processVoiceData(jsonFile: "students.min.json", progressTextView: self!.downloadLoadingLabel) {
+                                self?.finalizeDownload()
                             }
                         }
-
-                        dispatchGroup.notify(queue: .main)
-                        {
-                            DispatchQueue.main.async
-                            {
-                                self.downloadLoadingView.removeFromSuperview()
-                                let alert = UIAlertController(title: "更新完了", message: "更新が完了しました。", preferredStyle: .alert)
-                                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
-                                    self.loadView()
-                                    self.viewDidLoad()
-                                }))
-                                self.present(alert, animated: true, completion: nil)
-                            }
-                        }
-						
-					}
-				}
-			}
-		}
-	}
+                    }
+                }
+            }
+        }
+        
+        // ダウンロード状況の更新
+        private func updateDownloadStatus(_ status: String) {
+            DispatchQueue.main.async {
+                self.downloadLoadingLabel.text = status
+            }
+        }
+        
+        // ダウンロード完了後のアラート表示
+        private func showDownloadCompletionAlert(title: String, message: String, continueAction: @escaping () -> Void) {
+            DispatchQueue.main.async {
+                let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+                
+                alert.addAction(UIAlertAction(title: "ダウンロード", style: .default, handler: { _ in
+                    continueAction()
+                }))
+                
+                alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: { _ in
+                    self.finalizeDownload()
+                }))
+                
+                self.present(alert, animated: true, completion: nil)
+            }
+        }
+        
+        // ダウンロード完了後の処理の最終化
+        private func finalizeDownload() {
+            DispatchQueue.main.async {
+                self.downloadLoadingView.removeFromSuperview()
+                
+                let completionAlert = UIAlertController(title: "更新完了", message: "更新が完了しました。", preferredStyle: .alert)
+                completionAlert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
+                    self.loadView()
+                    self.viewDidLoad()
+                }))
+                
+                self.present(completionAlert, animated: true, completion: nil)
+            }
+        }
 
 	func urlSession(_: URLSession, downloadTask _: URLSessionDownloadTask, didWriteData _: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64)
 	{
