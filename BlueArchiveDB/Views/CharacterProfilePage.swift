@@ -15,7 +15,7 @@ class CharacterProfilePage: UIViewController
 {
 	let reachability = try! Reachability()
 	var unitId: Int = 100
-	var jsonArrays: [[String: Any]] = []
+	var studentData: [String: Any] = [:]
 	var AcquisitionMethodText: String = "取得できませんでした"
 	@IBOutlet var CharacterProfileText: UITextView!
 	// キャラクターの入手方法を記載するUITextView
@@ -36,20 +36,19 @@ class CharacterProfilePage: UIViewController
 		super.viewDidLoad()
 		CharacterProfileText.addObserver(self, forKeyPath: "contentSize", options: .new, context: nil)
 		CharacterAcquisitionMethodText.addObserver(self, forKeyPath: "contentSize", options: .new, context: nil)
-		let matchingStudents = jsonArrays.filter { $0["Id"] as? Int == unitId }
-		CharacterProfileText.text = matchingStudents.first?["ProfileIntroduction"] as? String
-		CharacterSchoolText.text = LoadFile.shared.translateString((matchingStudents.first?["School"])! as! String, mainKey: "SchoolLong")
-		CharacterSchoolYear.text = matchingStudents.first?["SchoolYear"] as? String
-		CharacterClub.text = LoadFile.shared.translateString((matchingStudents.first?["Club"])! as! String, mainKey: "Club")
-		CharacterAge.text = matchingStudents.first?["CharacterAge"] as? String
-		CharacterBirthday.text = matchingStudents.first?["Birthday"] as? String
-		CharacterCharHeightMetric.text = matchingStudents.first?["CharHeightMetric"] as? String
-		CharacterHobby.text = matchingStudents.first?["Hobby"] as? String
-		CharacterDesigner.text = matchingStudents.first?["Designer"] as? String
-		CharacterIllustrator.text = matchingStudents.first?["Illustrator"] as? String
-		CharacterCharacterVoice.text = matchingStudents.first?["CharacterVoice"] as? String
-		CharacterWeaponType.text = matchingStudents.first?["WeaponType"] as? String
-		let characterName: String = matchingStudents.first?["Name"] as? String ?? "null"
+		CharacterProfileText.text = studentData["ProfileIntroduction"] as? String
+        CharacterSchoolText.text = LoadFile.shared.translateString(studentData["School"] as? String ?? "", mainKey: "SchoolLong")
+		CharacterSchoolYear.text = studentData["SchoolYear"] as? String
+		CharacterClub.text = LoadFile.shared.translateString(studentData["Club"] as? String ?? "", mainKey: "Club")
+		CharacterAge.text = studentData["CharacterAge"] as? String
+		CharacterBirthday.text = studentData["Birthday"] as? String
+		CharacterCharHeightMetric.text = studentData["CharHeightMetric"] as? String
+		CharacterHobby.text = studentData["Hobby"] as? String
+		CharacterDesigner.text = studentData["Designer"] as? String
+		CharacterIllustrator.text = studentData["Illustrator"] as? String
+		CharacterCharacterVoice.text = studentData["CharacterVoice"] as? String
+		CharacterWeaponType.text = studentData["WeaponType"] as? String
+		let characterName: String = studentData["Name"] as? String ?? "null"
 		let urlString = "https://bluearchive.wikiru.jp/?\(characterName.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "null")"
 		if let url = URL(string: urlString)
 		{
@@ -145,7 +144,7 @@ class CharacterProfilePage: UIViewController
 			cleanString = cleanString.replacingOccurrences(of: "<td[^>]*>", with: "", options: .regularExpression, range: nil)
 			cleanString = cleanString.replacingOccurrences(of: "</td>", with: "")
 			cleanString = cleanString.replacingOccurrences(of: "<br[^>]*>", with: "\n", options: .regularExpression, range: nil)
-			cleanString = cleanString.replacingOccurrences(of: "<.[^>]*>|</.>", with: "", options: .regularExpression, range: nil)
+            cleanString = cleanString.replacingOccurrences(of: "<.[^>]*>|</.>", with: "", options: .regularExpression, range: nil)
 			cleanString = cleanString.replacingOccurrences(of: "\\((?<!\\n)(\\d{4}/\\d{2}/\\d{2}( \\d{2}:\\d{2})?)", with: "\n($1", options: .regularExpression, range: nil)
 			return cleanString
 		}

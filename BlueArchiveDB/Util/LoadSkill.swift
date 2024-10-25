@@ -25,7 +25,7 @@ class LoadSkill {
     )
     var NormalColor = UIColor(red: 72 / 255, green: 85 / 255, blue: 130 / 255, alpha: 1.0)
     
-    func loadAllSkillCell(studentStatus:[[String: Any]],skillIndex: Int, SkillArray: [String: Any],SkillCellPosition: Int,action: Selector,target: Any) -> UIView
+    func loadAllSkillCell(studentStatus:[String: Any],skillIndex: Int, SkillArray: [String: Any],SkillCellPosition: Int,SkillName:String,action: Selector,target: Any) -> UIView
     {
         let fileManager = FileManager.default
         let libraryDirectory = fileManager.urls(for: .libraryDirectory, in: .userDomainMask).first!
@@ -54,7 +54,7 @@ class LoadSkill {
         var skillDescTextView = UITextView()
         var SkillDescTemp: String
         var nowSkillLevel = 0
-        if SkillArray["SkillType"] as! String != "autoattack"
+        if SkillName != "Normal"
         {
             skillDescTextView.backgroundColor = .clear
             skillDescTextView.isEditable = false
@@ -72,15 +72,15 @@ class LoadSkill {
             let SkillLevelSlider = CustomSlider()
             SkillLevelSlider.tag = skillIndex * 100 + 5
             mainView.addSubview(SkillLevelSlider)
-            //                 SkillLevelSlider.topAnchor.constraint(equalTo: skillDescTextView.bottomAnchor, constant: )
-            //                .isActive = true
+//             SkillLevelSlider.topAnchor.constraint(equalTo: skillDescTextView.bottomAnchor, constant: )
+//            .isActive = true
             SkillLevelSlider.rightAnchor.constraint(equalTo: mainView.rightAnchor, constant: 5)
                 .isActive = true
             SkillLevelSlider.leftAnchor.constraint(equalTo: mainView.leftAnchor, constant: 5)
                 .isActive = true
             SkillLevelSlider.frame = CGRect(x: 0, y: 165, width: 459, height: 20)
             SkillLevelSlider.addTarget(target, action: action, for: .valueChanged)
-            if SkillArray["SkillType"] as? String == "ex"
+            if SkillName as? String == "Ex"
             {
                 SkillLevelSlider.maximumValue = Float(4)
             } else
@@ -101,7 +101,7 @@ class LoadSkill {
         {
             mainView.frame.size.height = 95
         }
-        SkillDescValueChange(SkillArray: SkillArray, nowSkillLevel: 0, skillDescTextView: skillDescTextView)
+        SkillDescValueChange(SkillArray: SkillArray, nowSkillLevel: 0, skillDescTextView: skillDescTextView, SkillName: SkillName)
         // // Repeat until the input text doesn't change anymore
         // if SkillArray["SkillType"] as? String == "ex" {
         //     nowSkillLevel = ExSkillLevel
@@ -109,29 +109,13 @@ class LoadSkill {
         //     SkillLevelSlider.isHidden = true
         //     nowSkillLevel = SkillLevel
         // }
-        if let radius = SkillArray["Radius"] as? [[String: Any]],
-           let type = radius[0]["Type"] as? String
+        if let IconImage = SkillArray["Icon"] as? String
         {
-            switch type
-            {
-            case "Circle":
                 let Desc = LoadFile.shared.translateString("skill_normalattack_circle")
                 let IconImagePath = libraryDirectory.appendingPathComponent(
-                    "assets/images/skill/COMMON_SKILLICON_CIRCLE.webp")
+                    "assets/images/skill/\(IconImage).webp")
                 skillImageView.image = UIImage(contentsOfFile: IconImagePath.path)
-            case "Obb":
-                let Desc = LoadFile.shared.translateString("skill_normalattack_line")
-                let IconImagePath = libraryDirectory.appendingPathComponent(
-                    "assets/images/skill/COMMON_SKILLICON_LINE.webp")
-                skillImageView.image = UIImage(contentsOfFile: IconImagePath.path)
-            case "Fan":
-                let Desc = LoadFile.shared.translateString("skill_normalattack_fan")
-                let IconImagePath = libraryDirectory.appendingPathComponent(
-                    "assets/images/skill/COMMON_SKILLICON_FAN.webp")
-                skillImageView.image = UIImage(contentsOfFile: IconImagePath.path)
-            default:
-                break
-            }
+            
         } else
         {
             let Desc = LoadFile.shared.translateString("skill_normalattack_target")
@@ -139,14 +123,7 @@ class LoadSkill {
                 "assets/images/skill/COMMON_SKILLICON_TARGET.webp")
             skillImageView.image = UIImage(contentsOfFile: IconImagePath.path)
         }
-        if SkillArray["Icon"] != nil
-        {
-            let IconImagePath = libraryDirectory.appendingPathComponent(
-                "assets/images/skill/\(SkillArray["Icon"]!).webp")
-
-            skillImageView.image = UIImage(contentsOfFile: IconImagePath.path)
-        }
-        if let bulletType = studentStatus.first?["BulletType"] as? String
+        if let bulletType = studentStatus["BulletType"] as? String
         {
             switch bulletType
             {
@@ -162,16 +139,16 @@ class LoadSkill {
                 skillImageView.backgroundColor = NormalColor
             }
         }
-        if SkillArray["Name"] != nil
+        if SkillName != nil
         {
-            skillName.text = SkillArray["Name"] as! String
-        } else if SkillArray["SkillType"] as! String == "autoattack"
+            skillName.text = SkillArray["Name"] as? String
+        } else if SkillName == "Normal"
         {
             skillName.text = "通常攻撃"
         }
-        switch SkillArray["SkillType"] as! String
+        switch SkillName
         {
-        case "autoattack":
+        case "Normal":
             var RadiusType: String
             if let radius = SkillArray["Radius"] as? [[String: Any]],
                let type = radius[0]["Type"] as? String
@@ -232,32 +209,19 @@ class LoadSkill {
 
             skillDesc.text = AutoAttackDescTemp
 
-        case "ex":
-            skillDesc.text = LoadFile.shared.translateString("student_skill_ex") ?? "null"
+        case "Ex":
+            skillDesc.text = LoadFile.shared.translateString(SkillName) ?? "null"
             let Cost = SkillArray["Cost"] as? [Any]
-            skillDesc.text! += "・コスト\(Cost?[0] as! Int)"
+            skillDesc.text! += " / COST: \(Cost?[0] as! Int)"
 
-        case "normal":
-            skillDesc.text = LoadFile.shared.translateString("student_skill_normal") ?? "null"
-
-        case "gearnormal":
-            skillDesc.text = LoadFile.shared.translateString("student_skill_gearnormal") ?? "null"
-
-        case "passive":
-            skillDesc.text = LoadFile.shared.translateString("student_skill_passive") ?? "null"
-
-        case "weaponpassive":
-            skillDesc.text = LoadFile.shared.translateString("student_skill_weaponpassive") ?? "null"
-
-        case "sub":
-            skillDesc.text = LoadFile.shared.translateString("student_skill_sub") ?? "null"
-
+        case "Public","GearPublic","Passive","WeaponPassive","ExtraPassive":
+            skillDesc.text = LoadFile.shared.translateString(SkillName) ?? "null"
         default:
             break
         }
         return mainView
     }
-    func SkillDescValueChange(SkillArray: [String: Any], nowSkillLevel: Int, skillDescTextView: UITextView)
+    func SkillDescValueChange(SkillArray: [String: Any], nowSkillLevel: Int, skillDescTextView: UITextView,SkillName:String)
     {
         var SkillDescTemp = SkillDescReplace(
             SkillDesc: SkillArray["Desc"] as? String ?? "nil", regexPattern: "<b:([a-zA-Z0-9_]+)>",
@@ -283,7 +247,7 @@ class LoadSkill {
             SkillDesc: SkillDescTemp, regexPattern: "<?([0-9]+)>", replaceOf: "?",
             nowSkillLevel: nowSkillLevel, SkillArray: SkillArray
         )
-        if SkillArray["SkillType"] as! String != "autoattack"
+        if SkillName != "autoattack"
         {
             skillDescTextView.text = SkillDescTemp
         }

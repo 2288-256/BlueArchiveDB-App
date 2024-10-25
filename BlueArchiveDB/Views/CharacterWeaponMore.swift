@@ -12,22 +12,23 @@ import UIKit
 class CharacterWeaponMore: UIViewController
 {
     var unitId: Int = 0
-    var studentStatus: [[String: Any]] = []
-    var jsonArrays: [[String: Any]] = []
+    var studentStatus: [String: Any] = [:]
+    var jsonArrays: [String: Any] = [:]
     var weaponData: [String: Any]?
-    var SkillArrays: [[String: Any]] = []
+    var SkillArrays: [String: Any] = [:]
     var weaponSkill: [String:Any] = [:]
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        jsonArrays = LoadFile.shared.getStudents()
-        studentStatus = jsonArrays.filter { $0["Id"] as? Int == unitId }
+                jsonArrays = LoadFile.shared.getStudents()
+//                jsonArrays = []
+        studentStatus = jsonArrays["\(unitId)"] as! [String : Any]
 //        weaponData = studentStatus?["Weapon"] as? [String: Any] ?? [:]
-        SkillArrays = studentStatus.first?["Skills"] as! [[String: Any]]
-        weaponSkill = SkillArrays.first(where: { $0["SkillType"] as? String == "weaponpassive" }) ?? [:]
+        SkillArrays = studentStatus["Skills"] as? [String: Any] ?? [:]
+        weaponSkill = SkillArrays["WeaponPassive"] as? [String:Any] ?? [:]
         let View = view.viewWithTag(0)!
         let StarInfo = view.viewWithTag(1)!
-        let mainView = LoadSkill.shared.loadAllSkillCell(studentStatus: studentStatus, skillIndex: 1, SkillArray: weaponSkill, SkillCellPosition: 0, action: #selector(sliderDidChangeValue(_:)), target: self)
+        let mainView = LoadSkill.shared.loadAllSkillCell(studentStatus: studentStatus, skillIndex: 1, SkillArray: weaponSkill, SkillCellPosition: 0, SkillName: "WeaponPassive", action: #selector(sliderDidChangeValue(_:)), target: self)
         View.addSubview(mainView)
         let mainViewWidth = mainView.frame.width
         let mainViewHeight = mainView.frame.height
@@ -41,9 +42,9 @@ class CharacterWeaponMore: UIViewController
         let tag = sender.tag
         let SkillLevelSlider = view.viewWithTag(tag) as! UISlider
         let SkillDesc = view.viewWithTag(tag - 1) as! UITextView
-        let SkillArray = SkillArrays.first(where: { $0["SkillType"] as? String == "weaponpassive" }) ?? [:]
+        let SkillArray = SkillArrays["WeaponPassive"] as? [String:Any] ?? [:]
         let SkillLevelLabel = view.viewWithTag(tag + 1) as! UILabel
         SkillLevelLabel.text = "Lv.\(Int(sender.value) + 1)"
-        LoadSkill.shared.SkillDescValueChange(SkillArray: SkillArray, nowSkillLevel: Int(sender.value), skillDescTextView: SkillDesc)
+        LoadSkill.shared.SkillDescValueChange(SkillArray: SkillArray, nowSkillLevel: Int(sender.value), skillDescTextView: SkillDesc, SkillName: "WeaponPassive")
     }
 }

@@ -30,37 +30,54 @@ func fetchTodayDateString() -> String
 
 func fetchBirthdayStudents(completion: @escaping ([String]) -> Void)
 {
-	let url = URL(string: "https://raw.githubusercontent.com/lonqie/SchaleDB/main/data/jp/students.min.json")!
+	let url = URL(string: "https://schaledb.com/data/jp/students.min.json")!
 
-	URLSession.shared.dataTask(with: url)
-	{ data, _, error in
-		guard let data = data, error == nil else
-		{
-			print(error?.localizedDescription ?? "Unknown error")
-			completion(["Unknown error"])
-			return
-		}
+    URLSession.shared.dataTask(with: url) { data, _, error in
+        guard let data = data, error == nil else {
+            print(error?.localizedDescription ?? "Unknown error")
+            completion(["Unknown error"])
+            return
+        }
 
-		do
-		{
-			let today = fetchTodayDateString()
-			let students = try JSONDecoder().decode([Student].self, from: data)
-			let birthdayStudents = students.filter { $0.BirthDay == today && !$0.Name.contains("（") && !$0.Name.contains("）") }
+        do {
+            // `data` を `[String: [String: Any]]` に変換
+            if let studentsData = try JSONSerialization.jsonObject(with: data, options: []) as? [String: [String: Any]] {
+                
+                let today = fetchTodayDateString()
+                
+                // 生徒データをフィルタリングする
+                let birthdayStudents = Array(studentsData.values).filter { value in
+                    guard let birthDay = value["BirthDay"] as? String,
+                          let name = value["Name"] as? String else {
+                        return false
+                    }
+                    // 本日が誕生日かどうかと、名前に「（」「）」が含まれていないかをチェック
+                    return birthDay == today && !name.contains("（") && !name.contains("）")
+                }
 
-			if birthdayStudents.isEmpty
-			{
-				completion(["本日誕生日の生徒がいません"])
-			} else
-			{
-				let names = birthdayStudents.map { $0.FamilyName + " " + $0.PersonalName }
-				completion(names)
-			}
-		} catch
-		{
-			print(error.localizedDescription)
-			completion(["error"])
-		}
-	}.resume()
+                // 誕生日の生徒がいない場合
+                if birthdayStudents.isEmpty {
+                    completion(["本日誕生日の生徒がいません"])
+                } else {
+                    // 該当する生徒の名前を取得
+                    let names = birthdayStudents.map { value in
+                        guard let familyName = value["FamilyName"] as? String,
+                              let personalName = value["PersonalName"] as? String else {
+                            return "Unknown"
+                        }
+                        return familyName + " " + personalName
+                    }
+                    completion(names)
+                }
+            } else {
+                completion(["データフォーマットが不正です"])
+            }
+        } catch {
+            print(error.localizedDescription)
+            completion(["error"])
+        }
+    }.resume()
+
 }
 
 // ウィジェットのタイムラインエントリー

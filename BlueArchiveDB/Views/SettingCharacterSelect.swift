@@ -12,13 +12,19 @@ import UIKit
 class SettingCharacterSelect: UIViewController, UICollectionViewDataSource,
 	UICollectionViewDelegateFlowLayout, UISearchBarDelegate
 {
-	var jsonArrays: [[String: Any]] = []
-	var StudentData: [[String: Any]] = []
+    var StudentData: [String: [String: Any]] = [:] // JSONが辞書形式になった
+    var jsonArrays: [[String: Any]] = [] // フィルタリングされた配列形式のデータ
 	var SearchString: String = ""
 	@IBOutlet var searchBar: UISearchBar!
 	override func viewDidLoad()
 	{
-		jsonArrays = LoadFile.shared.getStudents()
+        jsonArrays = Array(LoadFile.shared.getStudents().values)
+        jsonArrays.sort {
+            let order1 = ($0["DefaultOrder"] as? Int) ?? Int.max
+            let order2 = ($1["DefaultOrder"] as? Int) ?? Int.max
+            return order1 < order2
+        }
+        StudentData = LoadFile.shared.getStudents()
 	}
 
 	@IBAction func backButton(_: Any)
@@ -34,31 +40,32 @@ class SettingCharacterSelect: UIViewController, UICollectionViewDataSource,
 	}
 
 	@IBOutlet var collectionView: UICollectionView!
-	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
-	{
-		let testCell: UICollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "setting-character-cell", for: indexPath)
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
+    {
+        let testCell: UICollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "setting-character-cell", for: indexPath)
 
-		let imageView = testCell.contentView.viewWithTag(1) as! UIImageView
-		imageView.image = nil
-		let label = testCell.contentView.viewWithTag(2) as! UILabel
-		label.text = nil
-		if jsonArrays.count > indexPath.row
-		{
-			let characterInfo = jsonArrays[indexPath.row]
-			if let unitId = characterInfo["Id"] as? Int,
-			   let name = characterInfo["Name"] as? String
-			{
-				testCell.tag = unitId
-				let fileManager = FileManager.default
-				let libraryDirectory = fileManager.urls(for: .libraryDirectory, in: .userDomainMask).first!
-				let imagePath = libraryDirectory.appendingPathComponent("assets/images/student/collection/\(unitId).webp")
-				imageView.image = UIImage(contentsOfFile: imagePath.path)
-				label.text = name
-			}
-		}
+        let imageView = testCell.contentView.viewWithTag(1) as! UIImageView
+        imageView.image = nil
+        let label = testCell.contentView.viewWithTag(2) as! UILabel
+        label.text = nil
+        if jsonArrays.count > indexPath.row
+        {
+            let characterInfo = jsonArrays[indexPath.row]
+            if let unitId = characterInfo["Id"] as? Int,
+               let name = characterInfo["Name"] as? String
+            {
+                testCell.tag = unitId
+                // libraryにある画像を読み込む
+                let fileManager = FileManager.default
+                let libraryDirectory = fileManager.urls(for: .libraryDirectory, in: .userDomainMask).first!
+                let imagePath = libraryDirectory.appendingPathComponent("assets/images/student/collection/\(unitId).webp")
+                imageView.image = UIImage(contentsOfFile: imagePath.path)
+                label.text = name
+            }
+        }
 
-		return testCell
-	}
+        return testCell
+    }
 
 	func collectionView(_: UICollectionView,
 	                    layout _: UICollectionViewLayout,
@@ -137,7 +144,7 @@ class SettingCharacterSelect: UIViewController, UICollectionViewDataSource,
 		{
 			searchTerms += LoadFile.shared.findMatchingKeys(searchText: searchText)
 			// 検索文字列を含む要素を検索結果配列に追加する
-			jsonArrays = StudentData.filter
+            jsonArrays = StudentData.values.filter
 			{ student in
 				let searchTerms: [String] = (searchTerms as? [String]) ?? [searchTerms as? String].compactMap { $0 }
 				return searchTerms.contains
@@ -158,9 +165,15 @@ class SettingCharacterSelect: UIViewController, UICollectionViewDataSource,
 						(student["WeaponType"] as? String)?.contains(term) == true
 				}
 			}
+            jsonArrays.sort {
+                let order1 = ($0["DefaultOrder"] as? Int) ?? Int.max
+                let order2 = ($1["DefaultOrder"] as? Int) ?? Int.max
+                return order1 < order2
+            }
 		} else
 		{
-			jsonArrays = LoadFile.shared.getStudents()
+            //        jsonArrays = LoadFile.shared.getStudents()
+                    jsonArrays = []
 		}
 		// テーブルを再読み込みする
 		collectionView.reloadData()

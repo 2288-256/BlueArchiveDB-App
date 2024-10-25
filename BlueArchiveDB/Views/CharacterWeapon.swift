@@ -13,7 +13,7 @@ class CharacterWeapon: UIViewController
 {
     var unitId: Int = 0
     var studentStatus: [String: Any]?
-    var jsonArrays: [[String: Any]] = []
+    var studentData: [String: Any] = [:]
     var weaponData: [String: Any]?
     var contentCount: Int = 0
     @IBOutlet var nowWeaponLevel: UILabel!
@@ -26,12 +26,10 @@ class CharacterWeapon: UIViewController
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        jsonArrays = LoadFile.shared.getStudents()
-        studentStatus = jsonArrays.first(where: { $0["Id"] as? Int == unitId })
-        weaponData = studentStatus?["Weapon"] as? [String: Any] ?? [:]
-//        print(weaponData)
-        weaponName.text = weaponData?["Name"] as! String
-        let imageName = studentStatus?["WeaponImg"] as! String
+        weaponData = studentData["Weapon"] as? [String: Any] ?? [:]
+        print(weaponData)
+        weaponName.text = weaponData?["Name"] as? String
+        let imageName = studentData["WeaponImg"] as! String
         let fileManager = FileManager.default
         let libraryDirectory = fileManager.urls(for: .libraryDirectory, in: .userDomainMask).first!
         let imagePath = libraryDirectory.appendingPathComponent("assets/images/weapon/\(imageName).webp")

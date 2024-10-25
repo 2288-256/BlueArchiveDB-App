@@ -133,7 +133,7 @@
                                                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                                 </imageView>
                                                                                 <label opaque="NO" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tyn-rZ-AkB">
-                                                                                    <rect key="frame" x="35" y="113" width="42" height="21"/>
+                                                                                    <rect key="frame" x="4" y="113" width="105" height="21"/>
                                                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                                     <nil key="textColor"/>
@@ -838,7 +838,7 @@
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="00s-xZ-urG">
-                                                            <rect key="frame" x="-1" y="-1" width="117" height="117"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="117" height="117"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                         </imageView>
                                                         <label opaque="NO" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="atV-SL-zz3">
@@ -1683,23 +1683,23 @@
             <objects>
                 <viewController id="uIc-qV-LSG" customClass="CharacterProfilePage" customModule="BlueArchiveDB" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="tZU-sN-U5q">
-                        <rect key="frame" x="0.0" y="0.0" width="592" height="642"/>
+                        <rect key="frame" x="0.0" y="0.0" width="602" height="566"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="rhm-LP-BFP">
-                                <rect key="frame" x="28" y="7" width="536" height="628"/>
+                                <rect key="frame" x="28" y="7" width="546" height="552"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wqb-IH-VKP">
-                                        <rect key="frame" x="0.0" y="0.0" width="536" height="204"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="546" height="178.5"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="k42-8q-qUg">
-                                                <rect key="frame" x="0.0" y="0.0" width="270" height="204"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="280" height="178.5"/>
                                                 <subviews>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="vxi-O6-1JP">
-                                                        <rect key="frame" x="0.0" y="0.0" width="69" height="204"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="79" height="178.5"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="学園" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="wzj-j6-yGf" customClass="CustomLabel" customModule="BlueArchiveDB" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="0.0" width="69" height="34"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="79" height="30"/>
                                                                 <color key="backgroundColor" white="1" alpha="0.70453214329599545" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="34" id="6dF-bf-YhU"/>
@@ -1717,7 +1717,7 @@
                                                                 </userDefinedRuntimeAttributes>
                                                             </label>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="部活" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="kmp-e0-1Q4" customClass="CustomLabel" customModule="BlueArchiveDB" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="34" width="69" height="34"/>
+                                                                <rect key="frame" x="0.0" y="30" width="79" height="29.5"/>
                                                                 <color key="backgroundColor" white="1" alpha="0.70453214329599545" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                 <nil key="textColor"/>
@@ -1732,7 +1732,7 @@
                                                                 </userDefinedRuntimeAttributes>
                                                             </label>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="誕生日" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="h6B-dU-p2E" customClass="CustomLabel" customModule="BlueArchiveDB" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="68" width="69" height="34"/>
+                                                                <rect key="frame" x="0.0" y="59.5" width="79" height="30"/>
                                                                 <color key="backgroundColor" white="1" alpha="0.70453214329599545" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                 <nil key="textColor"/>
@@ -1747,7 +1747,7 @@
                                                                 </userDefinedRuntimeAttributes>
                                                             </label>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="身長" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="IQe-wY-Tv7" customClass="CustomLabel" customModule="BlueArchiveDB" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="102" width="69" height="34"/>
+                                                                <rect key="frame" x="0.0" y="89.5" width="79" height="29.5"/>
                                                                 <color key="backgroundColor" white="1" alpha="0.70453214329599545" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                 <nil key="textColor"/>
@@ -1762,7 +1762,7 @@
                                                                 </userDefinedRuntimeAttributes>
                                                             </label>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="デザイン" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="APv-Ex-ZdG" customClass="CustomLabel" customModule="BlueArchiveDB" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="136" width="69" height="34"/>
+                                                                <rect key="frame" x="0.0" y="119" width="79" height="30"/>
                                                                 <color key="backgroundColor" white="1" alpha="0.70453214329599545" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                 <nil key="textColor"/>
@@ -1777,7 +1777,7 @@
                                                                 </userDefinedRuntimeAttributes>
                                                             </label>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="CV." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="OOZ-Kr-kve" customClass="CustomLabel" customModule="BlueArchiveDB" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="170" width="69" height="34"/>
+                                                                <rect key="frame" x="0.0" y="149" width="79" height="29.5"/>
                                                                 <color key="backgroundColor" white="1" alpha="0.70453214329599545" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                 <nil key="textColor"/>
@@ -1794,10 +1794,10 @@
                                                         </subviews>
                                                     </stackView>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="BbK-02-AtK">
-                                                        <rect key="frame" x="69" y="0.0" width="201" height="204"/>
+                                                        <rect key="frame" x="79" y="0.0" width="201" height="178.5"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="cH9-zD-Sbk" customClass="CustomLabel" customModule="BlueArchiveDB" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="0.0" width="201" height="34"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="201" height="30"/>
                                                                 <color key="backgroundColor" white="1" alpha="0.70453214329599545" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="34" id="bJB-wL-SNU"/>
@@ -1816,7 +1816,7 @@
                                                                 </userDefinedRuntimeAttributes>
                                                             </label>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="DSb-2S-WGZ" customClass="CustomLabel" customModule="BlueArchiveDB" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="34" width="201" height="34"/>
+                                                                <rect key="frame" x="0.0" y="30" width="201" height="29.5"/>
                                                                 <color key="backgroundColor" white="1" alpha="0.70453214329599545" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                 <nil key="textColor"/>
@@ -1831,7 +1831,7 @@
                                                                 </userDefinedRuntimeAttributes>
                                                             </label>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="ok6-Ie-XDb" customClass="CustomLabel" customModule="BlueArchiveDB" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="68" width="201" height="34"/>
+                                                                <rect key="frame" x="0.0" y="59.5" width="201" height="30"/>
                                                                 <color key="backgroundColor" white="1" alpha="0.70453214329599545" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                 <nil key="textColor"/>
@@ -1846,7 +1846,7 @@
                                                                 </userDefinedRuntimeAttributes>
                                                             </label>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="Ay4-AT-eRq" customClass="CustomLabel" customModule="BlueArchiveDB" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="102" width="201" height="34"/>
+                                                                <rect key="frame" x="0.0" y="89.5" width="201" height="29.5"/>
                                                                 <color key="backgroundColor" white="1" alpha="0.70453214329599545" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                 <nil key="textColor"/>
@@ -1861,7 +1861,7 @@
                                                                 </userDefinedRuntimeAttributes>
                                                             </label>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="U7m-aT-jKv" customClass="CustomLabel" customModule="BlueArchiveDB" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="136" width="201" height="34"/>
+                                                                <rect key="frame" x="0.0" y="119" width="201" height="30"/>
                                                                 <color key="backgroundColor" white="1" alpha="0.70453214329599545" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                 <nil key="textColor"/>
@@ -1876,7 +1876,7 @@
                                                                 </userDefinedRuntimeAttributes>
                                                             </label>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="ujf-A3-vLE" customClass="CustomLabel" customModule="BlueArchiveDB" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="170" width="201" height="34"/>
+                                                                <rect key="frame" x="0.0" y="149" width="201" height="29.5"/>
                                                                 <color key="backgroundColor" white="1" alpha="0.70453214329599545" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                 <nil key="textColor"/>
@@ -1898,16 +1898,16 @@
                                                 </constraints>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eE6-7A-EaM">
-                                                <rect key="frame" x="270" y="0.0" width="266" height="204"/>
+                                                <rect key="frame" x="280" y="0.0" width="266" height="178.5"/>
                                                 <subviews>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="kNv-0f-0G8">
-                                                        <rect key="frame" x="0.0" y="0.0" width="75" height="204"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="75" height="178.5"/>
                                                         <subviews>
                                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="Ldm-rh-QBy">
-                                                                <rect key="frame" x="0.0" y="0.0" width="75" height="68"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="75" height="59.5"/>
                                                                 <subviews>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="学年" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="whM-3B-JCQ" customClass="CustomLabel" customModule="BlueArchiveDB" customModuleProvider="target">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="75" height="34"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="75" height="30"/>
                                                                         <color key="backgroundColor" white="1" alpha="0.70453214329599545" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                         <nil key="textColor"/>
@@ -1922,7 +1922,7 @@
                                                                         </userDefinedRuntimeAttributes>
                                                                     </label>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="年齢" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="brT-PV-Jb3" customClass="CustomLabel" customModule="BlueArchiveDB" customModuleProvider="target">
-                                                                        <rect key="frame" x="0.0" y="34" width="75" height="34"/>
+                                                                        <rect key="frame" x="0.0" y="30" width="75" height="29.5"/>
                                                                         <color key="backgroundColor" white="1" alpha="0.70453214329599545" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                         <nil key="textColor"/>
@@ -1939,7 +1939,7 @@
                                                                 </subviews>
                                                             </stackView>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="趣味" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="lRE-1h-AWU" customClass="CustomLabel" customModule="BlueArchiveDB" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="68" width="75" height="68"/>
+                                                                <rect key="frame" x="0.0" y="59.5" width="75" height="59.5"/>
                                                                 <color key="backgroundColor" white="1" alpha="0.70453214329599545" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="75" id="EP0-a7-yJd"/>
@@ -1957,10 +1957,10 @@
                                                                 </userDefinedRuntimeAttributes>
                                                             </label>
                                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="WSU-6J-xX4">
-                                                                <rect key="frame" x="0.0" y="136" width="75" height="68"/>
+                                                                <rect key="frame" x="0.0" y="119" width="75" height="59.5"/>
                                                                 <subviews>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="イラスト" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="Bso-oC-60M" customClass="CustomLabel" customModule="BlueArchiveDB" customModuleProvider="target">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="75" height="34"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="75" height="30"/>
                                                                         <color key="backgroundColor" white="1" alpha="0.70453214329599545" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                         <nil key="textColor"/>
@@ -1975,7 +1975,7 @@
                                                                         </userDefinedRuntimeAttributes>
                                                                     </label>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="武器タイプ" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="7" translatesAutoresizingMaskIntoConstraints="NO" id="8Hk-ld-pyZ" customClass="CustomLabel" customModule="BlueArchiveDB" customModuleProvider="target">
-                                                                        <rect key="frame" x="0.0" y="34" width="75" height="34"/>
+                                                                        <rect key="frame" x="0.0" y="30" width="75" height="29.5"/>
                                                                         <color key="backgroundColor" white="1" alpha="0.70453214329599545" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                                         <nil key="textColor"/>
@@ -1994,13 +1994,13 @@
                                                         </subviews>
                                                     </stackView>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="qEa-uZ-zAd">
-                                                        <rect key="frame" x="75" y="0.0" width="191" height="204"/>
+                                                        <rect key="frame" x="75" y="0.0" width="191" height="178.5"/>
                                                         <subviews>
                                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="pk7-oJ-tGk">
-                                                                <rect key="frame" x="0.0" y="0.0" width="191" height="68"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="191" height="59.5"/>
                                                                 <subviews>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="jft-En-K3n" customClass="CustomLabel" customModule="BlueArchiveDB" customModuleProvider="target">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="191" height="34"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="191" height="30"/>
                                                                         <color key="backgroundColor" white="1" alpha="0.70453214329599545" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                         <nil key="textColor"/>
@@ -2015,7 +2015,7 @@
                                                                         </userDefinedRuntimeAttributes>
                                                                     </label>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="pFe-5S-Ula" customClass="CustomLabel" customModule="BlueArchiveDB" customModuleProvider="target">
-                                                                        <rect key="frame" x="0.0" y="34" width="191" height="34"/>
+                                                                        <rect key="frame" x="0.0" y="30" width="191" height="29.5"/>
                                                                         <color key="backgroundColor" white="1" alpha="0.70453214329599545" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                         <nil key="textColor"/>
@@ -2032,7 +2032,7 @@
                                                                 </subviews>
                                                             </stackView>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="V7J-aJ-7KL" customClass="CustomLabel" customModule="BlueArchiveDB" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="68" width="191" height="68"/>
+                                                                <rect key="frame" x="0.0" y="59.5" width="191" height="59.5"/>
                                                                 <color key="backgroundColor" white="1" alpha="0.70453214329599545" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="191" id="tLg-Sc-2Oh"/>
@@ -2050,10 +2050,10 @@
                                                                 </userDefinedRuntimeAttributes>
                                                             </label>
                                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="6jH-zF-bqX">
-                                                                <rect key="frame" x="0.0" y="136" width="191" height="68"/>
+                                                                <rect key="frame" x="0.0" y="119" width="191" height="59.5"/>
                                                                 <subviews>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="01W-gc-MzB" customClass="CustomLabel" customModule="BlueArchiveDB" customModuleProvider="target">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="191" height="34"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="191" height="30"/>
                                                                         <color key="backgroundColor" white="1" alpha="0.70453214329599545" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="width" constant="191" id="16D-AY-b4o"/>
@@ -2072,7 +2072,7 @@
                                                                         </userDefinedRuntimeAttributes>
                                                                     </label>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="Zgs-j1-lfC" customClass="CustomLabel" customModule="BlueArchiveDB" customModuleProvider="target">
-                                                                        <rect key="frame" x="0.0" y="34" width="191" height="34"/>
+                                                                        <rect key="frame" x="0.0" y="30" width="191" height="29.5"/>
                                                                         <color key="backgroundColor" white="1" alpha="0.70453214329599545" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="34" id="DMP-I1-xeK"/>
@@ -2105,10 +2105,10 @@
                                         </constraints>
                                     </stackView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ILU-d3-3MY">
-                                        <rect key="frame" x="0.0" y="212" width="536" height="204"/>
+                                        <rect key="frame" x="0.0" y="186.5" width="546" height="179"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="キャラ紹介文" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hfr-Mf-Dj7" customClass="CustomLabel" customModule="BlueArchiveDB" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="0.0" width="536" height="26"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="546" height="26"/>
                                                 <color key="backgroundColor" white="1" alpha="0.70453214329599545" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
@@ -2126,7 +2126,7 @@
                                                 </userDefinedRuntimeAttributes>
                                             </label>
                                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="top" editable="NO" text="キャラ説明" textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="p81-Pz-PnK" customClass="CustomTextView" customModule="BlueArchiveDB" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="26" width="536" height="178"/>
+                                                <rect key="frame" x="0.0" y="26" width="546" height="153"/>
                                                 <color key="backgroundColor" white="1" alpha="0.69999999999999996" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <color key="textColor" systemColor="labelColor"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -2156,10 +2156,10 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jny-e6-ybI">
-                                        <rect key="frame" x="0.0" y="424" width="536" height="204"/>
+                                        <rect key="frame" x="0.0" y="373.5" width="546" height="178.5"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="入手方法" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8GS-NY-6JB" customClass="CustomLabel" customModule="BlueArchiveDB" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="0.0" width="536" height="20.5"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="546" height="20.5"/>
                                                 <color key="backgroundColor" white="1" alpha="0.70453214329599545" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
@@ -2177,7 +2177,7 @@
                                                 </userDefinedRuntimeAttributes>
                                             </label>
                                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="top" editable="NO" text="取得中" textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="djA-v8-OCf" customClass="CustomTextView" customModule="BlueArchiveDB" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="20.5" width="536" height="183.5"/>
+                                                <rect key="frame" x="0.0" y="20.5" width="546" height="158"/>
                                                 <color key="backgroundColor" white="1" alpha="0.69999999999999996" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <color key="textColor" systemColor="labelColor"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -2234,7 +2234,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oI3-0s-dr8" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-130.2342606149341" y="2321.484375"/>
+            <point key="canvasLocation" x="-49" y="2166"/>
         </scene>
         <!--Character Status More-->
         <scene sceneID="1ND-KI-AC1">
@@ -2719,11 +2719,11 @@
             <objects>
                 <viewController storyboardIdentifier="characterWeapon" id="tST-jR-km3" customClass="CharacterWeaponGearPage" customModule="BlueArchiveDB" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="jCp-5h-H6a">
-                        <rect key="frame" x="0.0" y="0.0" width="592" height="644"/>
+                        <rect key="frame" x="0.0" y="0.0" width="602" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="140" translatesAutoresizingMaskIntoConstraints="NO" id="Pxd-78-O2A">
-                                <rect key="frame" x="132" y="10" width="328" height="35"/>
+                                <rect key="frame" x="132" y="10" width="338" height="35"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DIc-zT-yof" customClass="CustomButton" customModule="BlueArchiveDB" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="94" height="35"/>
@@ -2750,7 +2750,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oZo-Cb-kwt" customClass="CustomButton" customModule="BlueArchiveDB" customModuleProvider="target">
-                                        <rect key="frame" x="234" y="0.0" width="94" height="35"/>
+                                        <rect key="frame" x="234" y="0.0" width="104" height="35"/>
                                         <color key="backgroundColor" white="1" alpha="0.70453214330000002" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="35" id="pL0-1C-OZt"/>
@@ -2776,16 +2776,16 @@
                                 </subviews>
                             </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="K40-qD-aYR">
-                                <rect key="frame" x="0.0" y="58" width="592" height="586"/>
+                                <rect key="frame" x="0.0" y="58" width="602" height="510"/>
                                 <subviews>
                                     <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rfU-Ya-K6Q" userLabel="Weapon View">
-                                        <rect key="frame" x="0.0" y="0.0" width="592" height="586"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="602" height="510"/>
                                         <connections>
                                             <segue destination="rd9-wS-EQr" kind="embed" identifier="toWeaponPage" id="t3G-Nt-CuZ"/>
                                         </connections>
                                     </containerView>
                                     <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OvJ-Sz-f8B">
-                                        <rect key="frame" x="0.0" y="0.0" width="592" height="586"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="602" height="510"/>
                                         <connections>
                                             <segue destination="8Kg-q9-s1A" kind="embed" identifier="toGearPage" id="jeq-gG-GfC"/>
                                         </connections>
@@ -2824,18 +2824,18 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Udz-u6-R9z" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="929" y="2318"/>
+            <point key="canvasLocation" x="1010" y="2162"/>
         </scene>
         <!--Character More Page-->
         <scene sceneID="cR2-h6-gJ6">
             <objects>
                 <viewController id="jMG-S3-3hx" customClass="CharacterMorePage" customModule="BlueArchiveDB" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8r5-C4-APM">
-                        <rect key="frame" x="0.0" y="0.0" width="592" height="642"/>
+                        <rect key="frame" x="0.0" y="0.0" width="602" height="566"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="x4V-cW-bEm">
-                                <rect key="frame" x="15" y="131" width="562" height="497"/>
+                                <rect key="frame" x="15" y="131" width="572" height="421"/>
                                 <color key="backgroundColor" white="1" alpha="0.70453214330000002" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="562" id="xdV-Hm-97J"/>
@@ -2848,7 +2848,7 @@
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="voice-cell" id="Y6z-Mp-MCP">
-                                        <rect key="frame" x="12" y="0.0" width="538" height="132"/>
+                                        <rect key="frame" x="17" y="0.0" width="538" height="132"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="gGz-L6-7G7">
                                             <rect key="frame" x="0.0" y="0.0" width="538" height="132"/>
@@ -2903,10 +2903,10 @@
                                 </connections>
                             </collectionView>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="158" translatesAutoresizingMaskIntoConstraints="NO" id="goW-RU-8pQ">
-                                <rect key="frame" x="141" y="5" width="310" height="34.5"/>
+                                <rect key="frame" x="141" y="5" width="320" height="34.5"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cVt-Cv-yiS" customClass="CustomButton" customModule="BlueArchiveDB" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="76" height="34.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="81" height="34.5"/>
                                         <color key="backgroundColor" white="1" alpha="0.70453214330000002" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="ボイス"/>
@@ -2923,7 +2923,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vge-Jv-fP5" customClass="CustomButton" customModule="BlueArchiveDB" customModuleProvider="target">
-                                        <rect key="frame" x="234" y="0.0" width="76" height="34.5"/>
+                                        <rect key="frame" x="239" y="0.0" width="81" height="34.5"/>
                                         <color key="backgroundColor" white="1" alpha="0.70453214330000002" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="その他"/>
@@ -2942,7 +2942,7 @@
                                 </subviews>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="jiF-2O-bim">
-                                <rect key="frame" x="179" y="66" width="398" height="34.5"/>
+                                <rect key="frame" x="189" y="66" width="398" height="34.5"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J2a-ud-oX6" customClass="CustomButton" customModule="BlueArchiveDB" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="93.5" height="34.5"/>
@@ -3054,14 +3054,14 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nOb-Ro-Uhs" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1300" y="2321"/>
+            <point key="canvasLocation" x="1381" y="2166"/>
         </scene>
         <!--Character Status-->
         <scene sceneID="kaX-vA-ZaG">
             <objects>
                 <viewController storyboardIdentifier="CharacterStatus" id="cGa-Ar-0Tl" customClass="CharacterStatus" customModule="BlueArchiveDB" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="MIZ-qG-OJI">
-                        <rect key="frame" x="0.0" y="0.0" width="592" height="642"/>
+                        <rect key="frame" x="0.0" y="0.0" width="602" height="566"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="コンポーネント 1 – 1 (ステータス)" translatesAutoresizingMaskIntoConstraints="NO" id="dKO-Vq-xMt">
@@ -3069,7 +3069,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lEL-kL-yCh">
-                                <rect key="frame" x="394" y="24" width="180" height="97"/>
+                                <rect key="frame" x="404" y="24" width="180" height="97"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="aSn-rj-dT3">
                                         <rect key="frame" x="4" y="5" width="171" height="87"/>
@@ -3981,14 +3981,14 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="201.86440677966104" y="2320.6097560975609"/>
+            <point key="canvasLocation" x="283" y="2165"/>
         </scene>
         <!--Character Skill-->
         <scene sceneID="AlI-2M-q8K">
             <objects>
                 <viewController id="31C-an-8lf" customClass="CharacterSkill" customModule="BlueArchiveDB" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Sop-LD-Imk">
-                        <rect key="frame" x="0.0" y="0.0" width="592" height="644"/>
+                        <rect key="frame" x="0.0" y="0.0" width="602" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uZ7-2L-hZG">
@@ -4004,10 +4004,10 @@
                                 </connections>
                             </button>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mnU-kC-XAC">
-                                <rect key="frame" x="14" y="58" width="564" height="571"/>
+                                <rect key="frame" x="14" y="58" width="574" height="495"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lWR-54-k22">
-                                        <rect key="frame" x="0.0" y="0.0" width="564" height="1000"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="574" height="1000"/>
                                         <color key="backgroundColor" white="1" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="1000" id="vLB-Wy-UN7"/>
@@ -4041,7 +4041,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WhV-IT-xjL" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="531.3559322033899" y="2318.0487804878048"/>
+            <point key="canvasLocation" x="613" y="2163"/>
         </scene>
         <!--Character Weapon-->
         <scene sceneID="7ad-Mk-LpZ">
@@ -4254,14 +4254,14 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ku7-Z1-g6v" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="790.67796610169501" y="3044.6341463414633"/>
+            <point key="canvasLocation" x="872" y="2890"/>
         </scene>
         <!--Character Gear-->
         <scene sceneID="zfw-Oa-qMg">
             <objects>
                 <viewController id="8Kg-q9-s1A" customClass="CharacterGear" customModule="BlueArchiveDB" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="zB9-H5-f6M">
-                        <rect key="frame" x="0.0" y="0.0" width="592" height="586"/>
+                        <rect key="frame" x="0.0" y="0.0" width="592" height="219"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="アルのすごく貴重な財布" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZDf-dA-vDw">
@@ -4329,7 +4329,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jnj-3h-1pD" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1121" y="2983"/>
+            <point key="canvasLocation" x="1202" y="2827"/>
         </scene>
         <!--Character Weapon More-->
         <scene sceneID="PbY-TO-utC">
@@ -4360,7 +4360,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9qM-4g-YLl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="791" y="3568"/>
+            <point key="canvasLocation" x="872" y="3413"/>
         </scene>
     </scenes>
     <designables>

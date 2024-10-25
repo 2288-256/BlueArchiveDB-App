@@ -13,7 +13,8 @@ class CharacterInfo: UIViewController
 {
 	var unitId: Int = 0
 	var BackPage: String = ""
-	var jsonArrays: [[String: Any]] = []
+    var jsonArrays: [String: [String: Any]] = [:]
+    var studentData: [String: Any] = [:]
 	var LightArmorColor = UIColor(red: 167 / 255, green: 12 / 255, blue: 25 / 255, alpha: 1.0)
 	var HeavyArmorColor = UIColor(red: 178 / 255, green: 109 / 255, blue: 31 / 255, alpha: 1.0)
 	var UnarmedColor = UIColor(red: 33 / 255, green: 111 / 255, blue: 156 / 255, alpha: 1.0)
@@ -57,7 +58,9 @@ class CharacterInfo: UIViewController
 		{
 			if self.jsonArrays.isEmpty
 			{
-				self.jsonArrays = LoadFile.shared.getStudents()
+                self.jsonArrays = LoadFile.shared.getStudents()
+                self.studentData = self.jsonArrays["\(self.unitId)"]!
+                
 			}
 		}
 		setup(unitId: unitId)
@@ -97,17 +100,16 @@ class CharacterInfo: UIViewController
 				self.CharacterImage.heightAnchor.constraint(equalToConstant: height).isActive = true
 			}
 		}
-		let matchingStudents = jsonArrays.filter { $0["Id"] as? Int == unitId }
-		Name.text = matchingStudents.first?["Name"] as? String
-		let PositionText = matchingStudents.first?["Position"] as? String
+		Name.text = studentData["Name"] as? String
+		let PositionText = studentData["Position"] as? String
 		Position.text = PositionText?.uppercased()
-		ArmorType.text = LoadFile.shared.translateString((matchingStudents.first?["ArmorType"])! as! String)
-		BulletType.text = LoadFile.shared.translateString((matchingStudents.first?["BulletType"])! as! String)
-		TacticRole.text = LoadFile.shared.translateString((matchingStudents.first?["TacticRole"])! as! String)
-		let image = UIImage(named: "Role_\((matchingStudents.first?["TacticRole"])! as! String)")
+		ArmorType.text = LoadFile.shared.translateString((studentData["ArmorType"])! as! String)
+		BulletType.text = LoadFile.shared.translateString((studentData["BulletType"])! as! String)
+		TacticRole.text = LoadFile.shared.translateString((studentData["TacticRole"])! as! String)
+		let image = UIImage(named: "Role_\((studentData["TacticRole"])! as! String)")
 		TacticRoleImage.image = image
 
-		if let armorType = matchingStudents.first?["ArmorType"] as? String
+		if let armorType = studentData["ArmorType"] as? String
 		{
 			switch armorType
 			{
@@ -124,7 +126,7 @@ class CharacterInfo: UIViewController
 			}
 		}
 
-		if let bulletType = matchingStudents.first?["BulletType"] as? String
+		if let bulletType = studentData["BulletType"] as? String
 		{
 			switch bulletType
 			{
@@ -141,17 +143,18 @@ class CharacterInfo: UIViewController
 			}
 		}
 
-		let StreetAdaptationImage = UIImage(named: "Ingame_Emo_Adaptresult\((matchingStudents.first?["StreetBattleAdaptation"])! as! Int)")
+		let StreetAdaptationImage = UIImage(named: "Ingame_Emo_Adaptresult\((studentData["StreetBattleAdaptation"])! as! Int)")
 		StreetBattleAdaptationImage.image = StreetAdaptationImage
 
-		let OutdoorAdaptationImage = UIImage(named: "Ingame_Emo_Adaptresult\((matchingStudents.first?["OutdoorBattleAdaptation"])! as! Int)")
+		let OutdoorAdaptationImage = UIImage(named: "Ingame_Emo_Adaptresult\((studentData["OutdoorBattleAdaptation"])! as! Int)")
 		OutdoorBattleAdaptationImage.image = OutdoorAdaptationImage
 
-		let IndoorAdaptationImage = UIImage(named: "Ingame_Emo_Adaptresult\((matchingStudents.first?["IndoorBattleAdaptation"])! as! Int)")
+		let IndoorAdaptationImage = UIImage(named: "Ingame_Emo_Adaptresult\((studentData["IndoorBattleAdaptation"])! as! Int)")
 		IndoorBattleAdaptationImage.image = IndoorAdaptationImage
 
-		let BackgroundImageFileName = matchingStudents.first?["CollectionBG"]! as! String
+		let BackgroundImageFileName = studentData["CollectionBG"]! as! String
 		let BackgroundImagePath = libraryDirectory.appendingPathComponent("assets/images/background/\(BackgroundImageFileName).jpg")
+        print(BackgroundImageFileName)
 		if let image = UIImage(contentsOfFile: BackgroundImagePath.path)
 		{
 			DispatchQueue.main.async
@@ -178,24 +181,25 @@ class CharacterInfo: UIViewController
 	{
 		if jsonArrays.isEmpty
 		{
-			jsonArrays = LoadFile.shared.getStudents()
+            jsonArrays = LoadFile.shared.getStudents()
+            studentData = jsonArrays["\(self.unitId)"]!
 		}
 		switch (segue.identifier, segue.destination)
 		{
 		case let ("toCharacterProfile"?, destination as CharacterProfilePage):
 			destination.unitId = unitId
-			destination.jsonArrays = jsonArrays
+			destination.studentData = studentData
 		case let ("toMorePage"?, destination as CharacterMorePage):
 			destination.unitId = unitId
 		case let ("toStatus"?, destination as CharacterStatus):
 			destination.unitId = unitId
-			destination.jsonArrays = jsonArrays
+			destination.studentData = studentData
 		case let ("toSkill"?, destination as CharacterSkill):
 			destination.unitId = unitId
-			destination.jsonArrays = jsonArrays
+			destination.studentData = studentData
 		case let ("toWeapon"?, destination as CharacterWeaponGearPage):
 			destination.unitId = unitId
-			destination.jsonArrays = jsonArrays
+			destination.studentData = studentData
 		default:
 			()
 		}

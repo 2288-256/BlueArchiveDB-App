@@ -12,7 +12,7 @@ class LoadFile
 {
     static let shared = LoadFile()
 
-    private var studentsData: [[String: Any]] = []
+    private var studentsData: [String: [String: Any]] = [:]
     private var voiceData: [[String: Any]] = []
     private var localizationData: [String: Any] = [:]
 
@@ -36,7 +36,7 @@ class LoadFile
     }
 
     // 初期データ読み込み処理
-    private func loadInitialData()
+    public func loadInitialData()
     {
         loadAllStudents()
         loadLocalizationData()
@@ -48,10 +48,11 @@ class LoadFile
         {
             let fileManager = FileManager.default
             let documentsURL = try fileManager.url(for: .libraryDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-            let studentsFileURL = documentsURL.appendingPathComponent("assets/data/jp/students.json")
+            let studentsFileURL = documentsURL.appendingPathComponent("assets/data/jp/students.min.json")
 
             let data = try Data(contentsOf: studentsFileURL)
-            studentsData = try JSONSerialization.jsonObject(with: data) as? [[String: Any]] ?? []
+            // 型を [String: [String: Any]] に変更
+            studentsData = try JSONSerialization.jsonObject(with: data) as? [String: [String: Any]] ?? [:]
             print("ロードした生徒数:\(studentsData.count)")
         } catch
         {
@@ -64,7 +65,7 @@ class LoadFile
         let fileManager = FileManager.default
         if let documentsURL = fileManager.urls(for: .libraryDirectory, in: .userDomainMask).first
         {
-            let voiceFileURL = documentsURL.appendingPathComponent("assets/data/jp/voice.json")
+            let voiceFileURL = documentsURL.appendingPathComponent("assets/data/jp/voice.min.json")
             do
             {
                 let data = try Data(contentsOf: voiceFileURL)
@@ -87,7 +88,7 @@ class LoadFile
         {
             let fileManager = FileManager.default
             let libraryDirectoryURL = fileManager.urls(for: .libraryDirectory, in: .userDomainMask).first
-            if let localizationFileURL = libraryDirectoryURL?.appendingPathComponent("assets/data/jp/localization.json")
+            if let localizationFileURL = libraryDirectoryURL?.appendingPathComponent("assets/data/jp/localization.min.json")
             {
                 let fileData = try Data(contentsOf: localizationFileURL)
                 let json = try JSONSerialization.jsonObject(with: fileData, options: [])
@@ -154,10 +155,9 @@ class LoadFile
             // If not found, search again using the entire key including trailing numbers
             let inputNew = String(input.dropLast())
             if
-               let mainDictionary = localizationData[mainKey] as? [String: String],
-               let translatedString = mainDictionary[input]
+                let mainDictionary = localizationData[mainKey] as? [String: String],
+                let translatedString = mainDictionary[input]
             {
-                print("if:"+translatedString)
                 return translatedString
             } else
             {
@@ -167,17 +167,18 @@ class LoadFile
                     if let translations = value as? [String: String],
                        let translatedString = translations[input]
                     {
-                        print("ifelse:"+translatedString)
                         return translatedString
                     }
                 }
             }
-        }else{
+        } else
+        {
             // Search using the key without trailing numbers
             if let translation = searchForKey(keyToSearch)
             {
                 return translation
-            }else{
+            } else
+            {
                 return "Error: TNSK"
             }
         }
@@ -192,7 +193,7 @@ class LoadFile
         {
             let fileManager = FileManager.default
             let documentsURL = try fileManager.url(for: .libraryDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-            let localizationFileURL = documentsURL.appendingPathComponent("assets/data/jp/localization.json")
+            let localizationFileURL = documentsURL.appendingPathComponent("assets/data/jp/localization.min.json")
 
             let fileData = try Data(contentsOf: localizationFileURL)
             if let json = try JSONSerialization.jsonObject(with: fileData, options: []) as? [String: [String: String]]
@@ -217,17 +218,17 @@ class LoadFile
         return matchingKeys
     }
 
-    public func getStudents() -> [[String: Any]]
+    public func getStudents() -> [String: [String: Any]]
     {
         return studentsData
     }
 
-    public func getVoiceData(forUnitId unitId: String) -> [String: Any]?
+    public func getVoiceData(forUnitId unitId: String) -> [[String: Any]]?
     {
         loadAllStudentsVoice(unitId: unitId)
         if !voiceData.isEmpty
         {
-            return voiceData[0]
+            return voiceData
         } else
         {
             return nil

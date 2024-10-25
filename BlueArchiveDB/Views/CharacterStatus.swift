@@ -12,9 +12,8 @@ import UIKit
 class CharacterStatus: UIViewController
 {
 	var unitId: Int = 0
-	var jsonArrays: [[String: Any]] = []
-	var ItemJson: [[String: Any]] = []
-	var studentStatus: [[String: Any]] = []
+    var studentData: [String: Any] = [:]
+    var ItemJson: [String: [String: Any]] = [:]
 	var stargrade: Int = 1
 	var nowLevel: Int = 1
 	var nowWeaponLevel: Int = 0
@@ -66,10 +65,8 @@ class CharacterStatus: UIViewController
 		EquipmentToggleButton.isSelected = false
 		LevelSlider.value = 1
 		LevelSliderLabel.text = "Lv.1"
-		studentStatus = jsonArrays.filter { $0["Id"] as? Int == unitId }
-		let levelUpValueHp = studentStatus.first?["MaxHP100"] as! Int / 99
-		print(levelUpValueHp)
-		EquipmentArray = studentStatus.first?["Equipment"] as! [String]
+//		let levelUpValueHp = studentData["MaxHP100"] as? Int / 99
+        EquipmentArray = studentData["Equipment"] as? [String] ?? []
 		for i in 1 ... StarTierImages.count
 		{
 			StarTierImages[i - 1].image = UIImage(systemName: "star.fill")
@@ -89,10 +86,10 @@ class CharacterStatus: UIViewController
 
 		let fileManager = FileManager.default
 		let libraryDirectory = fileManager.urls(for: .libraryDirectory, in: .userDomainMask).first!
-		let imageName = studentStatus.first?["WeaponImg"] as! String
-		WeaponType.text = studentStatus.first?["WeaponType"] as! String
+		let imageName = studentData["WeaponImg"] as? String ?? ""
+		WeaponType.text = studentData["WeaponType"] as? String ?? ""
 
-		if studentStatus.first?["Cover"] as! Bool == false
+		if let CoverBool = studentData["Cover"] as? Bool , CoverBool == false
 		{
 			CoverImage.isHidden = true
 		}
@@ -139,12 +136,12 @@ class CharacterStatus: UIViewController
 	{
 		let fileManager = FileManager.default
 		let libraryDirectory = fileManager.urls(for: .libraryDirectory, in: .userDomainMask).first!
-		print("assets/images/equipment/full/equipment_icon_\((EquipmentArray[0] as! String).lowercased())_tier\(String(EquipmentTier[1]!)).webp")
-		let Equipment1ImagePath = libraryDirectory.appendingPathComponent("assets/images/equipment/full/equipment_icon_\((EquipmentArray[0] as! String).lowercased())_tier\(String(EquipmentTier[1]!)).webp")
+//		print("assets/images/equipment/full/equipment_icon_\((EquipmentArray[0] as! String).lowercased())_tier\(String(EquipmentTier[1]!)).webp")
+        let Equipment1ImagePath = libraryDirectory.appendingPathComponent("assets/images/equipment/icon/equipment_icon_\((EquipmentArray[0] ).lowercased())_tier\(String(EquipmentTier[1]!)).webp")
 		Equipment1.image = UIImage(contentsOfFile: Equipment1ImagePath.path)
-		let Equipment2ImagePath = libraryDirectory.appendingPathComponent("assets/images/equipment/full/equipment_icon_\((EquipmentArray[1] as! String).lowercased())_tier\(String(EquipmentTier[2]!)).webp")
+		let Equipment2ImagePath = libraryDirectory.appendingPathComponent("assets/images/equipment/icon/equipment_icon_\((EquipmentArray[1] as! String).lowercased())_tier\(String(EquipmentTier[2]!)).webp")
 		Equipment2.image = UIImage(contentsOfFile: Equipment2ImagePath.path)
-		let Equipment3ImagePath = libraryDirectory.appendingPathComponent("assets/images/equipment/full/equipment_icon_\((EquipmentArray[2] as! String).lowercased())_tier\(String(EquipmentTier[3]!)).webp")
+		let Equipment3ImagePath = libraryDirectory.appendingPathComponent("assets/images/equipment/icon/equipment_icon_\((EquipmentArray[2] as! String).lowercased())_tier\(String(EquipmentTier[3]!)).webp")
 		Equipment3.image = UIImage(contentsOfFile: Equipment3ImagePath.path)
 	}
 
@@ -156,15 +153,15 @@ class CharacterStatus: UIViewController
 		popupView.modalPresentationStyle = .overFullScreen
 		popupView.modalTransitionStyle = .crossDissolve
 
-		popupView.WeaponImageName = studentStatus.first?["WeaponImg"] as! String
-		let EquipmentArray = studentStatus.first?["Equipment"] as! [String]
+		popupView.WeaponImageName = studentData["WeaponImg"] as! String
+//		let EquipmentArray = studentData["Equipment"] as! [String]
 		popupView.EquipmentName = EquipmentArray
 		var sendEquipmentTier: [Int] = []
 		sendEquipmentTier.append(Int(EquipmentTier[1]!)!)
 		sendEquipmentTier.append(Int(EquipmentTier[2]!)!)
 		sendEquipmentTier.append(Int(EquipmentTier[3]!)!)
 		popupView.EquipmentTier = sendEquipmentTier
-		popupView.studentStatus = studentStatus
+		popupView.studentData = studentData
 		popupView.nowWeaponLevel = nowWeaponLevel
 		popupView.nowLevel = nowLevel
 		popupView.EquipmentToggleButtonStatus = EquipmentToggleButton.isSelected
@@ -279,9 +276,12 @@ class CharacterStatus: UIViewController
 					Equipment3.image = Equipment3.image?.withRenderingMode(.alwaysTemplate)
 					Equipment3.tintColor = .gray
 				default:
-					let matchingStudents = ItemJson.filter { $0["Icon"] as? String == "equipment_icon_\(EquipmentArray[i - 1].lowercased())_tier\(String(EquipmentTier[i]!))" }
-					let statType = matchingStudents.first?["StatType"] as! [String]
-					let statValue = matchingStudents.first?["StatValue"] as! [[Int]]
+                    let matchingStudents =  ItemJson.first { (_, itemDetails) in
+                        guard let icon = itemDetails["Icon"] as? String else { return false }
+                        return icon == "equipment_icon_\(EquipmentArray[i - 1].lowercased())_tier\(String(EquipmentTier[i]!))"
+                    }
+                    let statType = matchingStudents?.value["StatType"] as! [String]
+                    let statValue = matchingStudents?.value["StatValue"] as! [[Int]]
 					for j in 0 ..< statType.count
 					{
 						if let existingValue = addBonus[statType[j]]
@@ -322,10 +322,10 @@ class CharacterStatus: UIViewController
 
 	func GetAdaptation(AdaptationName: String) -> Int
 	{
-		var DefaultAdaptation = studentStatus.first?["\(AdaptationName)BattleAdaptation"] as! Int
+		var DefaultAdaptation = studentData["\(AdaptationName)BattleAdaptation"] as? Int ?? 0
 		if stargrade == 8
 		{
-			let weaponStatus = studentStatus.first?["Weapon"] as? [String: Any]
+			let weaponStatus = studentData["Weapon"] as? [String: Any]
 			let weaponAdaptationType = weaponStatus?["AdaptationType"] as! String
 			if AdaptationName == "\(weaponAdaptationType)"
 			{
@@ -354,9 +354,9 @@ class CharacterStatus: UIViewController
 			}
 		}
 
-		if let start1 = studentStatus.first?["\(StatusName)1"] as? Double,
-		   let weaponStatus = studentStatus.first?["Weapon"] as? [String: Any],
-		   let start100 = studentStatus.first?["\(StatusName)100"] as? Double
+		if let start1 = studentData["\(StatusName)1"] as? Double,
+		   let weaponStatus = studentData["Weapon"] as? [String: Any],
+		   let start100 = studentData["\(StatusName)100"] as? Double
 		{
 			var levelScale: Double = 0
 			levelScale = round((Double(level - 1) / 99) * 10000) / 10000
@@ -484,10 +484,10 @@ class CharacterStatus: UIViewController
 
 			Label.text = formatter.string(from: NSNumber(value: Int(round(Double(scaledValue + addValue) * addCoefficient) * 10000) / 10000))
 		} else if StatusName == "CriticalDamageRate",
-		          let StatusValue = studentStatus.first?["\(StatusName)"] as? Int
+		          let StatusValue = studentData["\(StatusName)"] as? Int
 		{
 			Label.text = "\(StatusValue / 100)%"
-		} else if let StatusValue = studentStatus.first?["\(StatusName)"] as? Int
+		} else if let StatusValue = studentData["\(StatusName)"] as? Int
 		{
 			Label.text = "\(StatusValue)"
 		} else
@@ -502,7 +502,7 @@ class CharacterStatus: UIViewController
 		{
 			let fileManager = FileManager.default
 			let documentsURL = fileManager.urls(for: .libraryDirectory, in: .userDomainMask).first!
-			let studentsFileURL = documentsURL.appendingPathComponent("assets/data/jp/equipment.json")
+			let studentsFileURL = documentsURL.appendingPathComponent("assets/data/jp/equipment.min.json")
 
 			guard FileManager.default.fileExists(atPath: studentsFileURL.path) else
 			{
@@ -510,7 +510,7 @@ class CharacterStatus: UIViewController
 			}
 
 			let data = try Data(contentsOf: studentsFileURL)
-			ItemJson = try JSONSerialization.jsonObject(with: data) as? [[String: Any]] ?? []
+            ItemJson = try JSONSerialization.jsonObject(with: data) as? [String: [String: Any]] ?? [:]
 		} catch
 		{
 			print("Error reading students JSON file: \(error)")

@@ -12,8 +12,7 @@ import UIKit
 class CharacterWeaponGearPage: UIViewController
 {
 	var unitId: Int = 0
-	var jsonArrays: [[String: Any]] = []
-	var studentStatus: [[String: Any]] = []
+    var studentData: [String: Any] = [:]
     var GearData: [String: Any] = [:]
 	@IBOutlet var GearSwitchButton: UIButton!
 
@@ -34,11 +33,10 @@ class CharacterWeaponGearPage: UIViewController
         switch (segue.identifier, segue.destination) {
         case let ("toWeaponPage"?, destination as CharacterWeapon):
             destination.unitId = unitId
-            destination.jsonArrays = jsonArrays
+            destination.studentData = studentData
         case let ("toGearPage"?, destination as CharacterGear):
             destination.unitId = unitId
-            studentStatus = jsonArrays.filter { $0["Id"] as? Int == unitId }
-           GearData = studentStatus.compactMap { $0["Gear"] as? [String: Any] }.first ?? [:]
+            GearData = studentData["Gear"] as? [String: Any] ?? [:]
             destination.GearData = GearData
         default:
             ()
