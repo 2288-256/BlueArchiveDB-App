@@ -3,11 +3,6 @@
 ![GitHub Tag](https://img.shields.io/github/v/tag/2288-256/BlueArchiveDB-App)
 
 > [!CAUTION]
-> Currently not working properly due to SchaleBD update.
-> 
-> If you are interested in this project, please use the [support-for-the-new-site branch](https://github.com/2288-256/BlueArchiveDB-App/tree/support-for-the-new-site) and build it.
-
-> [!CAUTION]
 > This app is not programmed to run on an iPhone at this time.
 
 # BlueArchiveDB-App
