@@ -41,26 +41,27 @@ class CharacterSkill: UIViewController
 		SkillCellPosition = 0
         
 //        for key in SkillArrays.keys {
-//            guard let SkillArray = SkillArrays[key] else {
-//                // SkillArrayがnilでないことを確認
-//                continue
-//            }
-//            
-//            print(key)
-//            let skillIndex = Int(key) ?? 0  // キーが整数として扱われる場合、Intに変換
-//            var mainView = LoadSkill.shared.loadAllSkillCell(
-//                studentStatus: studentStatus,
-//                skillIndex: skillIndex,
-//                SkillArray: SkillArray as! [String : Any],
-//                SkillCellPosition: SkillCellPosition,
-//                action: #selector(sliderDidChangeValue(_:)),
-//                target: self
-//            )
-//            
-//            // returnでmainViewを返す
-//            ContainerSkillView.addSubview(mainView)
-//            SkillCellPosition += Int(mainView.frame.height) + 5
-//        }
+        for (index,key) in SkillList.enumerated() {
+            guard let SkillArray = SkillArrays[key] else {
+                // SkillArrayがnilでないことを確認
+                continue
+            }
+            
+            print(key)
+            let skillIndex = index  // キーが整数として扱われる場合、Intに変換
+            var mainView = LoadSkill.shared.loadAllSkillCell(
+                studentStatus: studentData,
+                skillIndex: skillIndex,
+                SkillArray: SkillArray as! [String : Any],
+                SkillCellPosition: SkillCellPosition, SkillName: key,
+                action: #selector(sliderDidChangeValue(_:)),
+                target: self
+            )
+            
+            // returnでmainViewを返す
+            ContainerSkillView.addSubview(mainView)
+            SkillCellPosition += Int(mainView.frame.height) + 5
+        }
 
 		print(SkillCellPosition + 10)
 		let heightConstraint = NSLayoutConstraint(item: ContainerSkillView, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: CGFloat(SkillCellPosition + 10))
@@ -78,23 +79,26 @@ class CharacterSkill: UIViewController
               let SkillLevelLabel = view.viewWithTag(tag + 1) as? UILabel else {
             return
         }
-        
         // (tag - 5) / 100 から辞書のキーを決定する処理を追加
         let key = String((tag - 5) / 100)  // キーが文字列であると仮定
-        guard let SkillArray = SkillArrays[key] else {
-            // SkillArrayがnilでないことを確認
-            return
-        }
+
         // スライダーの値をラベルに表示
         SkillLevelLabel.text = "Lv.\(Int(sender.value) + 1)"
-        
-        // SkillDescValueChangeメソッドを呼び出す
-        LoadSkill.shared.SkillDescValueChange(
-            SkillArray: SkillArray as! [String : Any],
-            nowSkillLevel: Int(sender.value),
-            skillDescTextView: SkillDesc,
-            SkillName: SkillList[(tag - 5) / 100]
-        )
+        for (index,key) in SkillList.enumerated() {
+            if index == (tag - 5) / 100{
+                        guard let SkillArray = SkillArrays[key] else {
+                            // SkillArrayがnilでないことを確認
+                            return
+                        }
+                // SkillDescValueChangeメソッドを呼び出す
+                LoadSkill.shared.SkillDescValueChange(
+                    SkillArray: SkillArray as! [String : Any],
+                    nowSkillLevel: Int(sender.value),
+                    skillDescTextView: SkillDesc,
+                    SkillName:key
+                )
+            }
+        }
     }
 
 

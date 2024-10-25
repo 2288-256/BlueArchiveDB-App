@@ -300,10 +300,13 @@ class DownloadFile
                 return
             }
             let dispatchGroup = DispatchGroup()
-            let uniqueNameList = ["Equipment", "CollectionBG"]
+            let uniqueNameList = ["Equipment", "CollectionBG","WeaponImg","SkillIcon"]
+            LoadFile.shared.loadInitialData()
             let jsonArrays: [String: [String: Any]] = LoadFile.shared.getStudents()
             var DownloadEquipmentArray: [String] = []
             var DownloadBGArray: [String] = []
+            var DownloadWeaponArray: [String] = []
+            var DownloadIconImageArray: [String] = []
             var totalCount = 0
             var processedCount = 0
 
@@ -312,6 +315,8 @@ class DownloadFile
                 let studentData: [String: Any] = jsonArrays["\(id)"] ?? [:]
                 let EquipmentArray = studentData["Equipment"] as? [String] ?? []
                 let bgName = studentData["CollectionBG"] as? String ?? ""
+                let wpName = studentData["WeaponImg"] as? String ?? ""
+                let SkillIconArray = studentData["Skills"] as? [String: Any] ?? [:]
                 for i in 0 ..< uniqueNameList.count
                 {
                     switch i
@@ -335,6 +340,22 @@ class DownloadFile
                             DownloadBGArray.append(bgName)
                             totalCount += 1
                         }
+                    case 2:
+                        if !DownloadWeaponArray.contains(wpName)
+                        {
+                            DownloadWeaponArray.append(wpName)
+                            totalCount += 1
+                        }
+                    case 3:
+                        for key in SkillIconArray.keys {
+                            let SkillArray = SkillIconArray[key] as! [String : Any]
+                            if let IconName = SkillArray["Icon"] as? String
+                            {
+                                if !DownloadIconImageArray.contains(IconName){
+                                    DownloadIconImageArray.append(IconName)
+                                }
+                            }
+                        }
                     default:
                         ()
                     }
@@ -343,6 +364,8 @@ class DownloadFile
             let downloadTasks = [
                 ("Equipment", DownloadEquipmentArray, "$FileName"),
                 ("CollectionBG", DownloadBGArray, "$BGName"),
+                ("WeaponImg", DownloadWeaponArray, "$WpName"),
+                ("SkillIcon", DownloadIconImageArray, "$IconName")
             ]
             print(DownloadEquipmentArray)
             for (key, fileArray, placeholder) in downloadTasks
@@ -513,9 +536,8 @@ enum StudentAssetURLs
         URL(string: "https://schaledb.com/images/student/collection/$ID.webp")!,
         URL(string: "https://schaledb.com/images/student/icon/$ID.webp")!,
         URL(string: "https://schaledb.com/images/student/portrait/$ID.webp")!,
-        URL(string: "https://schaledb.com/images/weapon/weapon_icon_$ID.webp")!,
         URL(string: "https://schaledb.com/images/gear/full/$ID.webp")!,
-        URL(string: "https://schaledb.com/images/gear/icon/$ID.webp")!,
+        URL(string: "https://schaledb.com/images/gear/icon/$ID.webp")!
     ]
 }
 
@@ -524,6 +546,8 @@ enum UniqueAssetURLs
     static let urls: [String: String] = [
         "Equipment": "https://schaledb.com/images/equipment/icon/$FileName.webp",
         "CollectionBG": "https://schaledb.com/images/background/$BGName.jpg",
+        "WeaponImg": "https://schaledb.com/images/weapon/$WpName.webp",
         "Voice": "https://r2.schaledb.com/voice/$path",
+        "SkillIcon": "https://schaledb.com/images/skill/$IconName.webp"
     ]
 }

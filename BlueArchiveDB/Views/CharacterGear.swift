@@ -32,7 +32,7 @@ class CharacterGear: UIViewController
 //                jsonArrays = []
         studentStatus = jsonArrays["\(unitId)"] as? [String:Any] ?? [:]
         SkillArrays = studentStatus["Skills"] as? [String: Any] ?? [:]
-        GearSkill = SkillArrays["gearnormal"] as? [String: Any] ?? [:]
+        GearSkill = SkillArrays["GearPublic"] as? [String: Any] ?? [:]
         GearName.text = GearData["Name"] as? String
         let fileManager = FileManager.default
         let libraryDirectory = fileManager.urls(for: .libraryDirectory, in: .userDomainMask).first!
@@ -68,7 +68,7 @@ class CharacterGear: UIViewController
             }
         }
         GearDesc.text = GearData["Desc"] as? String
-        let mainView = LoadSkill.shared.loadAllSkillCell(studentStatus: studentStatus, skillIndex: 1, SkillArray: GearSkill, SkillCellPosition: 0, SkillName: "gearnormal", action: #selector(sliderDidChangeValue(_:)), target: self)
+        let mainView = LoadSkill.shared.loadAllSkillCell(studentStatus: studentStatus, skillIndex: 1, SkillArray: GearSkill, SkillCellPosition: 0, SkillName: "GearPublic", action: #selector(sliderDidChangeValue(_:)), target: self)
         SkillUIView.addSubview(mainView)
     }
 
@@ -79,9 +79,9 @@ class CharacterGear: UIViewController
         let tag = sender.tag
         let SkillLevelSlider = view.viewWithTag(tag) as! UISlider
         let SkillDesc = view.viewWithTag(tag - 1) as! UITextView
-        let SkillArray = SkillArrays["weaponpassive"] as? [String:Any] ?? [:]
+        let SkillArray = SkillArrays["GearPublic"] as? [String:Any] ?? [:]
         let SkillLevelLabel = view.viewWithTag(tag + 1) as! UILabel
         SkillLevelLabel.text = "Lv.\(Int(sender.value) + 1)"
-        LoadSkill.shared.SkillDescValueChange(SkillArray: GearSkill, nowSkillLevel: Int(sender.value), skillDescTextView: SkillDesc, SkillName: "weaponpassive")
+        LoadSkill.shared.SkillDescValueChange(SkillArray: GearSkill, nowSkillLevel: Int(sender.value), skillDescTextView: SkillDesc, SkillName: "GearPublic")
     }
 }

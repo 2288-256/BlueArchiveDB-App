@@ -36,7 +36,7 @@ class LoadFile
     }
 
     // 初期データ読み込み処理
-    private func loadInitialData()
+    public func loadInitialData()
     {
         loadAllStudents()
         loadLocalizationData()
@@ -158,7 +158,6 @@ class LoadFile
                 let mainDictionary = localizationData[mainKey] as? [String: String],
                 let translatedString = mainDictionary[input]
             {
-                print("if:" + translatedString)
                 return translatedString
             } else
             {
@@ -168,7 +167,6 @@ class LoadFile
                     if let translations = value as? [String: String],
                        let translatedString = translations[input]
                     {
-                        print("ifelse:" + translatedString)
                         return translatedString
                     }
                 }

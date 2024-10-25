@@ -12,17 +12,20 @@ import MobileCoreServices
 import Reachability
 import UIKit
 import Zip
+import os.log
 
 class ViewController: UIViewController, UICollectionViewDataSource,
 	UICollectionViewDelegateFlowLayout, URLSessionDownloadDelegate
 {
+    let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "Logger")
 	var player: AVPlayer?
 	let reachability = try! Reachability()
 	@IBOutlet var versionLabel: UILabel!
 	@IBOutlet var studentCountLabel: UILabel!
 	@IBOutlet var CharacterImage: UIImageView!
 	@IBOutlet var collectionView: UICollectionView!
-	var jsonArrays: [[String: Any]] = []
+    var jsonArrays: [String : [String : Any]] = [:]
+    var studentArrays: [[String: Any]] = []
 	var voiceArrays: [[String: Any]] = []
 	var sevenDaysBirthDay: [[String: Any]] = []
 	var nextVoice: Bool = false
@@ -48,15 +51,15 @@ class ViewController: UIViewController, UICollectionViewDataSource,
 		let CharacterImageHeight = CharacterImage.frame.size.height
 		// イメージビューにタップジェスチャーレコグナイザーを追加
 		CharacterImage.addGestureRecognizer(tapGestureRecognizer)
-		//        jsonArrays = LoadFile.shared.getStudents()
-		jsonArrays = []
+        jsonArrays = LoadFile.shared.getStudents()
+        studentArrays = Array(LoadFile.shared.getStudents().values)
 		loadVoice()
-		print("ロードした生徒数:\(jsonArrays.count)")
+        print("ロードした生徒数:\(self.studentArrays.count)")
 		print(voiceArrays)
 		firstVoice = true
 		if jsonArrays.count > 0
 		{
-			studentCountLabel.text = "生徒数: \(jsonArrays.count)"
+			studentCountLabel.text = "生徒数: \(studentArrays.count)"
 		} else
 		{
 			studentCountLabel.text = "生徒数: 0"
@@ -75,17 +78,15 @@ class ViewController: UIViewController, UICollectionViewDataSource,
 				days7.append(dateFormatter.string(from: nextDate))
 			}
 		}
-		sevenDaysBirthDay = jsonArrays.filter
-		{ person in
-			guard let birthDay = person["BirthDay"] as? String,
-			      let name = person["Name"] as? String,
-			      !name.contains("（"),
-			      !name.contains("）") else
-			{
-				return false
-			}
-			return days7.contains(birthDay)
-		}
+        sevenDaysBirthDay = Array(jsonArrays.values).filter { person in
+            guard let birthDay = person["BirthDay"] as? String,
+                  let name = person["Name"] as? String,
+                  !name.contains("（"),
+                  !name.contains("）") else {
+                return false
+            }
+            return days7.contains(birthDay)
+        }
 
 		// Assuming 'sevenDaysBirthDay' is an array of dictionaries like 'jsonArrays'.
 
@@ -409,16 +410,51 @@ class ViewController: UIViewController, UICollectionViewDataSource,
 					}
 					DownloadFile.shared.processVoiceData(jsonFile: "students.min.json", progressTextView: self.downloadLoadingLabel)
 					{
-						DispatchQueue.main.async
-						{
-							self.downloadLoadingView.removeFromSuperview()
-							let alert = UIAlertController(title: "更新完了", message: "更新が完了しました。", preferredStyle: .alert)
-							alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
-								self.loadView()
-								self.viewDidLoad()
-							}))
-							self.present(alert, animated: true, completion: nil)
-						}
+                        let dispatchGroup = DispatchGroup()
+
+                        for (index, character) in self.jsonArrays.enumerated() {
+                            dispatchGroup.enter()
+                            guard let id = character.value["Id"] as? Int,
+                                  let familyName = character.value["FamilyName"] as? String,
+                                  let name = character.value["Name"] as? String,
+                                  let profileIntroduction = character.value["ProfileIntroduction"] as? String,
+                                  let school = LoadFile.shared.translateString((character.value["School"] as? String)!, mainKey: "School"),
+                                  let club = LoadFile.shared.translateString((character.value["Club"] as? String)!),
+                                  let familyNameRuby = character.value["FamilyNameRuby"] as? String,
+                                  let characterVoice = character.value["CharacterVoice"] as? String,
+                                  let illustrator = character.value["Illustrator"] as? String,
+                                  let designer = character.value["Designer"] as? String,
+                                  let searchTags = character.value["SearchTags"] as? [String] else { continue }
+
+                            let title = "\(familyName) \(name)"
+                            let summary = profileIntroduction
+                            var keywords: [String] = [school, club, familyNameRuby, characterVoice, illustrator, designer, familyName, name]
+                            for words in searchTags {
+                                keywords.append(words)
+                            }
+
+                            // Call the function to index this character for Spotlight
+                            self.insert(id: String(id), title: title, summary: summary, keywords: keywords)
+                            DispatchQueue.main.async {
+                                self.downloadLoadingLabel.text = "Spotlightに登録中... (\(index + 1)/\(self.jsonArrays.count))"
+                                dispatchGroup.leave()
+                            }
+                        }
+
+                        dispatchGroup.notify(queue: .main)
+                        {
+                            DispatchQueue.main.async
+                            {
+                                self.downloadLoadingView.removeFromSuperview()
+                                let alert = UIAlertController(title: "更新完了", message: "更新が完了しました。", preferredStyle: .alert)
+                                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
+                                    self.loadView()
+                                    self.viewDidLoad()
+                                }))
+                                self.present(alert, animated: true, completion: nil)
+                            }
+                        }
+						
 					}
 				}
 			}
@@ -497,33 +533,10 @@ class ViewController: UIViewController, UICollectionViewDataSource,
 				}
 				try fileManager.removeItem(at: sourceDirectory)
 				NotificationCenter.default.post(name: Notification.Name("LocalizationDataGenerated"), object: nil)
-				//                self.jsonArrays = LoadFile.shared.getStudents()
-				self.jsonArrays = []
+				                self.jsonArrays = LoadFile.shared.getStudents()
+//				self.jsonArrays = []
 				print("Indexing for Spotlight")
-				for (index, character) in self.jsonArrays.enumerated()
-				{
-					guard let id = character["Id"] as? Int,
-					      let familyName = character["FamilyName"] as? String,
-					      let name = character["Name"] as? String,
-					      let profileIntroduction = character["ProfileIntroduction"] as? String,
-					      let school = LoadFile.shared.translateString((character["School"] as? String)!, mainKey: "School"),
-					      let club = LoadFile.shared.translateString((character["Club"] as? String)!),
-					      let familyNameRuby = character["FamilyNameRuby"] as? String,
-					      let characterVoice = character["CharacterVoice"] as? String,
-					      let illustrator = character["Illustrator"] as? String,
-					      let designer = character["Designer"] as? String else { continue }
-
-					let title = "\(familyName) \(name)"
-					let summary = profileIntroduction
-					let keywords: [String] = [school, club, familyNameRuby, characterVoice, illustrator, designer, familyName, name]
-
-					// Call the function to index this character for Spotlight
-					self.insert(id: String(id), title: title, summary: summary, keywords: keywords)
-					DispatchQueue.main.async
-					{
-						self.downloadLoadingLabel.text = "Spotlightに登録中... (\(index + 1)/\(self.jsonArrays.count))"
-					}
-				}
+				
 				DispatchQueue.main.async
 				{
 					self.downloadLoadingView.removeFromSuperview()
@@ -578,10 +591,7 @@ class ViewController: UIViewController, UICollectionViewDataSource,
 						let secondMatchingDict = voiceArrays[nextIndex]
 						if let audioClip = secondMatchingDict["AudioClip"] as? String
 						{
-							if let url = URL(string: "https://static.schale.gg/voice/\(audioClip)")
-							{
-								playSound(from: url)
-							}
+                            playSound(SoundFilePath: audioClip)
 						} else
 						{
 							print("AudioClip not found in second matching item")
@@ -612,11 +622,7 @@ class ViewController: UIViewController, UICollectionViewDataSource,
 			{
 				playedVoiceNumber = VoiceKey
 				let audioClip: String = matchingDict["AudioClip"] as! String
-				if let url = URL(string: "https://static.schale.gg/voice/\(audioClip)")
-				{
-					print(url)
-					playSound(from: url)
-				}
+                playSound(SoundFilePath: audioClip)
 			}
 		} else
 		{
@@ -626,12 +632,25 @@ class ViewController: UIViewController, UICollectionViewDataSource,
 		}
 	}
 
-	func playSound(from url: URL)
-	{
-		let playerItem = AVPlayerItem(url: url)
-		player = AVPlayer(playerItem: playerItem)
-		player?.play()
-	}
+    func playSound(SoundFilePath: String) {
+        let libraryDirectory = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask).first!
+        let soundFilePath = libraryDirectory.appendingPathComponent("assets/voice/\(SoundFilePath)").path
+        let soundFileURL = URL(fileURLWithPath: soundFilePath)
+
+        // ファイルの存在確認
+        if !FileManager.default.fileExists(atPath: soundFilePath) {
+            print("Error: ファイルが存在しません: \(soundFilePath)")
+            return
+        }
+
+        do {
+            audioPlayer = try AVAudioPlayer(contentsOf: soundFileURL)
+            audioPlayer?.prepareToPlay()
+            audioPlayer?.play()
+        } catch {
+            print("音源ファイルの再生に失敗しました: \(error)")
+        }
+    }
 
 	func loadVoice()
 	{
@@ -639,7 +658,7 @@ class ViewController: UIViewController, UICollectionViewDataSource,
 		let fileManager = FileManager.default
 		if let documentsURL = fileManager.urls(for: .libraryDirectory, in: .userDomainMask).first
 		{
-			let voiceFileURL = documentsURL.appendingPathComponent("assets/data/jp/voice.json")
+			let voiceFileURL = documentsURL.appendingPathComponent("assets/data/jp/voice.min.json")
 			do
 			{
 				let data = try Data(contentsOf: voiceFileURL)

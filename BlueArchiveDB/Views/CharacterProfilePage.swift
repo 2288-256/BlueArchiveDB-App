@@ -144,7 +144,7 @@ class CharacterProfilePage: UIViewController
 			cleanString = cleanString.replacingOccurrences(of: "<td[^>]*>", with: "", options: .regularExpression, range: nil)
 			cleanString = cleanString.replacingOccurrences(of: "</td>", with: "")
 			cleanString = cleanString.replacingOccurrences(of: "<br[^>]*>", with: "\n", options: .regularExpression, range: nil)
-			cleanString = cleanString.replacingOccurrences(of: "<.[^>]*>|</.>", with: "", options: .regularExpression, range: nil)
+            cleanString = cleanString.replacingOccurrences(of: "<.[^>]*>|</.>", with: "", options: .regularExpression, range: nil)
 			cleanString = cleanString.replacingOccurrences(of: "\\((?<!\\n)(\\d{4}/\\d{2}/\\d{2}( \\d{2}:\\d{2})?)", with: "\n($1", options: .regularExpression, range: nil)
 			return cleanString
 		}

@@ -145,27 +145,6 @@ class CharacterMorePage: UIViewController, UICollectionViewDataSource,
 					return
 				}
 				playSound(SoundFilePath: SoundFilePath)
-				// switch reachability.connection
-				// {
-				// case .cellular, .wifi:
-				// 	if let url = URL(string: "https://static.schale.gg/voice/\(SoundFilePath)")
-				// 	{
-				// 		// http通信をし、200番台なら再生する
-				// 		if let data = try? Data(contentsOf: url)
-				// 		{
-				// 			playSound(from: url)
-				// 		} else
-				// 		{
-				// 			let alert = UIAlertController(title: "エラー", message: "原因不明のエラーで再生できませんでした。", preferredStyle: .alert)
-				// 			alert.addAction(UIAlertAction(title: "OK", style: .default))
-				// 			present(alert, animated: true, completion: nil)
-				// 		}
-				// 	}
-				// case .unavailable:
-				// 	let alert = UIAlertController(title: "エラー", message: "ネットワークに接続されていないため再生できません。", preferredStyle: .alert)
-				// 	alert.addAction(UIAlertAction(title: "OK", style: .default))
-				// 	present(alert, animated: true, completion: nil)
-				// }
 			}
 		}
 	}

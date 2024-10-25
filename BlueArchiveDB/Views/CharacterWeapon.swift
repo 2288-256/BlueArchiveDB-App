@@ -27,7 +27,7 @@ class CharacterWeapon: UIViewController
     {
         super.viewDidLoad()
         weaponData = studentData["Weapon"] as? [String: Any] ?? [:]
-//        print(weaponData)
+        print(weaponData)
         weaponName.text = weaponData?["Name"] as? String
         let imageName = studentData["WeaponImg"] as! String
         let fileManager = FileManager.default

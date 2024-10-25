@@ -154,6 +154,7 @@ class CharacterInfo: UIViewController
 
 		let BackgroundImageFileName = studentData["CollectionBG"]! as! String
 		let BackgroundImagePath = libraryDirectory.appendingPathComponent("assets/images/background/\(BackgroundImageFileName).jpg")
+        print(BackgroundImageFileName)
 		if let image = UIImage(contentsOfFile: BackgroundImagePath.path)
 		{
 			DispatchQueue.main.async

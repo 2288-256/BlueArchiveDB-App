@@ -22,12 +22,12 @@ class CharacterSelect: UIViewController, UICollectionViewDataSource,
         } else
         {
             jsonArrays = Array(LoadFile.shared.getStudents().values) // 辞書から配列に変換
-                    StudentData = LoadFile.shared.getStudents() // 辞書を保持
-                    jsonArrays.sort {
-                        let order1 = ($0["DefaultOrder"] as? Int) ?? Int.max
-                        let order2 = ($1["DefaultOrder"] as? Int) ?? Int.max
-                        return order1 < order2
-                    }
+            StudentData = LoadFile.shared.getStudents() // 辞書を保持
+            jsonArrays.sort {
+                let order1 = ($0["DefaultOrder"] as? Int) ?? Int.max
+                let order2 = ($1["DefaultOrder"] as? Int) ?? Int.max
+                return order1 < order2
+            }
         }
         if SearchString != ""
         {
@@ -196,7 +196,8 @@ class CharacterSelect: UIViewController, UICollectionViewDataSource,
                         (student["Designer"] as? String)?.contains(term) == true ||
                         (student["Illustrator"] as? String)?.contains(term) == true ||
                         (student["CharacterVoice"] as? String)?.contains(term) == true ||
-                        (student["WeaponType"] as? String)?.contains(term) == true
+                        (student["WeaponType"] as? String)?.contains(term) == true ||
+                    (student["SearchTags"] as? [String])?.contains(term) == true
                 }
             }
         } else

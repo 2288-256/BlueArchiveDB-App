@@ -17,8 +17,7 @@ class Setting: UIViewController
 	override func viewDidLoad()
 	{
 		super.viewDidLoad()
-        //        jsonArrays = LoadFile.shared.getStudents()
-                jsonArrays = []
+        jsonArrays = Array(LoadFile.shared.getStudents().values)
 		if let characterIdString = UserDefaults.standard.string(forKey: "CharacterID")
 		{
 			if let characterId = Int(characterIdString)
