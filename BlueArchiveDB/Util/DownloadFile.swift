@@ -367,7 +367,6 @@ class DownloadFile
                 ("WeaponImg", DownloadWeaponArray, "$WpName"),
                 ("SkillIcon", DownloadIconImageArray, "$IconName")
             ]
-            print(DownloadEquipmentArray)
             for (key, fileArray, placeholder) in downloadTasks
             {
                 for fileName in fileArray
@@ -451,7 +450,6 @@ class DownloadFile
                                 continue
                             }
                             let destinationPath = self.destinationPathForURL(url: url, baseURL: "https://r2.schaledb.com/")
-                            print(destinationPath)
                             if FileManager.default.fileExists(atPath: destinationPath.path)
                             {
                                 print("File already exists at: \(destinationPath.path). Skipping download.")
