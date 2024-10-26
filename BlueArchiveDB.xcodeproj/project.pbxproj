@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4B0B809A2CAFD1610007FB2E /* SideMenu in Frameworks */ = {isa = PBXBuildFile; productRef = 4B0B80992CAFD1610007FB2E /* SideMenu */; };
 		4B2528342BDB9C04006F83B2 /* CharacterWeaponGearPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B2528332BDB9C04006F83B2 /* CharacterWeaponGearPage.swift */; };
 		4B2528362BE9A0C5006F83B2 /* CharacterWeapon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B2528352BE9A0C5006F83B2 /* CharacterWeapon.swift */; };
 		4B2528382BED935C006F83B2 /* CharacterWeaponStar1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B2528372BED935B006F83B2 /* CharacterWeaponStar1.swift */; };
@@ -26,7 +25,6 @@
 		4B9ED6BD2B6766F600E5A29E /* CustomTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B9ED6BC2B6766F600E5A29E /* CustomTextView.swift */; };
 		4B9ED6C02B67926300E5A29E /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 4B9ED6BF2B67926300E5A29E /* SwiftSoup */; };
 		4B9ED6C32B68A50300E5A29E /* Reachability in Frameworks */ = {isa = PBXBuildFile; productRef = 4B9ED6C22B68A50300E5A29E /* Reachability */; };
-		4B9ED6C62B68B47F00E5A29E /* Zip in Frameworks */ = {isa = PBXBuildFile; productRef = 4B9ED6C52B68B47F00E5A29E /* Zip */; };
 		4BB31A902C376D0F004659C8 /* LoadFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BB31A8F2C376D0F004659C8 /* LoadFile.swift */; };
 		4BB8FE202B15B8E700946B70 /* CharacterInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BB8FE1F2B15B8E700946B70 /* CharacterInfo.swift */; };
 		4BB8FE242B16FD8300946B70 /* CustomLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BB8FE232B16FD8300946B70 /* CustomLabel.swift */; };
@@ -144,9 +142,7 @@
 				4B9313022C1AE62B0058B93D /* SwiftFormat in Frameworks */,
 				4B9ED6C32B68A50300E5A29E /* Reachability in Frameworks */,
 				4BE060452B5218EE006DF278 /* MobileCoreServices.framework in Frameworks */,
-				4B0B809A2CAFD1610007FB2E /* SideMenu in Frameworks */,
 				4B9ED6C02B67926300E5A29E /* SwiftSoup in Frameworks */,
-				4B9ED6C62B68B47F00E5A29E /* Zip in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -307,9 +303,7 @@
 			packageProductDependencies = (
 				4B9ED6BF2B67926300E5A29E /* SwiftSoup */,
 				4B9ED6C22B68A50300E5A29E /* Reachability */,
-				4B9ED6C52B68B47F00E5A29E /* Zip */,
 				4B9313012C1AE62B0058B93D /* SwiftFormat */,
-				4B0B80992CAFD1610007FB2E /* SideMenu */,
 			);
 			productName = "BlueArchive Database";
 			productReference = 4BE489402B0DC49B000992B0 /* BlueArchiveDB.app */;
@@ -345,10 +339,7 @@
 			packageReferences = (
 				4B9ED6BE2B67926300E5A29E /* XCRemoteSwiftPackageReference "SwiftSoup" */,
 				4B9ED6C12B68A50300E5A29E /* XCRemoteSwiftPackageReference "Reachability" */,
-				4B9ED6C42B68B47F00E5A29E /* XCRemoteSwiftPackageReference "Zip" */,
 				4B9313002C1AE62B0058B93D /* XCRemoteSwiftPackageReference "SwiftFormat" */,
-				4B5FABA42C892A820039CA83 /* XCRemoteSwiftPackageReference "OrderedDictionary" */,
-				4B0B80982CAFD1600007FB2E /* XCRemoteSwiftPackageReference "SideMenu" */,
 			);
 			productRefGroup = 4BE489412B0DC49B000992B0 /* Products */;
 			projectDirPath = "";
@@ -791,22 +782,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		4B0B80982CAFD1600007FB2E /* XCRemoteSwiftPackageReference "SideMenu" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/jonkykong/SideMenu.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 6.5.0;
-			};
-		};
-		4B5FABA42C892A820039CA83 /* XCRemoteSwiftPackageReference "OrderedDictionary" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/lukaskubanek/OrderedDictionary";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
 		4B9313002C1AE62B0058B93D /* XCRemoteSwiftPackageReference "SwiftFormat" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/nicklockwood/SwiftFormat";
@@ -831,22 +806,9 @@
 				kind = branch;
 			};
 		};
-		4B9ED6C42B68B47F00E5A29E /* XCRemoteSwiftPackageReference "Zip" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/marmelroy/Zip";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.0.0;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		4B0B80992CAFD1610007FB2E /* SideMenu */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 4B0B80982CAFD1600007FB2E /* XCRemoteSwiftPackageReference "SideMenu" */;
-			productName = SideMenu;
-		};
 		4B9313012C1AE62B0058B93D /* SwiftFormat */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 4B9313002C1AE62B0058B93D /* XCRemoteSwiftPackageReference "SwiftFormat" */;
@@ -861,11 +823,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 4B9ED6C12B68A50300E5A29E /* XCRemoteSwiftPackageReference "Reachability" */;
 			productName = Reachability;
-		};
-		4B9ED6C52B68B47F00E5A29E /* Zip */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 4B9ED6C42B68B47F00E5A29E /* XCRemoteSwiftPackageReference "Zip" */;
-			productName = Zip;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

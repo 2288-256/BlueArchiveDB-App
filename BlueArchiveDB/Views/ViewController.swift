@@ -11,11 +11,10 @@ import Foundation
 import MobileCoreServices
 import Reachability
 import UIKit
-import Zip
 import os.log
 
 class ViewController: UIViewController, UICollectionViewDataSource,
-	UICollectionViewDelegateFlowLayout, URLSessionDownloadDelegate
+	UICollectionViewDelegateFlowLayout
 {
     let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "Logger")
 	var player: AVPlayer?
@@ -427,99 +426,6 @@ class ViewController: UIViewController, UICollectionViewDataSource,
                 self.present(completionAlert, animated: true, completion: nil)
             }
         }
-
-	func urlSession(_: URLSession, downloadTask _: URLSessionDownloadTask, didWriteData _: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64)
-	{
-		let downloadedMB = String(format: "%.1f", Double(totalBytesWritten) / 1024.0 / 1024.0)
-		let totalMB: String = {
-			let sizeInMB = Double(totalBytesExpectedToWrite) / 1024.0 / 1024.0
-			return sizeInMB > 0 ? String(format: "%.1f", sizeInMB) : "不明"
-		}()
-		DispatchQueue.main.async
-		{
-			if totalMB == "不明"
-			{
-				self.downloadLoadingLabel.text = "ダウンロード中... (\(downloadedMB)MB/\(totalMB))"
-			} else
-			{
-				self.downloadLoadingLabel.text = "ダウンロード中... (\(downloadedMB)MB/\(totalMB)MB)"
-			}
-		}
-	}
-
-	func urlSession(_: URLSession, downloadTask _: URLSessionDownloadTask, didFinishDownloadingTo location: URL)
-	{
-		let fileManager = FileManager.default
-		let libraryDirectory = fileManager.urls(for: .libraryDirectory, in: .userDomainMask).first!
-		let fileURL = libraryDirectory.appendingPathComponent("main.zip")
-		let data = NSData(contentsOf: location as URL)!
-		do
-		{
-			try data.write(to: fileURL)
-			print("Saved file to Library as main.zip")
-		} catch
-		{
-			print("Error saving file: \(error.localizedDescription)")
-		}
-	}
-
-	func urlSession(_: URLSession, task _: URLSessionTask, didCompleteWithError error: Error?)
-	{
-		guard error == nil else
-		{
-			print("Download failed")
-			print(error!)
-			return
-		}
-		DispatchQueue.global().async
-		{
-			let fileManager = FileManager.default
-			let libraryDirectory = fileManager.urls(for: .libraryDirectory, in: .userDomainMask).first!
-			if fileManager.fileExists(atPath: libraryDirectory.appendingPathComponent("assets").path)
-			{
-				try? fileManager.removeItem(at: libraryDirectory.appendingPathComponent("assets"))
-			}
-			let destinationDirectory = libraryDirectory.appendingPathComponent("assets")
-			let zipFilePath = libraryDirectory.appendingPathComponent("main.zip")
-			print("Extracting the zip file")
-			DispatchQueue.main.async
-			{
-				self.downloadLoadingLabel.text = "ファイルを展開中..."
-			}
-			do
-			{
-				try Zip.unzipFile(zipFilePath, destination: destinationDirectory, overwrite: true, password: nil)
-				try fileManager.removeItem(at: zipFilePath)
-				let sourceDirectory = libraryDirectory.appendingPathComponent("assets/SchaleDB-main")
-				let files = try fileManager.contentsOfDirectory(atPath: sourceDirectory.path)
-				for file in files
-				{
-					let sourceFilePath = sourceDirectory.appendingPathComponent(file)
-					let destinationFilePath = destinationDirectory.appendingPathComponent(file)
-					try fileManager.moveItem(at: sourceFilePath, to: destinationFilePath)
-				}
-				try fileManager.removeItem(at: sourceDirectory)
-				NotificationCenter.default.post(name: Notification.Name("LocalizationDataGenerated"), object: nil)
-				                self.jsonArrays = LoadFile.shared.getStudents()
-//				self.jsonArrays = []
-				print("Indexing for Spotlight")
-				
-				DispatchQueue.main.async
-				{
-					self.downloadLoadingView.removeFromSuperview()
-					let alert = UIAlertController(title: "更新完了", message: "更新が完了しました。", preferredStyle: .alert)
-					alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
-						self.loadView()
-						self.viewDidLoad()
-					}))
-					self.present(alert, animated: true, completion: nil)
-				}
-			} catch
-			{
-				print("Error handling file operations: \(error)")
-			}
-		}
-	}
 
 	@objc func CharacterTapped(_: Any)
 	{
