@@ -667,7 +667,6 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2024.04.26;
 				DEVELOPMENT_TEAM = GR736X5QND;
 				ENABLE_NS_ASSERTIONS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -687,7 +686,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = "0.1.9-dev";
+				MARKETING_VERSION = 0.2;
 				OTHER_SWIFT_FLAGS = "-Xfrontend -warn-long-expression-type-checking=100";
 				PRODUCT_BUNDLE_IDENTIFIER = com.github.a2288.BlueArchiveDB;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -712,7 +711,6 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2024.04.26;
 				DEVELOPMENT_TEAM = GR736X5QND;
 				ENABLE_NS_ASSERTIONS = NO;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -732,7 +730,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = "0.1.9-dev";
+				MARKETING_VERSION = 0.2;
 				OTHER_SWIFT_FLAGS = "-Xfrontend -warn-long-expression-type-checking=100";
 				PRODUCT_BUNDLE_IDENTIFIER = com.github.a2288.BlueArchiveDB;
 				PRODUCT_NAME = "$(TARGET_NAME)";
