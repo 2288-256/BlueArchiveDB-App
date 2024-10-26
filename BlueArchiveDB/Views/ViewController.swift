@@ -375,6 +375,7 @@ class ViewController: UIViewController, UICollectionViewDataSource,
                     self.updateDownloadStatus("その他の画像をダウンロード中...")
                     
                     DownloadFile.shared.processUniqueImages(jsonFile: "students.min.json", progressTextView: self.downloadLoadingLabel) {
+                        self.updateDownloadStatus("")
                         self.showDownloadCompletionAlert(title: "更新完了",
                                                          message: "基本データのダウンロードが完了しました。\n続けてボイスデータをダウンロードしますか？\n(ボイスデータをダウンロードしない場合はオフラインでの再生ができなくなります)") { [weak self] in
                             self?.updateDownloadStatus("ボイスデータをダウンロード中...")
