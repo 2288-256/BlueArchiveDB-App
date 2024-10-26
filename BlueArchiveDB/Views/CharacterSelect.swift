@@ -57,6 +57,11 @@ class CharacterSelect: UIViewController, UICollectionViewDataSource,
     @IBAction func AllStudentsFilter(_: UIButton)
     {
         jsonArrays = Array(LoadFile.shared.getStudents().values) // 全データを取得
+        jsonArrays.sort {
+            let order1 = ($0["DefaultOrder"] as? Int) ?? Int.max
+            let order2 = ($1["DefaultOrder"] as? Int) ?? Int.max
+            return order1 < order2
+        }
         collectionView.reloadData()
     }
 
