@@ -139,12 +139,12 @@ class LoadSkill {
                 skillImageView.backgroundColor = NormalColor
             }
         }
-        if SkillName != nil
-        {
-            skillName.text = SkillArray["Name"] as? String
-        } else if SkillName == "Normal"
+        if SkillName == "Normal"
         {
             skillName.text = "通常攻撃"
+        } else if SkillName != nil
+        {
+            skillName.text = SkillArray["Name"] as? String
         }
         switch SkillName
         {
