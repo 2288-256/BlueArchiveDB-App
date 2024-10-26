@@ -505,7 +505,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.github.2288-256.BlueArchiveDB.birthdayStudents";
+				PRODUCT_BUNDLE_IDENTIFIER = com.github.a2288.BlueArchiveDB.birthdayStudents;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -533,7 +533,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.github.2288-256.BlueArchiveDB.birthdayStudents";
+				PRODUCT_BUNDLE_IDENTIFIER = com.github.a2288.BlueArchiveDB.birthdayStudents;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
@@ -689,7 +689,7 @@
 				);
 				MARKETING_VERSION = "0.1.9-dev";
 				OTHER_SWIFT_FLAGS = "-Xfrontend -warn-long-expression-type-checking=100";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.github.2288-256.BlueArchiveDB";
+				PRODUCT_BUNDLE_IDENTIFIER = com.github.a2288.BlueArchiveDB;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -734,7 +734,7 @@
 				);
 				MARKETING_VERSION = "0.1.9-dev";
 				OTHER_SWIFT_FLAGS = "-Xfrontend -warn-long-expression-type-checking=100";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.github.2288-256.BlueArchiveDB";
+				PRODUCT_BUNDLE_IDENTIFIER = com.github.a2288.BlueArchiveDB;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
