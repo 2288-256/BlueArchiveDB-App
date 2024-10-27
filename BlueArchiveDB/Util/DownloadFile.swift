@@ -14,12 +14,12 @@ class DownloadFile
     static let shared = DownloadFile()
     private let session: URLSession
     let libraryDirectory = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask).first!
-
+    
     private init(session: URLSession = .shared)
     {
         self.session = session
     }
-
+    
     /// ファイルの保存処理
     ///
     /// ファイルをダウンロードし、すでに存在する場合は上書き保存する関数
@@ -31,14 +31,14 @@ class DownloadFile
     {
         let downloadTask = session.downloadTask(with: url)
         { localURL, response, error in
-
+            
             // エラーがある場合はエラーを返す
             if let error = error
             {
                 completion(.failure(error))
                 return
             }
-
+            
             // レスポンスとローカルURLがnilでないことを確認
             guard let localURL = localURL, let response = response else
             {
@@ -46,37 +46,37 @@ class DownloadFile
                 completion(.failure(error))
                 return
             }
-
+            
             do
             {
                 var path = url.absoluteString
-
+                
                 if path.hasPrefix(baseURL)
                 {
                     path = String(path.dropFirst(baseURL.count))
                 }
-
+                
                 // ファイル名を取り除く
                 if let lastSlashIndex = path.lastIndex(of: "/")
                 {
                     path = String(path[..<lastSlashIndex]) + "/"
                 }
                 let destinationDirectory = self.libraryDirectory.appendingPathComponent("assets/\(path)", isDirectory: true)
-
+                
                 try? FileManager.default.createDirectory(at: destinationDirectory, withIntermediateDirectories: true, attributes: nil)
-
+                
                 // 保存先のファイルパスを生成
                 let destinationURL = destinationDirectory.appendingPathComponent(url.lastPathComponent)
-
+                
                 // 既にファイルが存在する場合は削除
                 if FileManager.default.fileExists(atPath: destinationURL.path)
                 {
                     try FileManager.default.removeItem(at: destinationURL)
                 }
-
+                
                 // ファイルを保存
                 try FileManager.default.moveItem(at: localURL, to: destinationURL)
-
+                
                 // ファイルサイズを取得してログに記録
                 let fileSize = try FileManager.default.attributesOfItem(atPath: destinationURL.path)[.size] as? Int64
                 Logger.download.debug("Downloaded file size: \(fileSize ?? 0) bytes from \(url)")
@@ -88,7 +88,7 @@ class DownloadFile
         }
         downloadTask.resume()
     }
-
+    
     /// DBデータのダウンロード処理
     ///
     ///
@@ -101,13 +101,13 @@ class DownloadFile
             completion(faultFileCount) // URLsが空の場合はそのまま返す
             return
         }
-
+        
         var remainingURLs = urls
         let currentURL = remainingURLs.removeFirst()
-
+        
         downloadFile(url: currentURL, baseURL: "https://schaledb.com/") { result in
             var updatedFaultFileCount = faultFileCount // 新しい変数にカウントを保持
-
+            
             switch result {
             case let .success(localURL):
                 Logger.download.debug("Downloaded to: \(localURL)")
@@ -115,13 +115,13 @@ class DownloadFile
                 updatedFaultFileCount += 1 // 更新されたカウントを使用
                 Logger.util.fault("Failed to download from \(currentURL): \(error)")
             }
-
+            
             // 次のファイルをダウンロード
             self.downloadDataFile(urls: remainingURLs, faultFileCount: updatedFaultFileCount, completion: completion)
         }
     }
-
-
+    
+    
     /// JsonFileから生徒IDを読み込む関数
     ///
     /// - Parameters:
@@ -137,7 +137,7 @@ class DownloadFile
             completion(nil)
             return
         }
-
+        
         do
         {
             let data = try Data(contentsOf: url)
@@ -150,9 +150,9 @@ class DownloadFile
             completion(nil)
         }
     }
-
+    
     // 画像をダウンロードし、指定したディレクトリに保存するメソッド
-
+    
     /// 生徒の画像をダウンロードするメソッド
     ///
     /// - Parameters:
@@ -162,7 +162,7 @@ class DownloadFile
     {
         var downloadedURLs: [URL] = []
         let dispatchGroup = DispatchGroup()
-
+        
         for urlTemplate in StudentAssetURLs.urls
         {
             // URLのテンプレートにIDを埋め込む
@@ -180,9 +180,9 @@ class DownloadFile
                 Logger.util.warning("File already exists at: \(destinationPath.path). Skipping download.")
                 continue
             }
-
+            
             dispatchGroup.enter()
-
+            
             downloadFile(url: url, baseURL: "https://schaledb.com/")
             { result in
                 switch result
@@ -196,13 +196,13 @@ class DownloadFile
                 }
             }
         }
-
+        
         dispatchGroup.notify(queue: .main)
         {
             completion(.success(downloadedURLs))
         }
     }
-
+    
     /// 生徒の画像をダウンロードするメソッド
     ///
     /// StudentAssetURLsで定義している"collection", "icon", "portrait", "weapon", "gear"の画像をダウンロードする
@@ -222,10 +222,10 @@ class DownloadFile
                 completion(updateFaultFileCount)
                 return
             }
-
+            
             let totalCount = ids.count * StudentAssetURLs.urls.count
             var processedCount = 0
-
+            
             let dispatchGroup = DispatchGroup()
             
             for id in ids
@@ -250,7 +250,7 @@ class DownloadFile
                         dispatchGroup.leave()
                         continue
                     }
-
+                    
                     self!.downloadFile(url: url, baseURL: "https://schaledb.com/")
                     { result in
                         switch result
@@ -270,7 +270,7 @@ class DownloadFile
                     }
                 }
             }
-
+            
             dispatchGroup.notify(queue: .main)
             {
                 Logger.util.info("All students images Downloaded.")
@@ -278,7 +278,7 @@ class DownloadFile
             }
         }
     }
-
+    
     /// その他の画像を保存する処理
     ///
     /// UniqueAssetURLsで定義している"Equipment", "CollectionBG"の画像をダウンロードする
@@ -313,7 +313,7 @@ class DownloadFile
             var DownloadIconImageArray: [String] = []
             var totalCount = 0
             var processedCount = 0
-
+            
             for id in ids
             {
                 let studentData: [String: Any] = jsonArrays["\(id)"] ?? [:]
@@ -417,7 +417,7 @@ class DownloadFile
             }
         }
     }
-
+    
     /// 各生徒の音声データをダウンロードする関数
     ///
     ///
@@ -495,7 +495,7 @@ class DownloadFile
             }
         }
     }
-
+    
     /// ファイルの保存先を生成する関数
     ///
     /// - Parameters:
@@ -513,10 +513,10 @@ class DownloadFile
         {
             path = String(path[..<lastSlashIndex])
         }
-
+        
         let destinationDirectory = libraryDirectory.appendingPathComponent("assets/\(path)", isDirectory: true)
         let destinationURL = destinationDirectory.appendingPathComponent(url.lastPathComponent)
-
+        
         return destinationURL
     }
 }
