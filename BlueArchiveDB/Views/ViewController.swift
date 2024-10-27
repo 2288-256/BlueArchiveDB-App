@@ -37,6 +37,7 @@ class ViewController: UIViewController, UICollectionViewDataSource,
     {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        NotificationCenter.default.addObserver(self, selector: #selector(handleDatabaseDownload), name: Notification.Name("DownloadDatabase"), object: nil)
         if let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String,
            let build = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String
         {
@@ -48,6 +49,9 @@ class ViewController: UIViewController, UICollectionViewDataSource,
         let CharacterImageHeight = CharacterImage.frame.size.height
         // イメージビューにタップジェスチャーレコグナイザーを追加
         CharacterImage.addGestureRecognizer(tapGestureRecognizer)
+		//ファイルの存在確認
+		let fileManager = FileManager.default
+        let libraryDirectory = fileManager.urls(for: .libraryDirectory, in: .userDomainMask).first!
         jsonArrays = LoadFile.shared.getStudents()
         studentArrays = Array(LoadFile.shared.getStudents().values)
         loadVoice()
@@ -140,8 +144,7 @@ class ViewController: UIViewController, UICollectionViewDataSource,
         }
         Logger.standard.debug("1週間以内の誕生日生徒: \(self.sevenDaysBirthDay.count)")
         let characterID = UserDefaults.standard.string(forKey: "CharacterID") ?? "10066"
-        let fileManager = FileManager.default
-        let libraryDirectory = fileManager.urls(for: .libraryDirectory, in: .userDomainMask).first!
+        
         let imagePath = libraryDirectory.appendingPathComponent("assets/images/student/portrait/\(characterID).webp")
         if let image = UIImage(contentsOfFile: imagePath.path)
         {
@@ -178,7 +181,9 @@ class ViewController: UIViewController, UICollectionViewDataSource,
         downloadLoadingLabel.text = "ダウンロードの準備中"
         downloadLoadingView.addSubview(downloadLoadingLabel)
     }
-    
+    @objc func handleDatabaseDownload() {
+        self.downloadZip()
+    }
     override func restoreUserActivityState(_ activity: NSUserActivity)
     {
         super.restoreUserActivityState(activity)
