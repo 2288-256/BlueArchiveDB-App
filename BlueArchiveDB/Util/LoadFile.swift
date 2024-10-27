@@ -107,7 +107,7 @@ class LoadFile
     }
 
     // 翻訳関数
-    func translateString(_ input: String, mainKey: String? = nil) -> String?
+    func translateString(_ input: String, mainKey: String? = nil, allowNumber: Bool? = false) -> String?
     {
         // Convert the input string to an array of characters
         let characters = Array(input)
@@ -125,7 +125,7 @@ class LoadFile
             }
         }
         // Remove the trailing numbers from the input to get the key to search
-        if !trailingNumberString.isEmpty
+        if !trailingNumberString.isEmpty && !(allowNumber ?? false)
         {
             keyToSearch.removeLast(trailingNumberString.count)
         }
