@@ -18,7 +18,6 @@ class CharacterProfilePage: UIViewController
 	var studentData: [String: Any] = [:]
 	var AcquisitionMethodText: String = "取得できませんでした"
 	@IBOutlet var CharacterProfileText: UITextView!
-	// キャラクターの入手方法を記載するUITextView
 	@IBOutlet var CharacterAcquisitionMethodText: UITextView!
 	@IBOutlet var CharacterSchoolText: UILabel!
 	@IBOutlet var CharacterSchoolYear: UILabel!

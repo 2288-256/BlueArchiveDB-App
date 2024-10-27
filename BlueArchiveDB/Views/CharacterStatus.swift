@@ -153,7 +153,6 @@ class CharacterStatus: UIViewController
 		popupView.modalTransitionStyle = .crossDissolve
 
 		popupView.WeaponImageName = studentData["WeaponImg"] as! String
-//		let EquipmentArray = studentData["Equipment"] as! [String]
 		popupView.EquipmentName = EquipmentArray
 		var sendEquipmentTier: [Int] = []
 		sendEquipmentTier.append(Int(EquipmentTier[1]!)!)

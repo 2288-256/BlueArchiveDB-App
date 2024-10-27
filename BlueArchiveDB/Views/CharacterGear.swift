@@ -29,7 +29,6 @@ class CharacterGear: UIViewController
     {
         super.viewDidLoad()
         jsonArrays = LoadFile.shared.getStudents()
-//                jsonArrays = []
         studentStatus = jsonArrays["\(unitId)"] as? [String: Any] ?? [:]
         SkillArrays = studentStatus["Skills"] as? [String: Any] ?? [:]
         GearSkill = SkillArrays["GearPublic"] as? [String: Any] ?? [:]

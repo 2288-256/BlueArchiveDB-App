@@ -21,9 +21,7 @@ class CharacterWeaponMore: UIViewController
     {
         super.viewDidLoad()
                 jsonArrays = LoadFile.shared.getStudents()
-//                jsonArrays = []
         studentStatus = jsonArrays["\(unitId)"] as! [String : Any]
-//        weaponData = studentStatus?["Weapon"] as? [String: Any] ?? [:]
         SkillArrays = studentStatus["Skills"] as? [String: Any] ?? [:]
         weaponSkill = SkillArrays["WeaponPassive"] as? [String:Any] ?? [:]
         let View = view.viewWithTag(0)!

@@ -34,7 +34,6 @@ class CharacterMorePage: UIViewController, UICollectionViewDataSource,
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
         jsonArray = LoadFile.shared.getVoiceData(forUnitId: "\(unitId)") ?? []
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout
         {
@@ -52,7 +51,6 @@ class CharacterMorePage: UIViewController, UICollectionViewDataSource,
             jsonArrays = normalArray
         } else
         {
-            // Handle the case where the optional does not contain a value
             jsonArrays = []
         }
     }
@@ -66,7 +64,6 @@ class CharacterMorePage: UIViewController, UICollectionViewDataSource,
     @IBAction func normalVoiceButton(_: Any)
     {
         jsonArrays = jsonArray.first?["Normal"] as? [[String: Any]] ?? []
-        // 空の場合は更新しない
         if jsonArrays.count > 0
         {
             collectionView.reloadData()
@@ -76,7 +73,6 @@ class CharacterMorePage: UIViewController, UICollectionViewDataSource,
     @IBAction func battleVoiceButton(_: Any)
     {
         jsonArrays = jsonArray.first?["Battle"] as? [[String: Any]] ?? []
-        // 空の場合は更新しない
         if jsonArrays.count > 0
         {
             collectionView.reloadData()
@@ -86,7 +82,6 @@ class CharacterMorePage: UIViewController, UICollectionViewDataSource,
     @IBAction func homeVoiceButton(_: Any)
     {
         jsonArrays = jsonArray.first?["Lobby"] as? [[String: Any]] ?? []
-        // 空の場合は更新しない
         if jsonArrays.count > 0
         {
             collectionView.reloadData()
@@ -96,7 +91,6 @@ class CharacterMorePage: UIViewController, UICollectionViewDataSource,
     @IBAction func eventVoiceButton(_: Any)
     {
         jsonArrays = jsonArray.first?["Event"] as? [[String: Any]] ?? []
-        // 空の場合は更新しない
         if jsonArrays.count > 0
         {
             collectionView.reloadData()
@@ -141,23 +135,11 @@ class CharacterMorePage: UIViewController, UICollectionViewDataSource,
                 if !FileManager.default.fileExists(atPath: soundFilePath)
                 {
                     playSound(SoundFilePath: SoundFilePath, type: "server")
-                    //                    let alert = UIAlertController(title: "エラー", message: "ファイルが見つかりませんでした。", preferredStyle: .alert)
-                    //                    alert.addAction(UIAlertAction(title: "OK", style: .default))
-                    //                    present(alert, animated: true, completion: nil)
-                    //                    return
                 }
                 playSound(SoundFilePath: SoundFilePath, type: "local")
             }
         }
     }
-
-    // func playSound(from url: URL)
-    // {
-
-    // 	let playerItem = AVPlayerItem(url: url)
-    // 	player = AVPlayer(playerItem: playerItem)
-    // 	player?.play()
-    // }
     func playSound(SoundFilePath: String, type: String)
     {
         switch type

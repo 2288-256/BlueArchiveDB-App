@@ -77,11 +77,6 @@ class SettingCharacterSelect: UIViewController, UICollectionViewDataSource,
 		return CGSize(width: cellSize, height: 165)
 	}
 
-	//    func collectionView(_ collectionView: UICollectionView,
-	//                       layout collectionViewLayout: UICollectionViewLayout,
-	//                       insetForSectionAt section: Int) -> UIEdgeInsets {
-	//        return UIEdgeInsets(top: 0, left: 0, bottom: 11, right: 0)
-	//    }
 	func numberOfSections(in _: UICollectionView) -> Int
 	{
 		// section数は１つ
@@ -174,7 +169,6 @@ class SettingCharacterSelect: UIViewController, UICollectionViewDataSource,
 			}
 		} else
 		{
-			//        jsonArrays = LoadFile.shared.getStudents()
 			jsonArrays = []
 		}
 		// テーブルを再読み込みする

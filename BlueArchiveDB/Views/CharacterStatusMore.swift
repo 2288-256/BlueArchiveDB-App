@@ -419,11 +419,6 @@ class CharacterStatusMore: UIViewController
 			addLabel.text = "+" + addLabel.text!
 			addPercentLabel.text = "+" + addPercentLabel.text! + "%"
 		}
-		// OppressionPower
-		//        CCPowerLabel.text = "100"
-		//        //OppressionResist
-		//        CCRESLabel.text = "100"
-		//        fromStatusMore = false
 	}
 
 	func GetStatusValue(StatusName: String, BeforeLabel: UILabel, addLabel: UILabel, addPercentLabel: UILabel, afterLabel: UILabel, level: Int)
