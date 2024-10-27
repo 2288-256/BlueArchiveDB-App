@@ -38,6 +38,9 @@ class ViewController: UIViewController, UICollectionViewDataSource,
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         NotificationCenter.default.addObserver(self, selector: #selector(handleDatabaseDownload), name: Notification.Name("DownloadDatabase"), object: nil)
+        fetchBuildFromLocalFile { value in
+            UserDefaults.standard.set(String(value ?? 0), forKey: "dbVersion")
+        }
         if let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String,
            let build = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String
         {
@@ -183,6 +186,23 @@ class ViewController: UIViewController, UICollectionViewDataSource,
     }
     @objc func handleDatabaseDownload() {
         self.downloadZip()
+    }
+    func fetchBuildFromLocalFile(completion: @escaping (Int?) -> Void) {
+        let fileURL = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent("assets/data/config.min.json")
+        
+        do {
+            let data = try Data(contentsOf: fileURL)
+            if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+               let build = json["build"] as? Int {
+                completion(build)
+            } else {
+                completion(nil)
+            }
+        } catch {
+            print("Error reading local file: \(error.localizedDescription)")
+            completion(nil)
+        }
     }
     override func restoreUserActivityState(_ activity: NSUserActivity)
     {
