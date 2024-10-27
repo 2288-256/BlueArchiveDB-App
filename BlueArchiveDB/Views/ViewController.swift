@@ -381,15 +381,50 @@ class ViewController: UIViewController, UICollectionViewDataSource,
                 DownloadFile.shared.processUniqueImages(jsonFile: "students.min.json", progressTextView: self.downloadLoadingLabel, FaultFileCount: faultFileCount)
                 { updateFaultFileCount in
                     faultFileCount = updateFaultFileCount
-                    self.updateDownloadStatus("")
-                    self.showDownloadCompletionAlert(title: "更新完了",
-                                                     message: "基本データのダウンロードが完了しました。\n続けてボイスデータをダウンロードしますか？\n(ボイスデータをダウンロードしない場合はオフラインでの再生ができなくなります)", faultFileCount: faultFileCount)
-                    { [weak self] in
-                        self?.updateDownloadStatus("ボイスデータをダウンロード中...")
+                    let dispatchGroup = DispatchGroup()
+                    
+                    for (index, character) in self.jsonArrays.enumerated() {
+                        dispatchGroup.enter()
+                        guard let id = character.value["Id"] as? Int,
+                              let familyName = character.value["FamilyName"] as? String,
+                              let name = character.value["Name"] as? String,
+                              let profileIntroduction = character.value["ProfileIntroduction"] as? String,
+                              let school = LoadFile.shared.translateString((character.value["School"] as? String)!, mainKey: "School",allowNumber: true),
+                              let club = LoadFile.shared.translateString((character.value["Club"] as? String)!,allowNumber: true),
+                              let familyNameRuby = character.value["FamilyNameRuby"] as? String,
+                              let characterVoice = character.value["CharacterVoice"] as? String,
+                              let illustrator = character.value["Illustrator"] as? String,
+                              let designer = character.value["Designer"] as? String,
+                              let searchTags = character.value["SearchTags"] as? [String] else { continue }
                         
-                        DownloadFile.shared.processVoiceData(jsonFile: "students.min.json", progressTextView: self!.downloadLoadingLabel, faultFileCount: faultFileCount)
-                        {faultFileCount,voiceFaultCount  in
-                            self?.finalizeDownload(faultFileCount: faultFileCount, faultVoiceFileCount: voiceFaultCount)
+                        let title = "\(familyName) \(name)"
+                        let summary = profileIntroduction
+                        var keywords: [String] = [school, club, familyNameRuby, characterVoice, illustrator, designer, familyName, name]
+                        for words in searchTags {
+                            keywords.append(words)
+                        }
+                        
+                        // Call the function to index this character for Spotlight
+                        self.insert(id: String(id), title: title, summary: summary, keywords: keywords)
+                        DispatchQueue.main.async {
+                            self.downloadLoadingLabel.text = "Spotlightに登録中... (\(index + 1)/\(self.jsonArrays.count))"
+                            Logger.spotlight.debug("\(title)")
+                            dispatchGroup.leave()
+                        }
+                    }
+                    
+                    dispatchGroup.notify(queue: .main)
+                    {
+                        self.updateDownloadStatus("")
+                        self.showDownloadCompletionAlert(title: "更新完了",
+                                                         message: "基本データのダウンロードが完了しました。\n続けてボイスデータをダウンロードしますか？\n(ボイスデータをダウンロードしない場合はオフラインでの再生ができなくなります)", faultFileCount: faultFileCount)
+                        { [weak self] in
+                            self?.updateDownloadStatus("ボイスデータをダウンロード中...")
+                            
+                            DownloadFile.shared.processVoiceData(jsonFile: "students.min.json", progressTextView: self!.downloadLoadingLabel, faultFileCount: faultFileCount)
+                            {faultFileCount,voiceFaultCount  in
+                                self?.finalizeDownload(faultFileCount: faultFileCount, faultVoiceFileCount: voiceFaultCount)
+                            }
                         }
                     }
                 }
