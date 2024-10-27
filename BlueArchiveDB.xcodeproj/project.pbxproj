@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4B0C93CA2CCDF2DA0025B535 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B0C93C92CCDF2DA0025B535 /* Logger.swift */; };
 		4B2528342BDB9C04006F83B2 /* CharacterWeaponGearPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B2528332BDB9C04006F83B2 /* CharacterWeaponGearPage.swift */; };
 		4B2528362BE9A0C5006F83B2 /* CharacterWeapon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B2528352BE9A0C5006F83B2 /* CharacterWeapon.swift */; };
 		4B2528382BED935C006F83B2 /* CharacterWeaponStar1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B2528372BED935B006F83B2 /* CharacterWeaponStar1.swift */; };
@@ -78,6 +79,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4B0C93C92CCDF2DA0025B535 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		4B2528332BDB9C04006F83B2 /* CharacterWeaponGearPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterWeaponGearPage.swift; sourceTree = "<group>"; };
 		4B2528352BE9A0C5006F83B2 /* CharacterWeapon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterWeapon.swift; sourceTree = "<group>"; };
 		4B2528372BED935B006F83B2 /* CharacterWeaponStar1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterWeaponStar1.swift; sourceTree = "<group>"; };
@@ -187,6 +189,7 @@
 				4B39DE452C7EE7DC008E8DC3 /* LoadSkill.swift */,
 				4B39DE492C84B608008E8DC3 /* CreateElement.swift */,
 				4B5FABA22C882A6D0039CA83 /* DownloadFile.swift */,
+				4B0C93C92CCDF2DA0025B535 /* Logger.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -389,7 +392,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nbuildNumber=$(date \"+%Y.%m.%d %H:%M\")\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nif [ ${CONFIGURATION} = \"Debug\" ]; then\nbuildNumber=$(date \"+%Y.%m.%d %H:%M\")\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\nfi\n\nif [ ${CONFIGURATION} = \"Release\" ]; then\nbuildNumber=\"\"\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\nfi\n";
 		};
 		4BE140D12B72FC7F0021912C /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -430,6 +433,7 @@
 				4BE4895A2B0DE9E3000992B0 /* CharacterSelect.swift in Sources */,
 				4BE0603F2B4FC0B3006DF278 /* Setting.swift in Sources */,
 				4BFC77D62BCF3F470069B248 /* CharacterSkill.swift in Sources */,
+				4B0C93CA2CCDF2DA0025B535 /* Logger.swift in Sources */,
 				4BB8FE282B1710E200946B70 /* CustomImageView.swift in Sources */,
 				4B9ED6BD2B6766F600E5A29E /* CustomTextView.swift in Sources */,
 				4BE489582B0DD638000992B0 /* CustomButton.swift in Sources */,
@@ -667,6 +671,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = GR736X5QND;
 				ENABLE_NS_ASSERTIONS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -711,6 +716,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = GR736X5QND;
 				ENABLE_NS_ASSERTIONS = NO;
 				GENERATE_INFOPLIST_FILE = YES;

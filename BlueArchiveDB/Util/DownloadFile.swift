@@ -79,7 +79,7 @@ class DownloadFile
 
                 // ファイルサイズを取得してログに記録
                 let fileSize = try FileManager.default.attributesOfItem(atPath: destinationURL.path)[.size] as? Int64
-                print("Downloaded file size: \(fileSize ?? 0) bytes from \(url)")
+                Logger.download.debug("Downloaded file size: \(fileSize ?? 0) bytes from \(url)")
                 completion(.success(destinationURL))
             } catch
             {
@@ -112,9 +112,9 @@ class DownloadFile
             switch result
             {
             case let .success(localURL):
-                print("Downloaded to: \(localURL)")
+                Logger.download.debug("Downloaded to: \(localURL)")
             case let .failure(error):
-                print("Failed to download from \(currentURL): \(error)")
+                Logger.util.fault("Failed to download from \(currentURL): \(error)")
             }
 
             // 次のファイルをダウンロード
@@ -133,6 +133,7 @@ class DownloadFile
         guard let url = fileManager.urls(for: .libraryDirectory, in: .userDomainMask).first?
             .appendingPathComponent("assets/data/jp/\(jsonFile)") else
         {
+            Logger.util.fault("Failed to get URL for \(jsonFile)")
             completion(nil)
             return
         }
@@ -145,7 +146,7 @@ class DownloadFile
             completion(ids)
         } catch
         {
-            print("Error loading JSON: \(error)")
+            Logger.util.fault("Error loading JSON: \(error)")
             completion(nil)
         }
     }
@@ -169,14 +170,14 @@ class DownloadFile
             let finalURLString = urlString.replacingOccurrences(of: "$ID", with: "\(id)")
             guard let url = URL(string: finalURLString) else
             {
-                print("Invalid URL: \(urlString)")
+                Logger.util.fault("Invalid URL: \(urlString)")
                 continue
             }
             // ダウンロード開始前にファイルの存在確認
             let destinationPath = destinationPathForURL(url: url, baseURL: "https://schaledb.com/")
             if FileManager.default.fileExists(atPath: destinationPath.path)
             {
-                print("File already exists at: \(destinationPath.path). Skipping download.")
+                Logger.util.warning("File already exists at: \(destinationPath.path). Skipping download.")
                 continue
             }
 
@@ -187,10 +188,10 @@ class DownloadFile
                 switch result
                 {
                 case let .success(localURL):
-                    print("Downloaded to: \(localURL)")
+                    Logger.download.debug("Downloaded to: \(localURL)")
                     dispatchGroup.leave()
                 case let .failure(error):
-                    print("Failed to download from \(url): \(error)")
+                    Logger.util.fault("Failed to download from \(url): \(error)")
                     dispatchGroup.leave()
                 }
             }
@@ -216,7 +217,7 @@ class DownloadFile
         { [weak self] ids in
             guard let ids = ids, !ids.isEmpty else
             {
-                print("Failed to load student IDs or no IDs found.")
+                Logger.util.fault("Failed to load student IDs or no IDs found.")
                 completion()
                 return
             }
@@ -236,7 +237,7 @@ class DownloadFile
                     let finalURLString = urlString.replacingOccurrences(of: "$ID", with: "\(id)")
                     guard let url = URL(string: finalURLString) else
                     {
-                        print("Invalid URL: \(urlString)")
+                        Logger.util.fault("Invalid URL: \(urlString)")
                         dispatchGroup.leave()
                         continue
                     }
@@ -244,7 +245,7 @@ class DownloadFile
                     let destinationPath = self!.destinationPathForURL(url: url, baseURL: "https://schaledb.com/")
                     if FileManager.default.fileExists(atPath: destinationPath.path)
                     {
-                        print("File already exists at: \(destinationPath.path). Skipping download.")
+                        Logger.util.warning("File already exists at: \(destinationPath.path). Skipping download.")
                         dispatchGroup.leave()
                         continue
                     }
@@ -254,9 +255,9 @@ class DownloadFile
                         switch result
                         {
                         case let .success(localURL):
-                            print("Downloaded to: \(localURL)")
+                            Logger.download.debug("Downloaded to: \(localURL)")
                         case let .failure(error):
-                            print("Failed to download from \(url): \(error)")
+                            Logger.util.fault("Failed to download from \(url): \(error)")
                         }
                         DispatchQueue.main.async
                         {
@@ -270,7 +271,7 @@ class DownloadFile
 
             dispatchGroup.notify(queue: .main)
             {
-                print("All images processed.")
+                Logger.util.info("All students images Downloaded.")
                 completion()
             }
         }
@@ -295,12 +296,12 @@ class DownloadFile
         { [weak self] ids in
             guard let self = self, let ids = ids, !ids.isEmpty else
             {
-                print("Failed to load student IDs or no IDs found.")
+                Logger.util.fault("Failed to load student IDs or no IDs found.")
                 completion()
                 return
             }
             let dispatchGroup = DispatchGroup()
-            let uniqueNameList = ["Equipment", "CollectionBG","WeaponImg","SkillIcon"]
+            let uniqueNameList = ["Equipment", "CollectionBG", "WeaponImg", "SkillIcon"]
             LoadFile.shared.loadInitialData()
             let jsonArrays: [String: [String: Any]] = LoadFile.shared.getStudents()
             var DownloadEquipmentArray: [String] = []
@@ -347,11 +348,13 @@ class DownloadFile
                             totalCount += 1
                         }
                     case 3:
-                        for key in SkillIconArray.keys {
-                            let SkillArray = SkillIconArray[key] as! [String : Any]
+                        for key in SkillIconArray.keys
+                        {
+                            let SkillArray = SkillIconArray[key] as! [String: Any]
                             if let IconName = SkillArray["Icon"] as? String
                             {
-                                if !DownloadIconImageArray.contains(IconName){
+                                if !DownloadIconImageArray.contains(IconName)
+                                {
                                     DownloadIconImageArray.append(IconName)
                                 }
                             }
@@ -365,7 +368,7 @@ class DownloadFile
                 ("Equipment", DownloadEquipmentArray, "$FileName"),
                 ("CollectionBG", DownloadBGArray, "$BGName"),
                 ("WeaponImg", DownloadWeaponArray, "$WpName"),
-                ("SkillIcon", DownloadIconImageArray, "$IconName")
+                ("SkillIcon", DownloadIconImageArray, "$IconName"),
             ]
             for (key, fileArray, placeholder) in downloadTasks
             {
@@ -374,14 +377,14 @@ class DownloadFile
                     let urlString = UniqueAssetURLs.urls[key] ?? ""
                     guard let url = URL(string: urlString.replacingOccurrences(of: placeholder, with: "\(fileName)")) else
                     {
-                        print("Invalid URL: \(urlString)")
+                        Logger.util.fault("Invalid URL: \(urlString)")
                         continue
                     }
                     // ダウンロード開始前にファイルの存在確認
                     let destinationPath = destinationPathForURL(url: url, baseURL: "https://schaledb.com/")
                     if FileManager.default.fileExists(atPath: destinationPath.path)
                     {
-                        print("File already exists at: \(destinationPath.path). Skipping download.")
+                        Logger.util.warning("File already exists at: \(destinationPath.path). Skipping download.")
                         continue
                     }
                     dispatchGroup.enter()
@@ -390,9 +393,9 @@ class DownloadFile
                         switch result
                         {
                         case let .success(localURL):
-                            print("Downloaded to: \(localURL)")
+                            Logger.download.debug("Downloaded to: \(localURL)")
                         case let .failure(error):
-                            print("Failed to download from \(url): \(error)")
+                            Logger.util.fault("Failed to download from \(url): \(error)")
                         }
                         processedCount += 1
                         DispatchQueue.main.async
@@ -405,7 +408,7 @@ class DownloadFile
             }
             dispatchGroup.notify(queue: .main)
             {
-                print("All images processed.")
+                Logger.util.info("All unique images Downloaded.")
                 completion()
             }
         }
@@ -423,7 +426,7 @@ class DownloadFile
         { [weak self] ids in
             guard let self = self, let ids = ids, !ids.isEmpty else
             {
-                print("Failed to load student IDs or no IDs found.")
+                Logger.util.fault("Failed to load student IDs or no IDs found.")
                 completion()
                 return
             }
@@ -446,13 +449,13 @@ class DownloadFile
                             let urlString = UniqueAssetURLs.urls["Voice"] ?? ""
                             guard let url = URL(string: urlString.replacingOccurrences(of: "$path", with: filePath)) else
                             {
-                                // print("Invalid URL: \(urlString)")
+                                Logger.util.fault("Invalid URL: \(urlString)")
                                 continue
                             }
                             let destinationPath = self.destinationPathForURL(url: url, baseURL: "https://r2.schaledb.com/")
                             if FileManager.default.fileExists(atPath: destinationPath.path)
                             {
-                                print("File already exists at: \(destinationPath.path). Skipping download.")
+                                Logger.util.warning("File already exists at: \(destinationPath.path). Skipping download.")
                                 continue
                             }
                             dispatchGroup.enter()
@@ -461,11 +464,9 @@ class DownloadFile
                                 switch result
                                 {
                                 case let .success(localURL):
-                                    // print("Downloaded to: \(localURL)")
-                                    print("")
+                                    Logger.download.debug("Downloaded to: \(localURL)")
                                 case let .failure(error):
-                                    // print("Failed to download from \(url): \(error)")
-                                    print("")
+                                    Logger.util.fault("Failed to download from \(url): \(error)")
                                 }
                                 processedCount += 1
                                 DispatchQueue.main.async
@@ -481,7 +482,7 @@ class DownloadFile
             }
             dispatchGroup.notify(queue: .main)
             {
-                print("All voice data processed.")
+                Logger.util.info("All voice data downloaded.")
                 completion()
             }
         }
@@ -535,7 +536,7 @@ enum StudentAssetURLs
         URL(string: "https://schaledb.com/images/student/icon/$ID.webp")!,
         URL(string: "https://schaledb.com/images/student/portrait/$ID.webp")!,
         URL(string: "https://schaledb.com/images/gear/full/$ID.webp")!,
-        URL(string: "https://schaledb.com/images/gear/icon/$ID.webp")!
+        URL(string: "https://schaledb.com/images/gear/icon/$ID.webp")!,
     ]
 }
 
@@ -546,6 +547,6 @@ enum UniqueAssetURLs
         "CollectionBG": "https://schaledb.com/images/background/$BGName.jpg",
         "WeaponImg": "https://schaledb.com/images/weapon/$WpName.webp",
         "Voice": "https://r2.schaledb.com/voice/$path",
-        "SkillIcon": "https://schaledb.com/images/skill/$IconName.webp"
+        "SkillIcon": "https://schaledb.com/images/skill/$IconName.webp",
     ]
 }

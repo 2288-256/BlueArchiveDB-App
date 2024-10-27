@@ -53,10 +53,10 @@ class LoadFile
             let data = try Data(contentsOf: studentsFileURL)
             // 型を [String: [String: Any]] に変更
             studentsData = try JSONSerialization.jsonObject(with: data) as? [String: [String: Any]] ?? [:]
-            print("ロードした生徒数:\(studentsData.count)")
+            Logger.util.info("ロードした生徒数:\(self.studentsData.count)")
         } catch
         {
-            print("Error reading students JSON file: \(error)")
+            Logger.util.fault("Error reading students JSON file: \(error)")
         }
     }
 
@@ -77,7 +77,7 @@ class LoadFile
                 }
             } catch
             {
-                print("Error reading voice JSON file: \(error)")
+                Logger.util.fault("Error reading voice JSON file: \(error)")
             }
         }
     }
@@ -98,11 +98,11 @@ class LoadFile
                 }
             } else
             {
-                print("Localization file not found at path.")
+                Logger.util.fault("Localization file not found at path.")
             }
         } catch
         {
-            print("Error loading localization JSON from Documents directory: \(error)")
+            Logger.util.fault("Error loading localization JSON from Documents directory: \(error)")
         }
     }
 
@@ -179,9 +179,11 @@ class LoadFile
                 return translation
             } else
             {
+                Logger.util.fault("Translation not found for key: \(keyToSearch)")
                 return "Error: TNSK"
             }
         }
+        Logger.util.fault("Translation not found for input: \(input) with mainKey: \(String(describing: mainKey))")
         return "Error: NIF"
     }
 
@@ -213,7 +215,7 @@ class LoadFile
             }
         } catch
         {
-            // Handle error
+            Logger.util.error("Error finding matching keys: \(error.localizedDescription)")
         }
         return matchingKeys
     }
@@ -231,6 +233,7 @@ class LoadFile
             return voiceData
         } else
         {
+            Logger.util.fault("voiceData is Empty")
             return nil
         }
     }

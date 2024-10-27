@@ -191,7 +191,6 @@ class LoadSkill {
                     if let swiftRange = Range(matchedRange, in: AutoAttackDescTemp)
                     {
                         let matchedText = String(AutoAttackDescTemp[swiftRange]) // The text between <? and >
-                        // print("Matched text: \(matchedText)") // Do something with matched text
 
                         // Replace the matched text with an empty string or any replacement text
                         let Parameters = SkillArray["Parameters"] as? [[Any]]
@@ -204,7 +203,7 @@ class LoadSkill {
                 }
             } catch
             {
-                print("Regex error: \(error.localizedDescription)")
+                Logger.util.fault("Regex error: \(error.localizedDescription)")
             }
 
             skillDesc.text = AutoAttackDescTemp
@@ -275,7 +274,6 @@ class LoadSkill {
                     if let swiftRange = Range(matchedRange, in: Desc)
                     {
                         let matchedText = String(Desc[swiftRange]) // The text between <b: and >
-                        // print("Matched text: \(matchedText)") // Do something with matched text
 
                         // Replace the matched text with an empty string or any replacement text
                         let replacementText =
@@ -294,7 +292,7 @@ class LoadSkill {
                 }
             } catch
             {
-                print("Regex error: \(error.localizedDescription)")
+                Logger.util.fault("Regex error: \(error.localizedDescription)")
             }
         }
         return Desc
@@ -321,7 +319,6 @@ class LoadSkill {
                     if let swiftRange = Range(matchedRange, in: Desc)
                     {
                         let matchedText = String(Desc[swiftRange]) // The text between <? and >
-                        // print("Matched text: \(matchedText)") // Do something with matched text
 
                         // Replace the matched text with an empty string or any replacement text
                         let Effects = SkillArray["Effects"] as! [[String: Any]]
@@ -341,7 +338,7 @@ class LoadSkill {
                 }
             } catch
             {
-                print("Regex error: \(error.localizedDescription)")
+                Logger.util.fault("Regex error: \(error.localizedDescription)")
             }
         }
         return Desc
@@ -368,7 +365,6 @@ class LoadSkill {
                     if let swiftRange = Range(matchedRange, in: Desc)
                     {
                         let matchedText = String(Desc[swiftRange]) // The text between <? and >
-                        // print("Matched text: \(matchedText)") // Do something with matched text
 
                         // Replace the matched text with an empty string or any replacement text
                         let Parameters = SkillArray["Parameters"] as? [[Any]]
@@ -383,13 +379,12 @@ class LoadSkill {
                                 of: "<\(replaceOf)\(matchedText)>", with: replacementText
                             )
                             BuffValuechanged = true
-                            //                            print(replacementText)
                         }
                     }
                 }
             } catch
             {
-                print("Regex error: \(error.localizedDescription)")
+                Logger.util.fault("Regex error: \(error.localizedDescription)")
             }
         }
         return Desc
