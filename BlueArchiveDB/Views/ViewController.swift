@@ -424,16 +424,24 @@ class ViewController: UIViewController, UICollectionViewDataSource,
 					if faultVoiceFileCount > 0 {
 						let faultAlert = UIAlertController(title: "更新完了", message: "更新が完了しました。\n(失敗:\(faultFileCount))\nダウンロードに失敗したファイルにボイスデータがあります\n再度ダウンロードしない場合はオフラインでの再生ができなくなります。", preferredStyle: .alert)
 						faultAlert.addAction(UIAlertAction(title: "再度ダウンロードする", style: .default, handler: { _ in
+            				LoadFile.shared.loadInitialData()
 							self.downloadZip()
 						}))
-						faultAlert.addAction(UIAlertAction(title: "キャンセル", style: .destructive, handler: nil))
+						faultAlert.addAction(UIAlertAction(title: "キャンセル", style: .destructive, handler: { _ in
+							self.loadView()
+							self.viewDidLoad()
+						}))
 						self.present(faultAlert, animated: true, completion: nil)
 					}else{
 						let faultAlert = UIAlertController(title: "更新完了", message: "更新が完了しました。\n(失敗:\(faultFileCount))", preferredStyle: .alert)
 						faultAlert.addAction(UIAlertAction(title: "再度ダウンロードする", style: .default, handler: { _ in
+            				LoadFile.shared.loadInitialData()
 							self.downloadZip()
 						}))
-						faultAlert.addAction(UIAlertAction(title: "キャンセル", style: .destructive, handler: nil))
+						faultAlert.addAction(UIAlertAction(title: "キャンセル", style: .destructive, handler: { _ in
+							self.loadView()
+							self.viewDidLoad()
+						}))
 						self.present(faultAlert, animated: true, completion: nil)
 					}
 				}else{
