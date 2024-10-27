@@ -53,7 +53,7 @@ class CharacterWeaponStar1: UIViewController
 		let SkillArray = SkillArrays.first(where: { ($0["SkillType"] as? String)?.hasPrefix("weaponpassive") == true })
 		if let Parameters = SkillArray!["Parameters"] as? [[Any]]
 		{
-			print(Parameters[0].count)
+			Logger.standard.debug("\(Parameters[0].count)")
 			SkillLevelSlider.maximumValue = Float(Parameters[0].count - 1)
 		}
 
@@ -127,7 +127,6 @@ class CharacterWeaponStar1: UIViewController
 			var RadiusType: String
 			if let radius = SkillArray!["Radius"] as? [[String: Any]], let type = radius[0]["Type"] as? String
 			{
-				//                    print(type)
 				if type == "Obb"
 				{
 					RadiusType = "line"
@@ -154,7 +153,6 @@ class CharacterWeaponStar1: UIViewController
 					if let swiftRange = Range(matchedRange, in: AutoAttackDescTemp)
 					{
 						let matchedText = String(AutoAttackDescTemp[swiftRange]) // The text between <? and >
-						// print("Matched text: \(matchedText)") // Do something with matched text
 
 						// Replace the matched text with an empty string or any replacement text
 						let Parameters = SkillArray!["Parameters"] as? [[Any]]
@@ -166,7 +164,7 @@ class CharacterWeaponStar1: UIViewController
 				}
 			} catch
 			{
-				print("Regex error: \(error.localizedDescription)")
+				Logger.standard.fault("Regex error: \(error.localizedDescription)")
 			}
 
 			SkillTypeName.text = AutoAttackDescTemp
@@ -216,7 +214,6 @@ class CharacterWeaponStar1: UIViewController
 					if let swiftRange = Range(matchedRange, in: Desc)
 					{
 						let matchedText = String(Desc[swiftRange]) // The text between <b: and >
-						// print("Matched text: \(matchedText)") // Do something with matched text
 
 						// Replace the matched text with an empty string or any replacement text
 						let replacementText = LoadFile.shared.translateString("\(replaceWithCategory)\(matchedText)", mainKey: replaceWithKey) ?? ""
@@ -229,7 +226,7 @@ class CharacterWeaponStar1: UIViewController
 				}
 			} catch
 			{
-				print("Regex error: \(error.localizedDescription)")
+				Logger.standard.fault("Regex error: \(error.localizedDescription)")
 			}
 		}
 		return Desc
@@ -254,7 +251,6 @@ class CharacterWeaponStar1: UIViewController
 					if let swiftRange = Range(matchedRange, in: Desc)
 					{
 						let matchedText = String(Desc[swiftRange]) // The text between <? and >
-						// print("Matched text: \(matchedText)") // Do something with matched text
 
 						// Replace the matched text with an empty string or any replacement text
 						let Effects = SkillArray["Effects"] as! [[String: Any]]
@@ -269,7 +265,7 @@ class CharacterWeaponStar1: UIViewController
 				}
 			} catch
 			{
-				print("Regex error: \(error.localizedDescription)")
+				Logger.standard.fault("Regex error: \(error.localizedDescription)")
 			}
 		}
 		return Desc
@@ -294,7 +290,6 @@ class CharacterWeaponStar1: UIViewController
 					if let swiftRange = Range(matchedRange, in: Desc)
 					{
 						let matchedText = String(Desc[swiftRange]) // The text between <? and >
-						// print("Matched text: \(matchedText)") // Do something with matched text
 
 						// Replace the matched text with an empty string or any replacement text
 						let Parameters = SkillArray["Parameters"] as? [[Any]]
@@ -303,13 +298,12 @@ class CharacterWeaponStar1: UIViewController
 						{
 							Desc = Desc.replacingOccurrences(of: "<\(replaceOf)\(matchedText)>", with: replacementText)
 							BuffValuechanged = true
-							//                            print(replacementText)
 						}
 					}
 				}
 			} catch
 			{
-				print("Regex error: \(error.localizedDescription)")
+				Logger.standard.fault("Regex error: \(error.localizedDescription)")
 			}
 		}
 		return Desc

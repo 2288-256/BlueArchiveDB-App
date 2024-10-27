@@ -11,12 +11,10 @@ import Foundation
 import MobileCoreServices
 import Reachability
 import UIKit
-import os.log
 
 class ViewController: UIViewController, UICollectionViewDataSource,
 	UICollectionViewDelegateFlowLayout
 {
-    let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "Logger")
 	var player: AVPlayer?
 	let reachability = try! Reachability()
 	@IBOutlet var versionLabel: UILabel!
@@ -53,8 +51,8 @@ class ViewController: UIViewController, UICollectionViewDataSource,
         jsonArrays = LoadFile.shared.getStudents()
         studentArrays = Array(LoadFile.shared.getStudents().values)
 		loadVoice()
-        print("ロードした生徒数:\(self.studentArrays.count)")
-		print(voiceArrays)
+        Logger.standard.info("ロードした生徒数:\(self.studentArrays.count)")
+        Logger.standard.debug("\(self.voiceArrays)")
 		firstVoice = true
 		if jsonArrays.count > 0
 		{
@@ -140,7 +138,7 @@ class ViewController: UIViewController, UICollectionViewDataSource,
 				return firstMonth < secondMonth // Different months: sort by month.
 			}
 		}
-		print(sevenDaysBirthDay.count)
+        Logger.standard.debug("1週間以内の誕生日生徒: \(self.sevenDaysBirthDay.count)")
 		let characterID = UserDefaults.standard.string(forKey: "CharacterID") ?? "10066"
 		let fileManager = FileManager.default
 		let libraryDirectory = fileManager.urls(for: .libraryDirectory, in: .userDomainMask).first!
@@ -188,7 +186,7 @@ class ViewController: UIViewController, UICollectionViewDataSource,
 		if activity.activityType == CSSearchableItemActionType,
 		   let uniqueIdentifier = activity.userInfo?[CSSearchableItemActivityIdentifier] as? String
 		{
-			print("Restore User Activity: \(uniqueIdentifier)")
+            Logger.standard.info("Restore User Activity: \(uniqueIdentifier)")
 		}
 	}
 
@@ -228,7 +226,7 @@ class ViewController: UIViewController, UICollectionViewDataSource,
 		{ error in
 			if let e = error
 			{
-				print("\(e)")
+                Logger.standard.error("\(e)")
 			}
 		}
 	}
@@ -309,7 +307,7 @@ class ViewController: UIViewController, UICollectionViewDataSource,
 			present(viewController, animated: false, completion: nil)
 		} else
 		{
-			print("Error: Failed to instantiate CharacterSelect")
+            Logger.standard.fault("Error: Failed to instantiate CharacterSelect")
 		}
 		// セル選択の解除
 		collectionView.deselectItem(at: indexPath, animated: true)
@@ -430,7 +428,7 @@ class ViewController: UIViewController, UICollectionViewDataSource,
 
 	@objc func CharacterTapped(_: Any)
 	{
-		print("CharacterTapped")
+        Logger.standard.debug("CharacterTapped")
 		if firstVoice == true
 		{
 			firstVoice = false
@@ -443,7 +441,7 @@ class ViewController: UIViewController, UICollectionViewDataSource,
 			{
 				let random = Int.random(in: 1 ... 5)
 				let VoiceKey = "UILobbyIdle\(random)"
-				print(VoiceKey)
+                Logger.standard.debug("\(VoiceKey)")
 				let matchingCount = voiceArrays.filter { $0["Group"] as? String == VoiceKey }.count
 				if matchingCount >= 2
 				{
@@ -454,7 +452,7 @@ class ViewController: UIViewController, UICollectionViewDataSource,
 			} else
 			{
 				// 続きのボイス
-				print("Continued voice")
+                Logger.standard.debug("Continued voice")
 				nextVoice = false
 				let VoiceKey = "UILobbyIdle\(nextVoiceNumber)"
 				if let firstIndex = voiceArrays.firstIndex(where: { $0["Group"] as? String == VoiceKey })
@@ -468,15 +466,15 @@ class ViewController: UIViewController, UICollectionViewDataSource,
                             playSound(SoundFilePath: audioClip)
 						} else
 						{
-							print("AudioClip not found in second matching item")
+                            Logger.standard.error("AudioClip not found in second matching item")
 						}
 					} else
 					{
-						print("There is no second item matching the VoiceKey")
+                        Logger.standard.error("There is no second item matching the VoiceKey")
 					}
 				} else
 				{
-					print("No items matching the VoiceKey found")
+                    Logger.standard.error("No items matching the VoiceKey found")
 				}
 			}
 		}
@@ -487,10 +485,10 @@ class ViewController: UIViewController, UICollectionViewDataSource,
 		if let matchingDict = voiceArrays.first(where: { $0["Group"] as? String == VoiceKey })
 		{
 			let audioText: String = matchingDict["Transcription"] as! String
-			print(audioText)
+            Logger.standard.debug("\(audioText)")
 			if playedVoiceNumber == VoiceKey
 			{
-				print("VoiceKey already played")
+                Logger.standard.debug("VoiceKey already played")
 				CharacterTapped(self)
 			} else
 			{
@@ -501,7 +499,7 @@ class ViewController: UIViewController, UICollectionViewDataSource,
 		} else
 		{
 			// 再度CharacterTappedを実行する
-			print("VoiceKey not found")
+            Logger.standard.error("VoiceKey not found")
 			CharacterTapped(self)
 		}
 	}
@@ -513,7 +511,7 @@ class ViewController: UIViewController, UICollectionViewDataSource,
 
         // ファイルの存在確認
         if !FileManager.default.fileExists(atPath: soundFilePath) {
-            print("Error: ファイルが存在しません: \(soundFilePath)")
+            Logger.standard.error("Error: ファイルが存在しません: \(soundFilePath)")
             return
         }
 
@@ -522,7 +520,7 @@ class ViewController: UIViewController, UICollectionViewDataSource,
             audioPlayer?.prepareToPlay()
             audioPlayer?.play()
         } catch {
-            print("音源ファイルの再生に失敗しました: \(error)")
+            Logger.standard.error("音源ファイルの再生に失敗しました: \(error)")
         }
     }
 
@@ -547,7 +545,7 @@ class ViewController: UIViewController, UICollectionViewDataSource,
 				}
 			} catch
 			{
-				print("Error reading voice JSON file: \(error)")
+                Logger.standard.fault("Error reading voice JSON file: \(error)")
 			}
 		}
 	}

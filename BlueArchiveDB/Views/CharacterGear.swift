@@ -30,7 +30,7 @@ class CharacterGear: UIViewController
         super.viewDidLoad()
         jsonArrays = LoadFile.shared.getStudents()
 //                jsonArrays = []
-        studentStatus = jsonArrays["\(unitId)"] as? [String:Any] ?? [:]
+        studentStatus = jsonArrays["\(unitId)"] as? [String: Any] ?? [:]
         SkillArrays = studentStatus["Skills"] as? [String: Any] ?? [:]
         GearSkill = SkillArrays["GearPublic"] as? [String: Any] ?? [:]
         GearName.text = GearData["Name"] as? String
@@ -63,7 +63,6 @@ class CharacterGear: UIViewController
             {
                 let cleanedStatType = statType.components(separatedBy: "_")[0]
                 let statusName = LoadFile.shared.translateString(cleanedStatType, mainKey: "Stat")
-                print("aaaa")
                 let Label1 = CreateElement.shared.createWeaponStatusView(addSubview: GearStatusUI, tag: 1, statusID: cleanedStatType, statusName: statusName!, statusValue: statValue[index][0], posx: 281 * index, leftEqualTo: index)
             }
         }
@@ -79,7 +78,7 @@ class CharacterGear: UIViewController
         let tag = sender.tag
         let SkillLevelSlider = view.viewWithTag(tag) as! UISlider
         let SkillDesc = view.viewWithTag(tag - 1) as! UITextView
-        let SkillArray = SkillArrays["GearPublic"] as? [String:Any] ?? [:]
+        let SkillArray = SkillArrays["GearPublic"] as? [String: Any] ?? [:]
         let SkillLevelLabel = view.viewWithTag(tag + 1) as! UILabel
         SkillLevelLabel.text = "Lv.\(Int(sender.value) + 1)"
         LoadSkill.shared.SkillDescValueChange(SkillArray: GearSkill, nowSkillLevel: Int(sender.value), skillDescTextView: SkillDesc, SkillName: "GearPublic")

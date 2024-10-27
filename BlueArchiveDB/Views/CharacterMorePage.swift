@@ -11,7 +11,7 @@ import Reachability
 import UIKit
 
 class CharacterMorePage: UIViewController, UICollectionViewDataSource,
-                         UICollectionViewDelegateFlowLayout,AVAudioPlayerDelegate
+    UICollectionViewDelegateFlowLayout, AVAudioPlayerDelegate
 {
     let reachability = try! Reachability()
     @IBOutlet var collectionView: UICollectionView!
@@ -30,7 +30,7 @@ class CharacterMorePage: UIViewController, UICollectionViewDataSource,
     var unitId: Int = 0
     var player: AVPlayer?
     var audioPlayer: AVAudioPlayer!
-    
+
     override func viewDidLoad()
     {
         super.viewDidLoad()
@@ -46,7 +46,7 @@ class CharacterMorePage: UIViewController, UICollectionViewDataSource,
         updateVoiceButton(button: battleVoiceButton, withKey: "Battle")
         updateVoiceButton(button: homeVoiceButton, withKey: "Lobby")
         updateVoiceButton(button: eventVoiceButton, withKey: "Event")
-        
+
         if let normalArray = jsonArray.first?["Normal"] as? [[String: Any]]
         {
             jsonArrays = normalArray
@@ -56,13 +56,13 @@ class CharacterMorePage: UIViewController, UICollectionViewDataSource,
             jsonArrays = []
         }
     }
-    
+
     private func updateVoiceButton(button: UIButton, withKey key: String)
     {
         let voiceData = jsonArray.first?[key] as? [[String: Any]] ?? []
         button.isEnabled = !voiceData.isEmpty
     }
-    
+
     @IBAction func normalVoiceButton(_: Any)
     {
         jsonArrays = jsonArray.first?["Normal"] as? [[String: Any]] ?? []
@@ -72,7 +72,7 @@ class CharacterMorePage: UIViewController, UICollectionViewDataSource,
             collectionView.reloadData()
         }
     }
-    
+
     @IBAction func battleVoiceButton(_: Any)
     {
         jsonArrays = jsonArray.first?["Battle"] as? [[String: Any]] ?? []
@@ -82,7 +82,7 @@ class CharacterMorePage: UIViewController, UICollectionViewDataSource,
             collectionView.reloadData()
         }
     }
-    
+
     @IBAction func homeVoiceButton(_: Any)
     {
         jsonArrays = jsonArray.first?["Lobby"] as? [[String: Any]] ?? []
@@ -92,7 +92,7 @@ class CharacterMorePage: UIViewController, UICollectionViewDataSource,
             collectionView.reloadData()
         }
     }
-    
+
     @IBAction func eventVoiceButton(_: Any)
     {
         jsonArrays = jsonArray.first?["Event"] as? [[String: Any]] ?? []
@@ -102,19 +102,19 @@ class CharacterMorePage: UIViewController, UICollectionViewDataSource,
             collectionView.reloadData()
         }
     }
-    
+
     @IBAction func backButton(_: Any)
     {
         dismiss(animated: false, completion: nil)
     }
-    
+
     @IBAction func homeButton(_: Any)
     {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let nextVC = storyboard.instantiateViewController(withIdentifier: "Home") as! ViewController
         present(nextVC, animated: false, completion: nil)
     }
-    
+
     // UIButtonが属するUICollectionViewCellを見つけるためのヘルパーメソッド
     func getParentCell(of view: UIView) -> UICollectionViewCell?
     {
@@ -125,7 +125,7 @@ class CharacterMorePage: UIViewController, UICollectionViewDataSource,
         }
         return superview as? UICollectionViewCell
     }
-    
+
     // ボタンが押されたときに呼ばれるアクション
     @IBAction func buttonPressed(_ sender: UIButton)
     {
@@ -138,7 +138,8 @@ class CharacterMorePage: UIViewController, UICollectionViewDataSource,
             {
                 let libraryDirectory = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask).first!
                 let soundFilePath = libraryDirectory.appendingPathComponent("assets/voice/\(SoundFilePath)").path
-                if !FileManager.default.fileExists(atPath: soundFilePath) {
+                if !FileManager.default.fileExists(atPath: soundFilePath)
+                {
                     playSound(SoundFilePath: SoundFilePath, type: "server")
                     //                    let alert = UIAlertController(title: "エラー", message: "ファイルが見つかりませんでした。", preferredStyle: .alert)
                     //                    alert.addAction(UIAlertAction(title: "OK", style: .default))
@@ -149,76 +150,92 @@ class CharacterMorePage: UIViewController, UICollectionViewDataSource,
             }
         }
     }
-    
+
     // func playSound(from url: URL)
     // {
-    
+
     // 	let playerItem = AVPlayerItem(url: url)
     // 	player = AVPlayer(playerItem: playerItem)
     // 	player?.play()
     // }
-    func playSound(SoundFilePath: String,type: String) {
-        switch type {
+    func playSound(SoundFilePath: String, type: String)
+    {
+        switch type
+        {
         case "local":
             let libraryDirectory = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask).first!
             let soundFilePath = libraryDirectory.appendingPathComponent("assets/voice/\(SoundFilePath)").path
             let soundFileURL = URL(fileURLWithPath: soundFilePath)
-            
-            do {
+
+            do
+            {
                 audioPlayer = try AVAudioPlayer(contentsOf: soundFileURL)
                 audioPlayer?.prepareToPlay()
+                Logger.standard.info("Play assets/voice/\(SoundFilePath) voice")
                 audioPlayer?.play()
-            } catch {
-                print("音源ファイルの再生に失敗しました: \(error)")
+            } catch
+            {
+                Logger.standard.fault("音源ファイルの再生に失敗しました: \(error)")
             }
-            
+
         case "server":
-            if let url = URL(string: "https://r2.schaledb.com/voice/\(SoundFilePath)") {
+            if let url = URL(string: "https://r2.schaledb.com/voice/\(SoundFilePath)")
+            {
                 // URLSessionを使用してContent-Typeを確認
                 var request = URLRequest(url: url)
-                    request.httpMethod = "HEAD" // ヘッダーのみを取得するためHEADリクエストを使用
+                request.httpMethod = "HEAD" // ヘッダーのみを取得するためHEADリクエストを使用
 
-                    URLSession.shared.dataTask(with: request) { (data, response, error) in
-                        if let error = error as? URLError {
-                            // オフラインの場合のエラーメッセージ
-                            let errorMessage = error.code == .notConnectedToInternet ? "オフラインです。インターネット接続を確認してください。" : "リクエストエラー: \(error.localizedDescription)"
-                            
-                            DispatchQueue.main.async {
-                                self.showAlert(title: "エラー", message: errorMessage)
-                            }
-                            return
-                        }
+                URLSession.shared.dataTask(with: request)
+                { _, response, error in
+                    if let error = error as? URLError
+                    {
+                        // オフラインの場合のエラーメッセージ
+                        let errorMessage = error.code == .notConnectedToInternet ? "オフラインです。インターネット接続を確認してください。" : "リクエストエラー: \(error.localizedDescription)"
 
-                        if let httpResponse = response as? HTTPURLResponse,
-                           let contentType = httpResponse.value(forHTTPHeaderField: "Content-Type"),
-                           contentType.contains("audio") {
-                            // Content-Typeにaudioが含まれていれば再生開始
-                            DispatchQueue.main.async {
-                                let playerItem = AVPlayerItem(url: url)
-                                self.player = AVPlayer(playerItem: playerItem)
-                                self.player?.play()
-                            }
-                        } else {
-                            // Content-Typeにaudioが含まれていない場合、アラート表示
-                            DispatchQueue.main.async {
-                                self.showAlert(title: "再生エラー", message: "指定されたファイルは音声ファイルではありません。")
-                            }
+                        DispatchQueue.main.async
+                        {
+                            self.showAlert(title: "エラー", message: errorMessage)
                         }
-                    }.resume()
+                        return
+                    }
+
+                    if let httpResponse = response as? HTTPURLResponse,
+                       let contentType = httpResponse.value(forHTTPHeaderField: "Content-Type"),
+                       contentType.contains("audio")
+                    {
+                        // Content-Typeにaudioが含まれていれば再生開始
+                        DispatchQueue.main.async
+                        {
+                            let playerItem = AVPlayerItem(url: url)
+                            self.player = AVPlayer(playerItem: playerItem)
+                            self.player?.play()
+                        }
+                    } else
+                    {
+                        // Content-Typeにaudioが含まれていない場合、アラート表示
+                        DispatchQueue.main.async
+                        {
+                            self.showAlert(title: "再生エラー", message: "指定されたファイルは音声ファイルではありません。")
+                        }
+                    }
+                }.resume()
             }
+
         default:
             ()
         }
-        
     }
-    func showAlert(title: String, message: String) {
+
+    func showAlert(title: String, message: String)
+    {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         // メインの表示しているビューコントローラーでアラートを表示
-        self.present(alertController, animated: true, completion: nil)
+        present(alertController, animated: true, completion: nil)
     }
+
     // JSONデータを含む配列
-    
+
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
     {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "voice-cell", for: indexPath)
@@ -227,7 +244,7 @@ class CharacterMorePage: UIViewController, UICollectionViewDataSource,
         cell.contentView.layer.borderWidth = 1.0 // 枠線の太さを1ポイントに設定
         cell.contentView.layer.cornerRadius = 5.0 // 角丸の半径を5ポイントに設定
         cell.contentView.clipsToBounds = true // 角丸を適用するために必要
-        
+
         // Reset the content of the cell
         let groupLabel = cell.contentView.viewWithTag(1) as? UILabel
         groupLabel?.text = nil // Reset to default text or empty string
@@ -240,7 +257,7 @@ class CharacterMorePage: UIViewController, UICollectionViewDataSource,
         {
             groupLabel?.text = LoadFile.shared.translateString(group)
         }
-        
+
         // Get the Transcription information.
         if var transcription = jsonArrays[indexPath.row]["Transcription"] as? String
         {
@@ -289,7 +306,7 @@ class CharacterMorePage: UIViewController, UICollectionViewDataSource,
         }
         return cell
     }
-    
+
     func collectionView(_: UICollectionView, numberOfItemsInSection _: Int) -> Int
     {
         // jsonArrayが0ではない場合
@@ -301,15 +318,15 @@ class CharacterMorePage: UIViewController, UICollectionViewDataSource,
             return 0
         }
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, layout _: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize
     {
         // Existing width calculation is maintained
         let cellWidth = collectionView.frame.width
-        
+
         // Default cell height
         var cellHeight: CGFloat = 37
-        
+
         // Determine if there is a transcription for the specific indexPath
         if let transcription = jsonArrays[indexPath.row]["Transcription"] as? String,
            !transcription.isEmpty
@@ -319,10 +336,10 @@ class CharacterMorePage: UIViewController, UICollectionViewDataSource,
             let transcriptionHeight = heightForText(transcription, havingWidth: cellWidth, andFont: UIFont.systemFont(ofSize: 14))
             cellHeight = groupLabelHeight + transcriptionHeight + 20
         }
-        
+
         return CGSize(width: cellWidth, height: cellHeight)
     }
-    
+
     // Helper function to calculate the height of the text
     func heightForText(_ text: String, havingWidth width: CGFloat, andFont font: UIFont) -> CGFloat
     {

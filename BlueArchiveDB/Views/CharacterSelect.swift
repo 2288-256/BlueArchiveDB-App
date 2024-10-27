@@ -9,7 +9,7 @@ class CharacterSelect: UIViewController, UICollectionViewDataSource,
     var jsonArrays: [[String: Any]] = [] // フィルタリングされた配列形式のデータ
     var SearchString: String = ""
     @IBOutlet var searchBar: UISearchBar!
-    
+
     override func viewDidLoad()
     {
         super.viewDidLoad()
@@ -23,7 +23,8 @@ class CharacterSelect: UIViewController, UICollectionViewDataSource,
         {
             jsonArrays = Array(LoadFile.shared.getStudents().values) // 辞書から配列に変換
             StudentData = LoadFile.shared.getStudents() // 辞書を保持
-            jsonArrays.sort {
+            jsonArrays.sort
+            {
                 let order1 = ($0["DefaultOrder"] as? Int) ?? Int.max
                 let order2 = ($1["DefaultOrder"] as? Int) ?? Int.max
                 return order1 < order2
@@ -57,7 +58,8 @@ class CharacterSelect: UIViewController, UICollectionViewDataSource,
     @IBAction func AllStudentsFilter(_: UIButton)
     {
         jsonArrays = Array(LoadFile.shared.getStudents().values) // 全データを取得
-        jsonArrays.sort {
+        jsonArrays.sort
+        {
             let order1 = ($0["DefaultOrder"] as? Int) ?? Int.max
             let order2 = ($1["DefaultOrder"] as? Int) ?? Int.max
             return order1 < order2
@@ -118,36 +120,43 @@ class CharacterSelect: UIViewController, UICollectionViewDataSource,
         return jsonArrays.count
     }
 
-    func loadMainStudents() {
-        do {
+    func loadMainStudents()
+    {
+        do
+        {
             jsonArrays.removeAll()
             jsonArrays = StudentData.values.filter { ($0["SquadType"] as? String) == "Main" }
-            jsonArrays.sort {
+            jsonArrays.sort
+            {
                 let order1 = ($0["DefaultOrder"] as? Int) ?? Int.max
                 let order2 = ($1["DefaultOrder"] as? Int) ?? Int.max
                 return order1 < order2
             }
-            print("STRIKERの生徒数:\(jsonArrays.count)人")
-        } catch {
-            print("Error reading students JSON file: \(error)")
+            Logger.standard.info("STRIKERの生徒数:\(self.jsonArrays.count)人")
+        } catch
+        {
+            Logger.standard.fault("Error reading students JSON file: \(error)")
         }
     }
 
-    func loadSupportStudents() {
-        do {
+    func loadSupportStudents()
+    {
+        do
+        {
             jsonArrays.removeAll()
             jsonArrays = StudentData.values.filter { ($0["SquadType"] as? String) == "Support" }
-            jsonArrays.sort {
+            jsonArrays.sort
+            {
                 let order1 = ($0["DefaultOrder"] as? Int) ?? Int.max
                 let order2 = ($1["DefaultOrder"] as? Int) ?? Int.max
                 return order1 < order2
             }
-            print("SUPPORTERの生徒数:\(jsonArrays.count)人")
-        } catch {
-            print("Error reading students JSON file: \(error)")
+            Logger.standard.info("SUPPORTERの生徒数:\(self.jsonArrays.count)人")
+        } catch
+        {
+            Logger.standard.fault("Error reading students JSON file: \(error)")
         }
     }
-
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath)
     {
@@ -156,21 +165,21 @@ class CharacterSelect: UIViewController, UICollectionViewDataSource,
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         if let viewController = storyboard.instantiateViewController(withIdentifier: "CharacterInfo") as? CharacterInfo
         {
-            print(cellTag)
+            Logger.standard.debug("\(cellTag ?? 0)")
             viewController.unitId = Int(cellTag ?? 0)
             viewController.modalTransitionStyle = .crossDissolve
             viewController.modalPresentationStyle = .fullScreen
             present(viewController, animated: false, completion: nil)
         } else
         {
-            print("Error: Failed to instantiate CharacterSelect")
+            Logger.standard.fault("Error: Failed to instantiate CharacterSelect")
         }
         collectionView.deselectItem(at: indexPath, animated: true)
     }
 
     func searchBar(_: UISearchBar, textDidChange searchText: String)
     {
-        print("検索文字:\(searchText)")
+        Logger.standard.debug("検索文字:\(searchText)")
         searchItems(searchText: searchText)
     }
 
@@ -182,7 +191,7 @@ class CharacterSelect: UIViewController, UICollectionViewDataSource,
         if searchText != ""
         {
             searchTerms += LoadFile.shared.findMatchingKeys(searchText: searchText)
-            print("検索結果:\(searchTerms)")
+            Logger.standard.debug("検索結果:\(searchTerms)")
             jsonArrays = StudentData.values.filter
             { student in
                 let searchTerms: [String] = (searchTerms as? [String]) ?? [searchTerms as? String].compactMap { $0 }
@@ -202,7 +211,7 @@ class CharacterSelect: UIViewController, UICollectionViewDataSource,
                         (student["Illustrator"] as? String)?.contains(term) == true ||
                         (student["CharacterVoice"] as? String)?.contains(term) == true ||
                         (student["WeaponType"] as? String)?.contains(term) == true ||
-                    (student["SearchTags"] as? [String])?.contains(term) == true
+                        (student["SearchTags"] as? [String])?.contains(term) == true
                 }
             }
         } else
@@ -216,12 +225,13 @@ class CharacterSelect: UIViewController, UICollectionViewDataSource,
             } else
             {
                 jsonArrays = Array(LoadFile.shared.getStudents().values) // 辞書から配列に変換
-                        StudentData = LoadFile.shared.getStudents() // 辞書を保持
-                        jsonArrays.sort {
-                            let order1 = ($0["DefaultOrder"] as? Int) ?? Int.max
-                            let order2 = ($1["DefaultOrder"] as? Int) ?? Int.max
-                            return order1 < order2
-                        }
+                StudentData = LoadFile.shared.getStudents() // 辞書を保持
+                jsonArrays.sort
+                {
+                    let order1 = ($0["DefaultOrder"] as? Int) ?? Int.max
+                    let order2 = ($1["DefaultOrder"] as? Int) ?? Int.max
+                    return order1 < order2
+                }
             }
         }
         collectionView.reloadData()

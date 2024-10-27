@@ -58,11 +58,11 @@ class CharacterStatusMore: UIViewController
 		LevelSlider.value = Float(nowLevel)
 		LevelSliderLabel.text = "Lv." + String(nowLevel)
 		let regions = configJson["Regions"] as? [[String: Any]]
-		print(regions)
+        Logger.standard.debug("\(regions ?? [])")
 		// [{"Name":"Jp"},{"Name":"Cn"}] からJpを取り出す
 		let jpRegion = regions?.first(where: { $0["Name"] as? String == "Jp" })
-        MaxTir = jpRegion?["EquipmentMaxLevel"] as? [Int] ?? []
-        MaxWeaponLevel = jpRegion?["WeaponMaxLevel"] as? Int ?? 0
+		MaxTir = jpRegion?["EquipmentMaxLevel"] as? [Int] ?? []
+		MaxWeaponLevel = jpRegion?["WeaponMaxLevel"] as? Int ?? 0
 		let weaponStatus = studentData["Weapon"] as? [String: Any]
 		var contentStackView: UIStackView
 		contentStackView = view.viewWithTag(999) as! UIStackView
@@ -124,7 +124,7 @@ class CharacterStatusMore: UIViewController
 			let equipmentTierLabel = equipmentView.viewWithTag((i * 100) + 2) as! UILabel
 			equipmentTierLabel.text = "T\(EquipmentTier[i - 1])"
 			let equipmentImageView = equipmentView.viewWithTag((i * 100) + 3) as! UIImageView
-            print(EquipmentTier)
+            Logger.standard.debug("\(self.EquipmentTier)")
 			UpdateEquipmentName(EquipmentType: EquipmentName[i - 1], Tier: EquipmentTier[i - 1], EquipmentNameLabel: equipmentName, EquipmentImage: equipmentImageView, equipmentEffectLabel: equipmentEffectLabel, tag: i)
 		}
 		let equipmentView = view.viewWithTag(4) as! UIView
@@ -268,8 +268,8 @@ class CharacterStatusMore: UIViewController
 
 	func UpdateEquipmentName(EquipmentType: String, Tier: Int, EquipmentNameLabel: UILabel, EquipmentImage: UIImageView, equipmentEffectLabel: UILabel, tag: Int)
 	{
-        let matchingStudents = ItemJson.values.filter { $0["Icon"] as? String == "equipment_icon_\(EquipmentType.lowercased())_tier\(Tier)" }
-        print(matchingStudents)
+		let matchingStudents = ItemJson.values.filter { $0["Icon"] as? String == "equipment_icon_\(EquipmentType.lowercased())_tier\(Tier)" }
+		Logger.standard.debug("\(matchingStudents)")
 		let StatType = matchingStudents.first?["StatType"] as! [String]
 		let StatValue = matchingStudents.first?["StatValue"] as! [[Int]]
 		var EffectText = ""
@@ -357,7 +357,7 @@ class CharacterStatusMore: UIViewController
 					Equipment3.image = Equipment3.image?.withRenderingMode(.alwaysTemplate)
 					Equipment3.tintColor = .gray
 				default:
-                    let matchingStudents = ItemJson.values.filter { $0["Icon"] as? String == "equipment_icon_\(EquipmentName[i - 1].lowercased())_tier\(String(EquipmentTier[i - 1]))" }
+					let matchingStudents = ItemJson.values.filter { $0["Icon"] as? String == "equipment_icon_\(EquipmentName[i - 1].lowercased())_tier\(String(EquipmentTier[i - 1]))" }
 					let statType = matchingStudents.first?["StatType"] as! [String]
 					let statValue = matchingStudents.first?["StatValue"] as! [[Int]]
 					for j in 0 ..< statType.count
@@ -641,14 +641,14 @@ class CharacterStatusMore: UIViewController
 				if matchedKeys[i - 1].contains("Base")
 				{
 					addValue = addBonus[matchedKeys[i - 1]]!
-					print("\(StatusName)_Base_\(addValue)")
+					Logger.standard.debug("\(StatusName)_Base_\(addValue)")
 					addLabel.text = "\(Int(addLabel.text!)! + Int(addBonus[matchedKeys[i - 1]]!))"
 				}
 				if matchedKeys[i - 1].contains("Coefficient")
 				{
 					addCoefficient = Double(addBonus[matchedKeys[i - 1]]!) / 10000 + 1
 
-					print("\(StatusName)_Coefficient_\(addCoefficient)")
+					Logger.standard.debug("\(StatusName)_Coefficient_\(addCoefficient)")
 					addPercentLabel.text = String("\(Double(addPercentLabel.text!)! + Double(addBonus[matchedKeys[i - 1]]!) / 100)".suffixZeroSuppress()!)
 				}
 			}
@@ -716,7 +716,7 @@ class CharacterStatusMore: UIViewController
 			ItemJson = try JSONSerialization.jsonObject(with: data) as? [String: [String: Any]] ?? [:]
 		} catch
 		{
-			print("Error reading students JSON file: \(error)")
+			Logger.standard.fault("Error reading students JSON file: \(error)")
 		}
 	}
 
@@ -737,7 +737,7 @@ class CharacterStatusMore: UIViewController
 			configJson = try (JSONSerialization.jsonObject(with: data) as? [String: Any]? ?? [:])!
 		} catch
 		{
-			print("Error reading students JSON file: \(error)")
+			Logger.standard.fault("Error reading students JSON file: \(error)")
 		}
 	}
 
@@ -758,7 +758,7 @@ class CharacterStatusMore: UIViewController
 			localizeJson = try JSONSerialization.jsonObject(with: data) as! [String: Any]
 		} catch
 		{
-			print("Error reading students JSON file: \(error)")
+			Logger.standard.fault("Error reading students JSON file: \(error)")
 		}
 	}
 

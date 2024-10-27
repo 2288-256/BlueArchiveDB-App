@@ -41,7 +41,7 @@ class Setting: UIViewController
 			present(viewController, animated: false, completion: nil)
 		} else
 		{
-			print("Error: Failed to instantiate CharacterSelect")
+			Logger.standard.fault("Error: Failed to instantiate CharacterSelect")
 		}
 	}
 

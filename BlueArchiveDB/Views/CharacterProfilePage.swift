@@ -37,7 +37,7 @@ class CharacterProfilePage: UIViewController
 		CharacterProfileText.addObserver(self, forKeyPath: "contentSize", options: .new, context: nil)
 		CharacterAcquisitionMethodText.addObserver(self, forKeyPath: "contentSize", options: .new, context: nil)
 		CharacterProfileText.text = studentData["ProfileIntroduction"] as? String
-        CharacterSchoolText.text = LoadFile.shared.translateString(studentData["School"] as? String ?? "", mainKey: "SchoolLong")
+		CharacterSchoolText.text = LoadFile.shared.translateString(studentData["School"] as? String ?? "", mainKey: "SchoolLong")
 		CharacterSchoolYear.text = studentData["SchoolYear"] as? String
 		CharacterClub.text = LoadFile.shared.translateString(studentData["Club"] as? String ?? "", mainKey: "Club")
 		CharacterAge.text = studentData["CharacterAge"] as? String
@@ -71,15 +71,15 @@ class CharacterProfilePage: UIViewController
 								{}
 							} catch
 							{
-								print("エラーが発生しました: \(error)")
+								Logger.standard.fault("エラーが発生しました: \(error)")
 							}
 						case let .failure(error):
-							print("HTMLの取得に失敗しました: \(error)")
+							Logger.standard.fault("HTMLの取得に失敗しました: \(error)")
 						}
 					}
 				}
 			case .unavailable:
-				print("ネットワークに接続されていません。")
+				Logger.standard.fault("ネットワークに接続されていません。")
 				CharacterAcquisitionMethodText.text = "オンライン環境で取得できます"
 			}
 		}
@@ -144,7 +144,7 @@ class CharacterProfilePage: UIViewController
 			cleanString = cleanString.replacingOccurrences(of: "<td[^>]*>", with: "", options: .regularExpression, range: nil)
 			cleanString = cleanString.replacingOccurrences(of: "</td>", with: "")
 			cleanString = cleanString.replacingOccurrences(of: "<br[^>]*>", with: "\n", options: .regularExpression, range: nil)
-            cleanString = cleanString.replacingOccurrences(of: "<.[^>]*>|</.>", with: "", options: .regularExpression, range: nil)
+			cleanString = cleanString.replacingOccurrences(of: "<.[^>]*>|</.>", with: "", options: .regularExpression, range: nil)
 			cleanString = cleanString.replacingOccurrences(of: "\\((?<!\\n)(\\d{4}/\\d{2}/\\d{2}( \\d{2}:\\d{2})?)", with: "\n($1", options: .regularExpression, range: nil)
 			return cleanString
 		}

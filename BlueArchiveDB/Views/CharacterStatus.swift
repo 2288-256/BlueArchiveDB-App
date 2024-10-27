@@ -12,8 +12,8 @@ import UIKit
 class CharacterStatus: UIViewController
 {
 	var unitId: Int = 0
-    var studentData: [String: Any] = [:]
-    var ItemJson: [String: [String: Any]] = [:]
+	var studentData: [String: Any] = [:]
+	var ItemJson: [String: [String: Any]] = [:]
 	var stargrade: Int = 1
 	var nowLevel: Int = 1
 	var nowWeaponLevel: Int = 0
@@ -22,7 +22,7 @@ class CharacterStatus: UIViewController
 	var StarATKCorrection: [[String: Any]] = [["1": 0, "2": 1.10, "3": 1.22, "4": 1.36, "5": 1.53]]
 	var StarHealingCorrection: [[String: Any]] = [["1": 0, "2": 1.075, "3": 1.175, "4": 1.295, "5": 1.445]]
 	var EquipmentTier: [Int: String] = [1: "1", 2: "1", 3: "1"]
-	var OrangeColor: UIColor = UIColor(red: 255 / 255, green: 147 / 255, blue: 0 / 255, alpha: 1.0)
+	var OrangeColor: UIColor = .init(red: 255 / 255, green: 147 / 255, blue: 0 / 255, alpha: 1.0)
 	var addBonus: [String: Int] = [:]
 	var weaponBuff: [String: Int] = [:]
 	var EquipmentArray: [String] = []
@@ -66,7 +66,7 @@ class CharacterStatus: UIViewController
 		LevelSlider.value = 1
 		LevelSliderLabel.text = "Lv.1"
 //		let levelUpValueHp = studentData["MaxHP100"] as? Int / 99
-        EquipmentArray = studentData["Equipment"] as? [String] ?? []
+		EquipmentArray = studentData["Equipment"] as? [String] ?? []
 		for i in 1 ... StarTierImages.count
 		{
 			StarTierImages[i - 1].image = UIImage(systemName: "star.fill")
@@ -89,7 +89,7 @@ class CharacterStatus: UIViewController
 		let imageName = studentData["WeaponImg"] as? String ?? ""
 		WeaponType.text = studentData["WeaponType"] as? String ?? ""
 
-		if let CoverBool = studentData["Cover"] as? Bool , CoverBool == false
+		if let CoverBool = studentData["Cover"] as? Bool, CoverBool == false
 		{
 			CoverImage.isHidden = true
 		}
@@ -122,7 +122,7 @@ class CharacterStatus: UIViewController
 
 	func sendDataBack(data: String)
 	{
-		print("Received data: \(data)")
+		Logger.standard.debug("Received data: \(data)")
 	}
 
 	@IBAction func buttonDidTap(_ sender: UIButton)
@@ -136,8 +136,7 @@ class CharacterStatus: UIViewController
 	{
 		let fileManager = FileManager.default
 		let libraryDirectory = fileManager.urls(for: .libraryDirectory, in: .userDomainMask).first!
-//		print("assets/images/equipment/full/equipment_icon_\((EquipmentArray[0] as! String).lowercased())_tier\(String(EquipmentTier[1]!)).webp")
-        let Equipment1ImagePath = libraryDirectory.appendingPathComponent("assets/images/equipment/icon/equipment_icon_\((EquipmentArray[0] ).lowercased())_tier\(String(EquipmentTier[1]!)).webp")
+		let Equipment1ImagePath = libraryDirectory.appendingPathComponent("assets/images/equipment/icon/equipment_icon_\(EquipmentArray[0].lowercased())_tier\(String(EquipmentTier[1]!)).webp")
 		Equipment1.image = UIImage(contentsOfFile: Equipment1ImagePath.path)
 		let Equipment2ImagePath = libraryDirectory.appendingPathComponent("assets/images/equipment/icon/equipment_icon_\((EquipmentArray[1] as! String).lowercased())_tier\(String(EquipmentTier[2]!)).webp")
 		Equipment2.image = UIImage(contentsOfFile: Equipment2ImagePath.path)
@@ -276,12 +275,13 @@ class CharacterStatus: UIViewController
 					Equipment3.image = Equipment3.image?.withRenderingMode(.alwaysTemplate)
 					Equipment3.tintColor = .gray
 				default:
-                    let matchingStudents =  ItemJson.first { (_, itemDetails) in
-                        guard let icon = itemDetails["Icon"] as? String else { return false }
-                        return icon == "equipment_icon_\(EquipmentArray[i - 1].lowercased())_tier\(String(EquipmentTier[i]!))"
-                    }
-                    let statType = matchingStudents?.value["StatType"] as! [String]
-                    let statValue = matchingStudents?.value["StatValue"] as! [[Int]]
+					let matchingStudents = ItemJson.first
+					{ _, itemDetails in
+						guard let icon = itemDetails["Icon"] as? String else { return false }
+						return icon == "equipment_icon_\(EquipmentArray[i - 1].lowercased())_tier\(String(EquipmentTier[i]!))"
+					}
+					let statType = matchingStudents?.value["StatType"] as! [String]
+					let statValue = matchingStudents?.value["StatValue"] as! [[Int]]
 					for j in 0 ..< statType.count
 					{
 						if let existingValue = addBonus[statType[j]]
@@ -384,10 +384,10 @@ class CharacterStatus: UIViewController
 				}
 
 				let tempValue: Double = round((start1 + (start100 - start1) * levelScale) * 10000) / 10000
-                let roundedTempValue = round(tempValue)
-                let scaledTempValue = roundedTempValue * Double(transcendenceHP)
-                let totalValue = scaledTempValue + Double(addWeaponHP)
-                scaledValue = Int(ceil(totalValue))
+				let roundedTempValue = round(tempValue)
+				let scaledTempValue = roundedTempValue * Double(transcendenceHP)
+				let totalValue = scaledTempValue + Double(addWeaponHP)
+				scaledValue = Int(ceil(totalValue))
 
 			case "AttackPower":
 				var addWeaponATK = 0
@@ -409,11 +409,10 @@ class CharacterStatus: UIViewController
 				}
 
 				let tempValue: Double = round((start1 + (start100 - start1) * levelScale) * 10000) / 10000
-                let roundedTempValue = round(tempValue)
-                let scaledTempValue = roundedTempValue * Double(transcendenceAttack)
-                let totalValue = scaledTempValue + Double(addWeaponATK)
-                scaledValue = Int(ceil(totalValue))
-
+				let roundedTempValue = round(tempValue)
+				let scaledTempValue = roundedTempValue * Double(transcendenceAttack)
+				let totalValue = scaledTempValue + Double(addWeaponATK)
+				scaledValue = Int(ceil(totalValue))
 
 			case "HealPower":
 				var addWeaponHeal = 0
@@ -435,11 +434,10 @@ class CharacterStatus: UIViewController
 				}
 
 				let tempValue: Double = round((start1 + (start100 - start1) * levelScale) * 10000) / 10000
-                let roundedTempValue = round(tempValue)
-                let scaledTempValue = roundedTempValue * Double(transcendenceHeal)
-                let totalValue = scaledTempValue + Double(addWeaponHeal)
-                scaledValue = Int(ceil(totalValue))
-
+				let roundedTempValue = round(tempValue)
+				let scaledTempValue = roundedTempValue * Double(transcendenceHeal)
+				let totalValue = scaledTempValue + Double(addWeaponHeal)
+				scaledValue = Int(ceil(totalValue))
 
 			default:
 				var levelscale = Double(nowWeaponLevel - 1) / 99
@@ -510,10 +508,10 @@ class CharacterStatus: UIViewController
 			}
 
 			let data = try Data(contentsOf: studentsFileURL)
-            ItemJson = try JSONSerialization.jsonObject(with: data) as? [String: [String: Any]] ?? [:]
+			ItemJson = try JSONSerialization.jsonObject(with: data) as? [String: [String: Any]] ?? [:]
 		} catch
 		{
-			print("Error reading students JSON file: \(error)")
+			Logger.standard.fault("Error reading students JSON file: \(error)")
 		}
 	}
 }
