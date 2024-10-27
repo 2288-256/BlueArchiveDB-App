@@ -135,6 +135,7 @@ class CharacterMorePage: UIViewController, UICollectionViewDataSource,
                 if !FileManager.default.fileExists(atPath: soundFilePath)
                 {
                     playSound(SoundFilePath: SoundFilePath, type: "server")
+                    return
                 }
                 playSound(SoundFilePath: SoundFilePath, type: "local")
             }
@@ -157,7 +158,12 @@ class CharacterMorePage: UIViewController, UICollectionViewDataSource,
                 audioPlayer?.play()
             } catch
             {
-                Logger.standard.fault("音源ファイルの再生に失敗しました: \(error)")
+                Logger.standard.fault("音源ファイルの再生に失敗しました: \(error)\n filePath: assets/voice/\(SoundFilePath)")
+                if error != nil{
+                    self.showAlert(title: "エラー", message:"音源ファイルの再生に失敗しました\n\(error)")
+                }else{
+                    self.showAlert(title: "エラー", message: "音源ファイルの再生に失敗しました\nこのエラーはデータを更新すると解決する可能性があります。")
+                }
             }
 
         case "server":
