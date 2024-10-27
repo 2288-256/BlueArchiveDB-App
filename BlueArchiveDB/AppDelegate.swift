@@ -14,31 +14,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate
 {
     var window: UIWindow?
     private func application(application _: UIApplication, continueUserActivity userActivity: NSUserActivity, restorationHandler _: ([AnyObject]?) -> Void) -> Bool
-	{
-		if userActivity.activityType == CSSearchableItemActionType
-		{
-			let uniqueIdentifier = userActivity.userInfo? [CSSearchableItemActivityIdentifier] as? String
-		}
-		return true
-	}
-
-	// MARK: UISceneSession Lifecycle
-
-	func application(_: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options _: UIScene.ConnectionOptions) -> UISceneConfiguration
-	{
-		// Called when a new scene session is being created.
-		// Use this method to select a configuration to create the new scene with.
-		return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
-	}
-
-	func application(_: UIApplication, didDiscardSceneSessions _: Set<UISceneSession>)
-	{
-		// Called when the user discards a scene session.
-		// If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
-		// Use this method to release any resources that were specific to the discarded scenes, as they will not return.
-	}
+    {
+        if userActivity.activityType == CSSearchableItemActionType
+        {
+            let uniqueIdentifier = userActivity.userInfo? [CSSearchableItemActivityIdentifier] as? String
+        }
+        return true
+    }
+    
+    // MARK: UISceneSession Lifecycle
+    
+    func application(_: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options _: UIScene.ConnectionOptions) -> UISceneConfiguration
+    {
+        // Called when a new scene session is being created.
+        // Use this method to select a configuration to create the new scene with.
+        return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
+    }
+    
+    func application(_: UIApplication, didDiscardSceneSessions _: Set<UISceneSession>)
+    {
+        // Called when the user discards a scene session.
+        // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
+        // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
+    }
     func application(_ application: UIApplication,
-                         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+                     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // アプリ起動時に一度だけ実行する処理
         checkDBFile()
         return true
@@ -49,15 +49,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate
         let studentsFileURL = libraryDirectory.appendingPathComponent("assets/data/jp/students.min.json")
         if !fileManager.fileExists(atPath: studentsFileURL.path)
         {
-                let alert = UIAlertController(title: "エラー", message: "DBファイルが見つかりませんでした。\nデータを今すぐダウンロードしますか？", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "はい", style: .default, handler: { _ in
-                    NotificationCenter.default.post(name: Notification.Name("DownloadDatabase"), object: nil)
-                }))
-                alert.addAction(UIAlertAction(title: "いいえ", style: .cancel, handler: nil))
-                DispatchQueue.main.async {
-                    if let topController = UIApplication.shared.connectedScenes.compactMap({ ($0 as? UIWindowScene)?.keyWindow }).last?.rootViewController {
-                        topController.present(alert, animated: true, completion: nil)
-                    }
+            let alert = UIAlertController(title: "エラー", message: "DBファイルが見つかりませんでした。\nデータを今すぐダウンロードしますか？", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "はい", style: .default, handler: { _ in
+                NotificationCenter.default.post(name: Notification.Name("DownloadDatabase"), object: nil)
+            }))
+            alert.addAction(UIAlertAction(title: "いいえ", style: .cancel, handler: nil))
+            DispatchQueue.main.async {
+                if let topController = UIApplication.shared.connectedScenes.compactMap({ ($0 as? UIWindowScene)?.keyWindow }).last?.rootViewController {
+                    topController.present(alert, animated: true, completion: nil)
+                }
                 
             }
         }else{
@@ -117,7 +117,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate
         
         task.resume()
     }
-
+    
     // ローカルファイルからBuildを取得
     func fetchBuildFromLocalFile(completion: @escaping (Int?) -> Void) {
         let fileURL = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask)[0]

@@ -49,8 +49,8 @@ class ViewController: UIViewController, UICollectionViewDataSource,
         let CharacterImageHeight = CharacterImage.frame.size.height
         // イメージビューにタップジェスチャーレコグナイザーを追加
         CharacterImage.addGestureRecognizer(tapGestureRecognizer)
-		//ファイルの存在確認
-		let fileManager = FileManager.default
+        //ファイルの存在確認
+        let fileManager = FileManager.default
         let libraryDirectory = fileManager.urls(for: .libraryDirectory, in: .userDomainMask).first!
         jsonArrays = LoadFile.shared.getStudents()
         studentArrays = Array(LoadFile.shared.getStudents().values)
