@@ -350,38 +350,49 @@ class ViewController: UIViewController, UICollectionViewDataSource,
 		}
 	}
 
-    @IBAction func downloadZip() {
-            updateDownloadStatus("ダウンロードの準備中")
-            
-            if let keyWindow = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
-                keyWindow.addSubview(downloadLoadingView)
-            }
-            
-            updateDownloadStatus("ダウンロード中...")
-            
-            // ダウンロード処理開始
-            DownloadFile.shared.downloadDataFile(urls: DataFileURLs.urls) {
-                self.updateDownloadStatus("生徒の画像をダウンロード中...")
-                
-                DownloadFile.shared.processStudentImages(jsonFile: "students.min.json", progressTextView: self.downloadLoadingLabel) {
-                    self.updateDownloadStatus("その他の画像をダウンロード中...")
-                    
-                    DownloadFile.shared.processUniqueImages(jsonFile: "students.min.json", progressTextView: self.downloadLoadingLabel) {
-                        self.updateDownloadStatus("")
-                        self.showDownloadCompletionAlert(title: "更新完了",
-                                                         message: "基本データのダウンロードが完了しました。\n続けてボイスデータをダウンロードしますか？\n(ボイスデータをダウンロードしない場合はオフラインでの再生ができなくなります)") { [weak self] in
-                            self?.updateDownloadStatus("ボイスデータをダウンロード中...")
-                            
-                            DownloadFile.shared.processVoiceData(jsonFile: "students.min.json", progressTextView: self!.downloadLoadingLabel) {
-                                self?.finalizeDownload()
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        
-        // ダウンロード状況の更新
+	@IBAction func downloadZip()
+	{
+		var faultFileCount = 0
+		updateDownloadStatus("ダウンロードの準備中")
+
+		if let keyWindow = UIApplication.shared.windows.first(where: { $0.isKeyWindow })
+		{
+			keyWindow.addSubview(downloadLoadingView)
+		}
+
+		updateDownloadStatus("ダウンロード中...")
+
+		// ダウンロード処理開始
+		DownloadFile.shared.downloadDataFile(urls: DataFileURLs.urls, faultFileCount: faultFileCount)
+		{ updateFaultFileCount in
+			faultFileCount = updateFaultFileCount
+			self.updateDownloadStatus("生徒の画像をダウンロード中...")
+
+			DownloadFile.shared.processStudentImages(jsonFile: "students.min.json", progressTextView: self.downloadLoadingLabel, faultFileCount: faultFileCount)
+			{ updateFaultFileCount in
+			faultFileCount = updateFaultFileCount
+				self.updateDownloadStatus("その他の画像をダウンロード中...")
+
+				DownloadFile.shared.processUniqueImages(jsonFile: "students.min.json", progressTextView: self.downloadLoadingLabel, FaultFileCount: faultFileCount)
+				{ updateFaultFileCount in
+				faultFileCount = updateFaultFileCount
+					self.updateDownloadStatus("")
+					self.showDownloadCompletionAlert(title: "更新完了",
+                                                     message: "基本データのダウンロードが完了しました。\n続けてボイスデータをダウンロードしますか？\n(ボイスデータをダウンロードしない場合はオフラインでの再生ができなくなります)", faultFileCount: faultFileCount)
+					{ [weak self] in
+						self?.updateDownloadStatus("ボイスデータをダウンロード中...")
+
+                        DownloadFile.shared.processVoiceData(jsonFile: "students.min.json", progressTextView: self!.downloadLoadingLabel, faultFileCount: faultFileCount)
+                        {faultFileCount,voiceFaultCount  in
+                            self?.finalizeDownload(faultFileCount: faultFileCount, faultVoiceFileCount: voiceFaultCount)
+						}
+					}
+				}
+			}
+		}
+	}
+
+	// ダウンロード状況の更新
         private func updateDownloadStatus(_ status: String) {
             DispatchQueue.main.async {
                 self.downloadLoadingLabel.text = status
@@ -389,7 +400,7 @@ class ViewController: UIViewController, UICollectionViewDataSource,
         }
         
         // ダウンロード完了後のアラート表示
-        private func showDownloadCompletionAlert(title: String, message: String, continueAction: @escaping () -> Void) {
+    private func showDownloadCompletionAlert(title: String, message: String,faultFileCount:Int, continueAction: @escaping () -> Void) {
             DispatchQueue.main.async {
                 let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
                 
@@ -398,7 +409,7 @@ class ViewController: UIViewController, UICollectionViewDataSource,
                 }))
                 
                 alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { _ in
-                    self.finalizeDownload()
+                    self.finalizeDownload(faultFileCount: faultFileCount, faultVoiceFileCount: 0)
                 }))
                 
                 self.present(alert, animated: true, completion: nil)
@@ -406,17 +417,34 @@ class ViewController: UIViewController, UICollectionViewDataSource,
         }
         
         // ダウンロード完了後の処理の最終化
-        private func finalizeDownload() {
+    private func finalizeDownload(faultFileCount:Int,faultVoiceFileCount:Int) {
             DispatchQueue.main.async {
                 self.downloadLoadingView.removeFromSuperview()
-                
-                let completionAlert = UIAlertController(title: "更新完了", message: "更新が完了しました。", preferredStyle: .alert)
-                completionAlert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
-                    self.loadView()
-                    self.viewDidLoad()
-                }))
-                
-                self.present(completionAlert, animated: true, completion: nil)
+                if faultFileCount > 0 {
+					if faultVoiceFileCount > 0 {
+						let faultAlert = UIAlertController(title: "更新完了", message: "更新が完了しました。\n(失敗:\(faultFileCount))\nダウンロードに失敗したファイルにボイスデータがあります\n再度ダウンロードしない場合はオフラインでの再生ができなくなります。", preferredStyle: .alert)
+						faultAlert.addAction(UIAlertAction(title: "再度ダウンロードする", style: .default, handler: { _ in
+							self.downloadZip()
+						}))
+						faultAlert.addAction(UIAlertAction(title: "キャンセル", style: .destructive, handler: nil))
+						self.present(faultAlert, animated: true, completion: nil)
+					}else{
+						let faultAlert = UIAlertController(title: "更新完了", message: "更新が完了しました。\n(失敗:\(faultFileCount))", preferredStyle: .alert)
+						faultAlert.addAction(UIAlertAction(title: "再度ダウンロードする", style: .default, handler: { _ in
+							self.downloadZip()
+						}))
+						faultAlert.addAction(UIAlertAction(title: "キャンセル", style: .destructive, handler: nil))
+						self.present(faultAlert, animated: true, completion: nil)
+					}
+				}else{
+					let completionAlert = UIAlertController(title: "更新完了", message: "更新が完了しました。", preferredStyle: .alert)
+					completionAlert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
+						self.loadView()
+						self.viewDidLoad()
+					}))
+					
+					self.present(completionAlert, animated: true, completion: nil)
+				}
             }
         }
 

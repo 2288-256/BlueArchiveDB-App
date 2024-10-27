@@ -96,31 +96,31 @@ class DownloadFile
     /// - Parameters:
     ///   - urls: ダウンロードするURLの配列
     ///   - completion: ダウンロード完了時に呼び出されるクロージャ
-    func downloadDataFile(urls: [URL], completion: @escaping () -> Void)
-    {
-        guard !urls.isEmpty else
-        {
-            completion()
+    func downloadDataFile(urls: [URL], faultFileCount: Int, completion: @escaping (Int) -> Void) {
+        guard !urls.isEmpty else {
+            completion(faultFileCount) // URLsが空の場合はそのまま返す
             return
         }
 
         var remainingURLs = urls
         let currentURL = remainingURLs.removeFirst()
 
-        downloadFile(url: currentURL, baseURL: "https://schaledb.com/")
-        { result in
-            switch result
-            {
+        downloadFile(url: currentURL, baseURL: "https://schaledb.com/") { result in
+            var updatedFaultFileCount = faultFileCount // 新しい変数にカウントを保持
+
+            switch result {
             case let .success(localURL):
                 Logger.download.debug("Downloaded to: \(localURL)")
             case let .failure(error):
+                updatedFaultFileCount += 1 // 更新されたカウントを使用
                 Logger.util.fault("Failed to download from \(currentURL): \(error)")
             }
 
             // 次のファイルをダウンロード
-            self.downloadDataFile(urls: remainingURLs, completion: completion)
+            self.downloadDataFile(urls: remainingURLs, faultFileCount: updatedFaultFileCount, completion: completion)
         }
     }
+
 
     /// JsonFileから生徒IDを読み込む関数
     ///
@@ -211,14 +211,15 @@ class DownloadFile
     ///   - jsonFile: 生徒IDが記載されたJSONファイルの名前
     ///   - progressTextView: 画像処理の進捗を更新するためのテキストビュー
     ///   - completion: 画像処理が完了した際に呼び出されるクロージャ
-    func processStudentImages(jsonFile: String, progressTextView: UILabel, completion: @escaping () -> Void)
+    func processStudentImages(jsonFile: String, progressTextView: UILabel, faultFileCount: Int, completion: @escaping (Int) -> Void)
     {
+        var updateFaultFileCount = faultFileCount
         loadStudentIDs(jsonFile: jsonFile)
         { [weak self] ids in
             guard let ids = ids, !ids.isEmpty else
             {
                 Logger.util.fault("Failed to load student IDs or no IDs found.")
-                completion()
+                completion(updateFaultFileCount)
                 return
             }
 
@@ -226,7 +227,7 @@ class DownloadFile
             var processedCount = 0
 
             let dispatchGroup = DispatchGroup()
-
+            
             for id in ids
             {
                 for urlTemplate in StudentAssetURLs.urls
@@ -257,6 +258,7 @@ class DownloadFile
                         case let .success(localURL):
                             Logger.download.debug("Downloaded to: \(localURL)")
                         case let .failure(error):
+                            updateFaultFileCount += 1
                             Logger.util.fault("Failed to download from \(url): \(error)")
                         }
                         DispatchQueue.main.async
@@ -272,7 +274,7 @@ class DownloadFile
             dispatchGroup.notify(queue: .main)
             {
                 Logger.util.info("All students images Downloaded.")
-                completion()
+                completion(updateFaultFileCount)
             }
         }
     }
@@ -285,8 +287,9 @@ class DownloadFile
     ///   - jsonFile: 画像をダウンロードする生徒IDが記載されたJSONファイルの名前
     ///   - progressTextView: 画像処理の進捗を更新するためのテキストビュー
     ///   - completion: 画像処理が完了した際に呼び出されるクロージャ
-    func processUniqueImages(jsonFile: String, progressTextView: UILabel, completion: @escaping () -> Void)
+    func processUniqueImages(jsonFile: String, progressTextView: UILabel,FaultFileCount:Int, completion: @escaping (Int) -> Void)
     {
+        var updateFaultCount = FaultFileCount
         var EquipmentArray: [String] = []
         DispatchQueue.main.async
         {
@@ -297,7 +300,7 @@ class DownloadFile
             guard let self = self, let ids = ids, !ids.isEmpty else
             {
                 Logger.util.fault("Failed to load student IDs or no IDs found.")
-                completion()
+                completion(updateFaultCount)
                 return
             }
             let dispatchGroup = DispatchGroup()
@@ -395,6 +398,7 @@ class DownloadFile
                         case let .success(localURL):
                             Logger.download.debug("Downloaded to: \(localURL)")
                         case let .failure(error):
+                            updateFaultCount += 1
                             Logger.util.fault("Failed to download from \(url): \(error)")
                         }
                         processedCount += 1
@@ -409,7 +413,7 @@ class DownloadFile
             dispatchGroup.notify(queue: .main)
             {
                 Logger.util.info("All unique images Downloaded.")
-                completion()
+                completion(updateFaultCount)
             }
         }
     }
@@ -420,14 +424,16 @@ class DownloadFile
     /// - Parameters:
     ///   - progressTextView: 進捗を表示するためのテキストビュー
     ///   - completion: 音声データのダウンロードが完了した際に呼び出されるクロージャ
-    func processVoiceData(jsonFile: String, progressTextView: UILabel, completion: @escaping () -> Void)
+    func processVoiceData(jsonFile: String, progressTextView: UILabel,faultFileCount: Int, completion: @escaping (Int,Int) -> Void)
     {
+        var updateFaultCount = faultFileCount
+        var voiceFaultCount = 0
         loadStudentIDs(jsonFile: jsonFile)
         { [weak self] ids in
             guard let self = self, let ids = ids, !ids.isEmpty else
             {
                 Logger.util.fault("Failed to load student IDs or no IDs found.")
-                completion()
+                completion(updateFaultCount, voiceFaultCount)
                 return
             }
             let dispatchGroup = DispatchGroup()
@@ -466,6 +472,8 @@ class DownloadFile
                                 case let .success(localURL):
                                     Logger.download.debug("Downloaded to: \(localURL)")
                                 case let .failure(error):
+                                    updateFaultCount += 1
+                                    voiceFaultCount += 1
                                     Logger.util.fault("Failed to download from \(url): \(error)")
                                 }
                                 processedCount += 1
@@ -483,7 +491,7 @@ class DownloadFile
             dispatchGroup.notify(queue: .main)
             {
                 Logger.util.info("All voice data downloaded.")
-                completion()
+                completion(updateFaultCount,voiceFaultCount)
             }
         }
     }
