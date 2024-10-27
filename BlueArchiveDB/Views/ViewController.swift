@@ -402,7 +402,7 @@ class ViewController: UIViewController, UICollectionViewDataSource,
                 { updateFaultFileCount in
                     faultFileCount = updateFaultFileCount
                     let dispatchGroup = DispatchGroup()
-                    
+                    self.jsonArrays = LoadFile.shared.getStudents()
                     for (index, character) in self.jsonArrays.enumerated() {
                         dispatchGroup.enter()
                         guard let id = character.value["Id"] as? Int,
